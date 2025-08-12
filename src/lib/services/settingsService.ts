@@ -8,17 +8,26 @@ export async function getAllSettings(): Promise<SettingsType> {
 	return settingsSchema.parse(obj); // Type-sicher zurückgeben
 }
 
-export async function setSetting<K extends keyof SettingsType>(key: K, value: SettingsType[K]) {
-	// Validierung einzelner Werte
-	settingsSchema.pick({ [key]: true }).parse({ [key]: value });
-	await db
-		.insert(settings)
-		.values({
-			key,
-			value: JSON.stringify(value)
-		})
-		.onConflictDoUpdate({
-			target: settings.key,
-			set: { value: JSON.stringify(value) }
-		});
+export async function saveSettings(newSettings: Partial<SettingsType>) {
+	if (Object.keys(newSettings).length === 0) return;
+
+	try {
+		for (const [key, value] of Object.entries(newSettings) as [
+			keyof SettingsType,
+			SettingsType[keyof SettingsType]
+		][]) {
+			await db
+				.insert(settings)
+				.values({
+					key,
+					value: JSON.stringify(value)
+				})
+				.onConflictDoUpdate({
+					target: settings.key,
+					set: { value: JSON.stringify(value) }
+				});
+		}
+	} catch (error) {
+		console.error('Fehler beim Speichern der Settings:', error);
+	}
 }

@@ -1,15 +1,9 @@
 <script lang="ts">
-	import { setSetting } from '$lib/services/settingsService';
+	import { saveSettings } from '$lib/services/settingsService';
 	import { settings } from '$lib/stores/settings.svelte';
 	import type { SettingsType } from '$lib/validation/settingsSchema';
 
 	let localSettings: SettingsType = $state({ ...settings });
-
-	function saveSettings() {
-		(
-			Object.entries(localSettings) as [keyof SettingsType, SettingsType[keyof SettingsType]][]
-		).forEach(([key, value]) => setSetting(key, value));
-	}
 </script>
 
 <div class="mx-auto max-w-4xl space-y-6 p-6">
@@ -124,6 +118,8 @@
 
 	<!-- Save Button -->
 	<div class="flex justify-end">
-		<button class="btn btn-success" onclick={saveSettings}> Save Settings </button>
+		<button class="btn btn-success" onclick={() => saveSettings($state.snapshot(localSettings))}>
+			Save Settings
+		</button>
 	</div>
 </div>

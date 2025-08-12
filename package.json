@@ -50,6 +50,7 @@
 	"dependencies": {
 		"@tauri-apps/api": "^2.7.0",
 		"@tauri-apps/plugin-opener": "^2.4.0",
+		"@tauri-apps/plugin-sql": "~2.3.0",
 		"better-sqlite3": "^11.8.0",
 		"drizzle-orm": "^0.40.0"
 	},

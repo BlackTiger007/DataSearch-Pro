@@ -17,12 +17,14 @@ export const db = drizzle<typeof schema>(
 
 		// Wenn die Abfrage ein SELECT ist, nutze die select-Methode
 		if (isSelect) {
-			results = await sqlite.select(sql, params).catch(() => {
+			results = await sqlite.select(sql, params).catch((e) => {
+				console.error('DB Select error: ', e);
 				return [];
 			});
 		} else {
 			// Ansonsten, nutze die execute-Methode
-			await sqlite.execute(sql, params).catch(() => {
+			await sqlite.execute(sql, params).catch((e) => {
+				console.error('DB Execute error: ', e);
 				return [];
 			});
 			return { rows: [] };

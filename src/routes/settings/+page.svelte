@@ -6,7 +6,7 @@
 	let localSettings: SettingsType = $state({ ...settings });
 </script>
 
-<div class="mx-auto max-w-4xl space-y-6 p-6">
+<div class="mx-auto w-full max-w-4xl space-y-6 p-6">
 	<h1 class="mb-6 text-3xl font-bold">Settings</h1>
 
 	<!-- Theme -->

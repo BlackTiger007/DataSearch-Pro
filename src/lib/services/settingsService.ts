@@ -1,6 +1,7 @@
 import { db } from '$lib/db';
 import { settings } from '$lib/db/schema/settings';
 import { settingsSchema, type SettingsType } from '$lib/validation/settingsSchema';
+import { settings as settingsStore } from '$lib/stores/settings.svelte';
 
 export async function getAllSettings(): Promise<SettingsType> {
 	const rows = await db.select().from(settings);
@@ -30,4 +31,6 @@ export async function saveSettings(newSettings: Partial<SettingsType>) {
 	} catch (error) {
 		console.error('Fehler beim Speichern der Settings:', error);
 	}
+
+	Object.assign(settingsStore, newSettings); // Eigenschaften von settingsTemp in settings kopieren
 }

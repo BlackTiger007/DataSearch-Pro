@@ -182,29 +182,11 @@ function createIndexingStore() {
 
 	/** Watcht einen Ordner und fügt Änderungen der Queue hinzu */
 	async function watch(path: string) {
+		// Bereits aktiv → abbrechen
 		if (indexing.store.activeWatches.has(path)) return;
 
 		try {
-			if (await exists(path)) {
-				const handle = await watchWithDelay(
-					path,
-					async (e) => {
-						for (const p of e.paths) {
-							const exi = await exists(p);
-							if (exi) {
-								indexing.addToQueue([p]);
-							} else {
-								// Wenn gelöscht, aus Queue entfernen
-								indexing.store.queue = indexing.store.queue.filter((q) => q.file !== p);
-							}
-						}
-					},
-					{ delayMs: 1000, recursive: true }
-				);
-				indexing.store.activeWatches.set(path, handle);
-				// neue Map erzeugen → trigger für Svelte
-				store.activeWatches = new Map(store.activeWatches);
-			} else {
+			if (!(await exists(path))) {
 				if (settings.folders.includes(path)) {
 					if (await ask(`Pfad ${path} wurde gelöscht. Löschen?`, { kind: 'warning' })) {
 						settings.folders = settings.folders.filter((p) => p !== path);
@@ -213,7 +195,31 @@ function createIndexingStore() {
 				} else {
 					message(`Pfad ${path} existiert nicht. Watchvorgang abgebrochen.`, { kind: 'error' });
 				}
+				return;
 			}
+
+			// Watch starten
+			const handle = await watchWithDelay(
+				path,
+				async (e) => {
+					if (!e.paths?.length) return;
+
+					for (const p of e.paths) {
+						const existsFile = await exists(p);
+						if (existsFile) {
+							indexing.addToQueue([p]);
+						} else {
+							// Entfernen aus Queue
+							indexing.store.queue = indexing.store.queue.filter((q) => q.file !== p);
+						}
+					}
+				},
+				{ delayMs: 1000, recursive: true }
+			);
+
+			// Handle speichern und Map neu zuweisen für Reaktivität
+			indexing.store.activeWatches.set(path, handle);
+			indexing.store.activeWatches = new Map(indexing.store.activeWatches);
 		} catch (err) {
 			console.error(`Fehler beim Watchen von ${path}:`, err);
 		}

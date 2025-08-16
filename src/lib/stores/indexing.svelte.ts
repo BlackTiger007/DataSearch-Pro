@@ -4,11 +4,18 @@ import { readDirectory, type IndexedFile } from '$lib/utils/fileUtils';
 import { eq } from 'drizzle-orm';
 import { settings } from './settings.svelte';
 import type { UnwatchFn } from '@tauri-apps/plugin-fs';
-import { exists, readFile, stat, watch as watchWithDelay } from '@tauri-apps/plugin-fs';
+import {
+	exists,
+	readFile,
+	readTextFileLines,
+	stat,
+	watch as watchWithDelay
+} from '@tauri-apps/plugin-fs';
 import { saveSettings } from '$lib/services/settingsService';
 import { ask, message } from '@tauri-apps/plugin-dialog';
 import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
+import { splitSmartForDb } from '$lib/utils/split';
 
 interface QueueItem {
 	file: string;
@@ -123,7 +130,7 @@ function createIndexingStore() {
 		const newItems = toQueue.filter((item) => !existingFiles.has(item.file));
 
 		if (newItems.length === 0) {
-			message('Keine neuen Dateien gefunden.', { kind: 'info' });
+			// message('Keine neuen Dateien gefunden.', { kind: 'info' });
 			return;
 		}
 
@@ -138,18 +145,12 @@ function createIndexingStore() {
 	}
 
 	async function processFile(file: QueueItem) {
-		// Simulierte Verarbeitung
-		//  OCR Scanns
 		try {
 			console.log('Verarbeitung', $state.snapshot(file));
-			await new Promise((res) => setTimeout(res, 5000));
 
 			await db
 				.insert(schema.files)
-				.values({
-					...file.data,
-					indexedAt: new Date()
-				})
+				.values({ ...file.data, indexedAt: new Date() })
 				.onConflictDoUpdate({
 					target: schema.files.path,
 					set: {
@@ -159,6 +160,47 @@ function createIndexingStore() {
 						indexedAt: new Date()
 					}
 				});
+
+			// ID zuverlässig holen:
+			const dbFile = await db.query.files.findFirst({
+				where: eq(schema.files.path, file.data.path),
+				columns: { id: true }
+			});
+
+			const id = dbFile?.id;
+			console.log('ID der Datei:', id);
+			if (!id) {
+				console.warn(`Keine ID zurückgegeben für Datei ${file.file}, überspringe Textchunks`);
+				return;
+			}
+
+			const textChunks = [];
+			if (file.data.mimeType === 'txt') {
+				const lines = await readTextFileLines(file.file);
+				let lineNumber = 0;
+
+				for await (const line of lines) {
+					lineNumber++;
+					const clean = line.replace(/\p{C}/gu, '').trim();
+					if (clean.length === 0) continue;
+
+					textChunks.push(...splitSmartForDb(clean, lineNumber, id));
+				}
+			}
+
+			for (const chunk of textChunks) {
+				await db
+					.insert(schema.scans)
+					.values(chunk)
+					.onConflictDoUpdate({
+						target: [schema.scans.fileId, schema.scans.lineNumber, schema.scans.chunkNumber],
+						set: {
+							content: chunk.content,
+							lineNumber: chunk.lineNumber,
+							chunkNumber: chunk.chunkNumber
+						}
+					});
+			}
 		} catch (err) {
 			console.error(`Fehler bei Datei ${file.file}:`, err);
 			// Wieder einreihen mit niedrigerer Priorität

@@ -8,7 +8,7 @@ export const files = sqliteTable('files', {
 	name: text('name').notNull(),
 
 	// Absoluter oder relativer Pfad auf dem System/Speicherort
-	path: text('path').notNull(),
+	path: text('path').notNull().unique(),
 
 	// Dateigröße in Bytes
 	size: integer('size').notNull(),
@@ -23,7 +23,10 @@ export const files = sqliteTable('files', {
 	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 
 	// Zeitstempel, wann die Datei zuletzt geändert wurde
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+
+	// Zeitstempel, wann die Datei zuletzt indexiert wurde
+	indexedAt: integer('indexed_at', { mode: 'timestamp' }).notNull()
 });
 
 export type File = typeof files.$inferSelect;

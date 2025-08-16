@@ -32,7 +32,7 @@
 <main class="flex grow flex-col space-y-6 p-6 text-base-content">
 	<h1 class="text-3xl font-bold">📊 Dashboard</h1>
 	<p class="text-base-content/70">Live-Indexierungsstatus & Warteschlange</p>
-	{indexing.store.activeWatches.size}
+
 	<!-- Watch-Pfade -->
 	<section>
 		<h2 class="mb-2 text-2xl font-semibold">👀 Aktive Watch-Pfade</h2>

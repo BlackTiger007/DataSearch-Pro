@@ -9,6 +9,12 @@
 		"sql:default",
 		"sql:allow-execute",
 		"dialog:default",
-		"fs:default"
+		"fs:default",
+		"fs:allow-watch",
+		"fs:allow-stat",
+		{
+			"identifier": "fs:scope",
+			"allow": [{ "path": "*/**" }]
+		}
 	]
 }

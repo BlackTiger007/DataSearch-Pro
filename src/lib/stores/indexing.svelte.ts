@@ -16,20 +16,7 @@ import { ask, message } from '@tauri-apps/plugin-dialog';
 import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
 import { splitSmartForDb } from '$lib/utils/split';
-
-interface QueueItem {
-	file: string;
-	priority: number; // höherer Wert = höhere Priorität
-	data: IndexedFile;
-}
-
-interface IndexingState {
-	isRunning: boolean;
-	isPaused: boolean;
-	queue: QueueItem[];
-	currentFile: string | null;
-	activeWatches: Map<string, UnwatchFn>;
-}
+import type { IndexingState, QueueItem } from '$lib/types/indexing';
 
 function createIndexingStore() {
 	const store = $state<IndexingState>({

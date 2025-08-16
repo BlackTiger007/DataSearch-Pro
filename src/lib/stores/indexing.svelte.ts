@@ -4,19 +4,14 @@ import { readDirectory, type IndexedFile } from '$lib/utils/fileUtils';
 import { eq } from 'drizzle-orm';
 import { settings } from './settings.svelte';
 import type { UnwatchFn } from '@tauri-apps/plugin-fs';
-import {
-	exists,
-	readFile,
-	readTextFileLines,
-	stat,
-	watch as watchWithDelay
-} from '@tauri-apps/plugin-fs';
+import { exists, readFile, stat, watch as watchWithDelay } from '@tauri-apps/plugin-fs';
 import { saveSettings } from '$lib/services/settingsService';
 import { ask, message } from '@tauri-apps/plugin-dialog';
 import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
-import { splitSmartForDb } from '$lib/utils/split';
 import type { IndexingState, QueueItem } from '$lib/types/indexing';
+import type { NewScan } from '$lib/db/schema/scans';
+import { extractTxt } from '$lib/extractors/txtExtractor';
 
 function createIndexingStore() {
 	const store = $state<IndexingState>({
@@ -161,19 +156,11 @@ function createIndexingStore() {
 				return;
 			}
 
-			const textChunks = [];
+			const textChunks: NewScan[] = [];
 			if (file.data.mimeType === 'txt') {
-				const lines = await readTextFileLines(file.file);
-				let lineNumber = 0;
-
-				for await (const line of lines) {
-					lineNumber++;
-					const clean = line.replace(/\p{C}/gu, '').trim();
-					if (clean.length === 0) continue;
-
-					textChunks.push(...splitSmartForDb(clean, lineNumber, id));
-				}
+				textChunks.push(...(await extractTxt(file, id)));
 			}
+			// else if (file.data.mimeType === 'pdf') {textChunks.push(...(await extractPdf(file, id)));}
 
 			for (const chunk of textChunks) {
 				await db

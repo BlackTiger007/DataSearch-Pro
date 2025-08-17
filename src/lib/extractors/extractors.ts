@@ -7,6 +7,7 @@ type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
 export const extractors: Record<string, ExtractFn> = {
 	txt: extractTxt,
-	csv: extractTxt // CSV ist auch "plain text"
+	csv: extractTxt, // CSV ist auch "plain text"
+	tsv: extractTxt
 	// 'docx': extractDocx, usw.
 };

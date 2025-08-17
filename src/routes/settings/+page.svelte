@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { cleanupMissingFiles } from '$lib/maintenance/cleanupMissingFiles';
 	import { saveSettings } from '$lib/services/settingsService';
 	import { settings } from '$lib/stores/settings.svelte';
 	import type { SettingsType } from '$lib/validation/settingsSchema';
@@ -128,6 +129,17 @@
 				<option value="de">Deutsch</option>
 				<option value="fr">Français</option>
 			</select>
+		</div>
+	</div>
+
+	<!-- Cleanup -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Datenbank-Bereinigung</h2>
+			<p>Entfernt Einträge, deren Dateien nicht mehr vorhanden sind.</p>
+			<button class="btn btn-error" onclick={cleanupMissingFiles}>
+				Fehlende Dateien bereinigen
+			</button>
 		</div>
 	</div>
 

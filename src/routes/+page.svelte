@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { db } from '$lib/db';
-	import { schema, type File } from '$lib/db/schema';
+	import { schema, type File, type Tag, type NewTag } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
-	import { eq } from 'drizzle-orm';
+	import { and, eq } from 'drizzle-orm';
+	import { onMount } from 'svelte';
 
 	const filesPromise = db.select().from(schema.files);
 	const filePromise = (id: number) =>
@@ -11,10 +12,95 @@
 	let selectedFile: File | null = $state(null);
 	let search = $state('');
 	let overflow = $state(true);
+
+	const tags: Tag[] = $state([]);
+	let selectedTags: number[] = $state([]);
+	let newTagName = $state('');
+	let newTagColor = $state('#34d399'); // Standardfarbe grün
+
+	onMount(async () => {
+		tags.push(...(await db.select().from(schema.tags)));
+	});
+
+	async function loadFileTags(fileId: number) {
+		selectedTags.splice(0, selectedTags.length);
+		const fileTags = await db
+			.select()
+			.from(schema.fileTags)
+			.where(eq(schema.fileTags.fileId, fileId));
+		selectedTags.push(...fileTags.map((ft) => ft.tagId));
+	}
+
+	async function addNewTag() {
+		if (!newTagName.trim()) return;
+
+		const newTag: NewTag = { name: newTagName, color: newTagColor };
+		await db.insert(schema.tags).values(newTag);
+
+		const createdTag = await db.query.tags.findFirst({ where: eq(schema.tags.name, newTagName) });
+		if (!createdTag) return;
+
+		tags.push(createdTag);
+		newTagName = '';
+
+		// Direkt auch für die aktuelle Datei zuordnen, falls eine ausgewählt
+		if (selectedFile) {
+			await addTagToFile(createdTag.id!, selectedFile.id);
+			selectedTags.push(createdTag.id!);
+		}
+	}
+
+	async function addTagToFile(tagId: number, fileId: number) {
+		const exists = await db
+			.select()
+			.from(schema.fileTags)
+			.where(and(eq(schema.fileTags.fileId, fileId), eq(schema.fileTags.tagId, tagId)));
+		if (exists.length === 0) {
+			await db.insert(schema.fileTags).values({ fileId, tagId });
+		}
+	}
+
+	async function removeTagFromFile(tagId: number, fileId: number) {
+		await db
+			.delete(schema.fileTags)
+			.where(and(eq(schema.fileTags.fileId, fileId), eq(schema.fileTags.tagId, tagId)));
+	}
+
+	async function updateTag(tag: Tag) {
+		await db
+			.update(schema.tags)
+			.set({ name: tag.name, color: tag.color })
+			.where(eq(schema.tags.id, tag.id));
+		const index = tags.findIndex((t) => t.id === tag.id);
+		if (index !== -1) tags[index] = tag;
+	}
+
+	async function selectFile(file: File) {
+		selectedFile = file;
+		await loadFileTags(file.id);
+	}
+
+	async function toggleTag(tagId: number) {
+		if (!selectedFile) return;
+		if (selectedTags.includes(tagId)) {
+			selectedTags = selectedTags.filter((id) => id !== tagId);
+			await removeTagFromFile(tagId, selectedFile.id);
+		} else {
+			selectedTags.push(tagId);
+			await addTagToFile(tagId, selectedFile.id);
+		}
+	}
+
+	async function deleteTag(id: number) {
+		await db.delete(schema.tags).where(eq(schema.tags.id, id));
+		tags.splice(
+			tags.findIndex((t) => t.id === id),
+			1
+		);
+	}
 </script>
 
 <main class="flex h-screen">
-	<!-- Linke Spalte: Dateiliste -->
 	<div class="w-1/3 overflow-y-auto border-r border-base-300 bg-base-200">
 		<div class="p-4">
 			<input
@@ -37,34 +123,28 @@
 					<li
 						class="list-row cursor-pointer rounded-lg"
 						class:bg-base-100={selectedFile?.id === file.id}
-						onclick={() => (selectedFile = file)}
+						onclick={() => selectFile(file)}
 					>
-						<!-- Icon -->
 						<div class="shrink-0 text-xl">
 							{file.mimeType === 'txt' ? '📝' : file.mimeType === 'pdf' ? '📄' : '📁'}
 						</div>
 
-						<!-- Name + Pfad -->
 						<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
 							<div class="truncate font-semibold">{file.name}</div>
-							<div class="truncate text-xs text-base-content/70" title={file.path}>
-								{file.path}
-							</div>
+							<div class="truncate text-xs text-base-content/70" title={file.path}>{file.path}</div>
 						</div>
 
-						<!-- Größe -->
 						<div class="ml-2 shrink-0 text-sm">{formatBytes(file.size)}</div>
 					</li>
 				{/each}
 			{/await}
 
 			<li class="list-row">
-				<p>Keine weitere Dateien</p>
+				<p>Keine weiteren Dateien</p>
 			</li>
 		</ul>
 	</div>
 
-	<!-- Rechte Spalte: Detailansicht -->
 	<div class="w-2/3 overflow-y-auto bg-base-300 p-6">
 		{#if selectedFile}
 			<h2 class="mb-2 text-2xl font-bold">{selectedFile.name}</h2>
@@ -81,17 +161,20 @@
 				</div>
 			</div>
 
-			<!-- Bereich für Tags -->
+			<!-- Tags anzeigen -->
 			<div class="mb-4">
 				<h3 class="mb-2 font-semibold">Tags</h3>
 				<div class="flex flex-wrap gap-2">
-					<span class="badge badge-primary">Rechnung</span>
-					<span class="badge badge-secondary">Wichtig</span>
-					<button class="btn btn-outline btn-xs">+ Tag</button>
+					{#each selectedTags
+						.map((id) => tags.find((t) => t.id === id))
+						.filter((t): t is Tag => !!t) as tag}
+						<span class="badge" style="background-color: {tag.color}">{tag.name}</span>
+					{/each}
+					<label for="modal_tag" class="btn btn-outline btn-xs">+ Tag</label>
 				</div>
 			</div>
 
-			<!-- Bereich für Notizen / Beschreibung -->
+			<!-- Beschreibung -->
 			<div class="mb-4">
 				<h3 class="mb-2 font-semibold">Beschreibung</h3>
 				<textarea
@@ -105,11 +188,10 @@
 			<div>
 				<div class="mb-2 flex justify-between">
 					<h3 class="font-semibold">Indexierter Text</h3>
-					<button class="btn" onclick={() => (overflow = !overflow)}>
-						{overflow ? 'Kein Scroll' : 'Scroll'}
-					</button>
+					<button class="btn" onclick={() => (overflow = !overflow)}
+						>{overflow ? 'Kein Scroll' : 'Scroll'}</button
+					>
 				</div>
-
 				<div
 					class="max-h-[60vh] w-full overflow-y-auto rounded-lg bg-base-200 p-3 text-sm"
 					class:overflow-x-auto={overflow}
@@ -137,3 +219,51 @@
 		{/if}
 	</div>
 </main>
+
+<!-- MODAL -->
+<input type="checkbox" id="modal_tag" class="modal-toggle" />
+<div class="modal">
+	<div class="modal-box">
+		<h3 class="text-lg font-bold">Tags</h3>
+
+		<!-- Neue Tags erstellen -->
+		<div class="flex gap-2 py-2">
+			<input
+				type="text"
+				placeholder="Neuen Tag erstellen"
+				bind:value={newTagName}
+				class="input-bordered input flex-1"
+			/>
+			<input type="color" bind:value={newTagColor} class="h-10 w-12 border-none p-0" />
+			<button class="btn btn-primary" onclick={addNewTag}>Erstellen</button>
+		</div>
+
+		<!-- Bestehende Tags auswählen und bearbeiten -->
+		<div class="py-2">
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">Tags zuweisen / bearbeiten</legend>
+				{#each tags as tag (tag.id)}
+					<div class="flex items-center gap-2 py-1">
+						<input
+							type="checkbox"
+							checked={selectedTags.includes(tag.id)}
+							onchange={() => toggleTag(tag.id)}
+						/>
+						<input type="text" class="input" bind:value={tag.name} onblur={() => updateTag(tag)} />
+						<input
+							type="color"
+							class="h-6 w-6 border-none p-0"
+							bind:value={tag.color}
+							onchange={() => updateTag(tag)}
+						/>
+						<button class="btn" ondblclick={() => deleteTag(tag.id)}>✕</button>
+					</div>
+				{/each}
+			</fieldset>
+		</div>
+
+		<div class="modal-action">
+			<label for="modal_tag" class="btn">Schließen</label>
+		</div>
+	</div>
+</div>

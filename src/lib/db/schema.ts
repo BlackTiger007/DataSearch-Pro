@@ -1,22 +1,30 @@
-import { files, type File } from './schema/files';
-import { tags, type Tag } from './schema/tags';
-import { scans, type Scan } from './schema/scans';
-import { settings, type Setting } from './schema/settings';
+import { files, type File, type NewFile } from './schema/files';
+import { fileTags, type FileTag, type NewFileTag } from './schema/fileTags';
+import { scans, type Scan, type NewScan } from './schema/scans';
+import { settings, type Setting, type NewSetting } from './schema/settings';
+import { tags, type Tag, type NewTag } from './schema/tags';
 
 export const schema = {
 	files,
-	tags,
+	fileTags,
 	scans,
-	settings
+	settings,
+	tags
 };
 
-export { files, tags, scans, settings };
+export { files, tags, scans, settings, fileTags };
 
 export interface Schema {
 	File: File;
-	Tag: Tag;
+	NewFile: NewFile;
+	FileTag: FileTag;
+	NewFileTag: NewFileTag;
 	Scan: Scan;
+	NewScan: NewScan;
 	Setting: Setting;
+	NewSetting: NewSetting;
+	Tag: Tag;
+	NewTag: NewTag;
 }
 
-export type { File, Tag, Scan, Setting };
+export type { File, NewFile, FileTag, NewFileTag, Scan, NewScan, Setting, NewSetting, Tag, NewTag };

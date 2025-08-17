@@ -1,13 +1,22 @@
 import type { QueueItem } from '$lib/types/indexing';
 import type { NewScan } from '$lib/db/schema';
 import { extractTxt } from './txt';
-// später: import { extractCsv } from './extractors/csv';
 
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
 export const extractors: Record<string, ExtractFn> = {
+	// Klartext
 	txt: extractTxt,
-	csv: extractTxt, // CSV ist auch "plain text"
-	tsv: extractTxt
-	// 'docx': extractDocx, usw.
+	csv: extractTxt, // CSV kann man wie Text behandeln
+	tsv: extractTxt,
+	log: extractTxt,
+	md: extractTxt,
+	ini: extractTxt,
+	yaml: extractTxt,
+	yml: extractTxt,
+	json: extractTxt // JSON kann als Text eingelesen werden
+
+	// Platzhalter für spezielle Formate
+	// docx: extractDocx,
+	// pdf: extractPdf,
 };

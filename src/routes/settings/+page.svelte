@@ -100,7 +100,7 @@
 		<div class="card-body">
 			<h2 class="card-title">Automation</h2>
 			<label class="label cursor-pointer">
-				<span class="label-text">Enable Watching Folders</span>
+				<span class="label-text">Watching Folders</span>
 				<input
 					type="checkbox"
 					class="toggle toggle-primary"
@@ -109,7 +109,7 @@
 			</label>
 
 			<label class="label cursor-pointer">
-				<span class="label-text">Enable Auto Start</span>
+				<span class="label-text">Auto Start Indexierung</span>
 				<input
 					type="checkbox"
 					class="toggle toggle-primary"

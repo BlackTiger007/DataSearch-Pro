@@ -209,7 +209,7 @@
 								</div>
 							{/each}
 						{:else}
-							<p>Keine Inhalte gefunden</p>
+							<p>Keine Inhalte gefunden oder kein Parser für dieses Format verfügbar.</p>
 						{/if}
 					{/await}
 				</div>

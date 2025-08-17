@@ -186,27 +186,27 @@
 
 			<!-- Indexierter Inhalt -->
 			<div>
-				<div class="mb-2 flex justify-between">
+				<div class="mb-2 flex items-center justify-between">
 					<h3 class="font-semibold">Indexierter Text</h3>
-					<button class="btn" onclick={() => (overflow = !overflow)}
-						>{overflow ? 'Kein Scroll' : 'Scroll'}</button
-					>
+					<button class="btn btn-sm" onclick={() => (overflow = !overflow)}>
+						{overflow ? 'Kein Scroll' : 'Scroll'}
+					</button>
 				</div>
 				<div
 					class="max-h-[60vh] w-full overflow-y-auto rounded-lg bg-base-200 p-3 text-sm"
 					class:overflow-x-auto={overflow}
-					class:whitespace-nowrap={overflow}
-					class:break-words={!overflow}
 				>
 					{#await filePromise(selectedFile.id)}
 						<p>Wird geladen...</p>
 					{:then fileChunks}
 						{#if fileChunks.length > 0}
 							{#each fileChunks as chunk (chunk.id)}
-								<span class="flex gap-1">
-									<p class="font-semibold">{chunk.lineNumber}</p>
-									<p>{chunk.content}</p>
-								</span>
+								<div class="flex gap-2">
+									<span class="shrink-0 font-semibold">{chunk.lineNumber}</span>
+									<pre
+										class:whitespace-pre={overflow}
+										class:whitespace-pre-wrap={!overflow}>{chunk.content}</pre>
+								</div>
 							{/each}
 						{:else}
 							<p>Keine Inhalte gefunden</p>

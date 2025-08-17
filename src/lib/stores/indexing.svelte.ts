@@ -97,7 +97,11 @@ function createIndexingStore() {
 		// Nur neue oder geänderte Dateien zur Queue hinzufügen
 		const toQueue: QueueItem[] = [];
 		for (const file of allFiles) {
-			if (!settings.allowedFileTypes.includes(file.mimeType)) continue;
+			if (
+				settings.allowedFileTypes.length > 0 &&
+				!settings.allowedFileTypes.includes(file.mimeType)
+			)
+				continue;
 			const existing = await db.query.files.findFirst({
 				where: eq(schema.files.path, file.path)
 			});

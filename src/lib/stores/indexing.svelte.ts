@@ -227,6 +227,7 @@ function createIndexingStore() {
 						} else {
 							// Entfernen aus Queue
 							indexing.store.queue = indexing.store.queue.filter((q) => q.file !== p);
+							await db.delete(schema.files).where(eq(schema.files.path, p));
 						}
 					}
 				},

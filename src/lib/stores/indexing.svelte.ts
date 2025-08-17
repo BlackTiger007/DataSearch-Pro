@@ -10,8 +10,7 @@ import { ask, message } from '@tauri-apps/plugin-dialog';
 import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
 import type { IndexingState, QueueItem } from '$lib/types/indexing';
-import type { NewScan } from '$lib/db/schema/scans';
-import { extractTxt } from '$lib/extractors/txtExtractor';
+import { extractors } from '$lib/extractors/extractors';
 
 function createIndexingStore() {
 	const store = $state<IndexingState>({
@@ -143,24 +142,26 @@ function createIndexingStore() {
 					}
 				});
 
-			// ID zuverlässig holen:
+			// ID zuverlässig holen
 			const dbFile = await db.query.files.findFirst({
 				where: eq(schema.files.path, file.data.path),
 				columns: { id: true }
 			});
 
 			const id = dbFile?.id;
-			console.log('ID der Datei:', id);
 			if (!id) {
 				console.warn(`Keine ID zurückgegeben für Datei ${file.file}, überspringe Textchunks`);
 				return;
 			}
 
-			const textChunks: NewScan[] = [];
-			if (file.data.mimeType === 'txt') {
-				textChunks.push(...(await extractTxt(file, id)));
+			// passenden Extractor holen
+			const extractor = extractors[file.data.mimeType];
+			if (!extractor) {
+				console.warn(`Kein Extractor für Typ ${file.data.mimeType}`);
+				return;
 			}
-			// else if (file.data.mimeType === 'pdf') {textChunks.push(...(await extractPdf(file, id)));}
+
+			const textChunks = await extractor(file, id);
 
 			for (const chunk of textChunks) {
 				await db
@@ -177,7 +178,6 @@ function createIndexingStore() {
 			}
 		} catch (err) {
 			console.error(`Fehler bei Datei ${file.file}:`, err);
-			// Wieder einreihen mit niedrigerer Priorität
 			file.priority -= 100;
 			store.queue.push(file);
 			sortPriority();

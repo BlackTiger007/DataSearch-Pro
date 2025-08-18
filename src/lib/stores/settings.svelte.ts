@@ -1,3 +1,3 @@
-import { getAllSettings } from "$lib/services/settingsService";
+import { getAllSettings } from '$lib/services/settingsService';
 
-export const settings =$state(await getAllSettings()) 
+export const settings = $state(await getAllSettings());

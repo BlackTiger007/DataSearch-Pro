@@ -3,9 +3,10 @@
 	import { schema, type File, type Tag, type NewTag } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { and, eq } from 'drizzle-orm';
-	import { onMount } from 'svelte';
+	import type { PageProps } from './$types';
 
-	const filesPromise = db.select().from(schema.files);
+	let { data }: PageProps = $props();
+
 	const filePromise = (id: number) =>
 		db.select().from(schema.scans).where(eq(schema.scans.fileId, id));
 
@@ -13,14 +14,10 @@
 	let search = $state('');
 	let overflow = $state(true);
 
-	const tags: Tag[] = $state([]);
+	const tags: Tag[] = $state([...data.tags]);
 	let selectedTags: number[] = $state([]);
 	let newTagName = $state('');
 	let newTagColor = $state('#34d399'); // Standardfarbe grün
-
-	onMount(async () => {
-		tags.push(...(await db.select().from(schema.tags)));
-	});
 
 	async function loadFileTags(fileId: number) {
 		selectedTags.splice(0, selectedTags.length);
@@ -114,30 +111,28 @@
 		<ul class="list overflow-y-auto shadow-md">
 			<li class="px-4 pb-2 text-xs tracking-wide opacity-60">Dateien auf diesem PC</li>
 
-			{#await filesPromise then files}
-				{#each files.filter((f) => f.name
-						.toLowerCase()
-						.includes(search.toLowerCase())) as file (file.id)}
-					<!-- svelte-ignore a11y_click_events_have_key_events -->
-					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-					<li
-						class="list-row cursor-pointer rounded-lg"
-						class:bg-base-100={selectedFile?.id === file.id}
-						onclick={() => selectFile(file)}
-					>
-						<div class="shrink-0 text-xl">
-							{file.mimeType === 'txt' ? '📝' : file.mimeType === 'pdf' ? '📄' : '📁'}
-						</div>
+			{#each data.files.filter((f) => f.name
+					.toLowerCase()
+					.includes(search.toLowerCase())) as file (file.id)}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<li
+					class="list-row cursor-pointer rounded-lg"
+					class:bg-base-100={selectedFile?.id === file.id}
+					onclick={() => selectFile(file)}
+				>
+					<div class="shrink-0 text-xl">
+						{file.mimeType === 'txt' ? '📝' : file.mimeType === 'pdf' ? '📄' : '📁'}
+					</div>
 
-						<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-							<div class="truncate font-semibold">{file.name}</div>
-							<div class="truncate text-xs text-base-content/70" title={file.path}>{file.path}</div>
-						</div>
+					<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+						<div class="truncate font-semibold">{file.name}</div>
+						<div class="truncate text-xs text-base-content/70" title={file.path}>{file.path}</div>
+					</div>
 
-						<div class="ml-2 shrink-0 text-sm">{formatBytes(file.size)}</div>
-					</li>
-				{/each}
-			{/await}
+					<div class="ml-2 shrink-0 text-sm">{formatBytes(file.size)}</div>
+				</li>
+			{/each}
 
 			<li class="list-row">
 				<p>Keine weiteren Dateien</p>

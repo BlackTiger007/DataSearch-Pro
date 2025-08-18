@@ -222,48 +222,74 @@
 
 <!-- MODAL -->
 <input type="checkbox" id="modal_tag" class="modal-toggle" />
-<div class="modal">
-	<div class="modal-box">
-		<h3 class="text-lg font-bold">Tags</h3>
+<div class="modal modal-bottom sm:modal-middle">
+	<div class="modal-box w-11/12 max-w-2xl">
+		<h3 class="mb-4 text-xl font-bold">Tags verwalten</h3>
 
 		<!-- Neue Tags erstellen -->
-		<div class="flex gap-2 py-2">
+		<div class="mb-4 flex flex-col items-center gap-2 sm:flex-row">
 			<input
 				type="text"
 				placeholder="Neuen Tag erstellen"
 				bind:value={newTagName}
 				class="input-bordered input flex-1"
 			/>
-			<input type="color" bind:value={newTagColor} class="h-10 w-12 border-none p-0" />
-			<button class="btn btn-primary" onclick={addNewTag}>Erstellen</button>
+			<input
+				type="color"
+				bind:value={newTagColor}
+				class="h-10 w-12 cursor-pointer rounded border-none"
+			/>
+			<button class="btn flex-none btn-primary" onclick={addNewTag}> Erstellen </button>
 		</div>
 
 		<!-- Bestehende Tags auswählen und bearbeiten -->
-		<div class="py-2">
+		<div class="max-h-64 overflow-y-auto border-t border-b border-gray-200 py-2">
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">Tags zuweisen / bearbeiten</legend>
 				{#each tags as tag (tag.id)}
-					<div class="flex items-center gap-2 py-1">
+					<div class="flex items-center gap-2 rounded px-1 py-1 transition hover:bg-gray-100">
 						<input
 							type="checkbox"
 							checked={selectedTags.includes(tag.id)}
 							onchange={() => toggleTag(tag.id)}
+							class="checkbox checkbox-primary"
 						/>
-						<input type="text" class="input" bind:value={tag.name} onblur={() => updateTag(tag)} />
+
+						<!-- Farbkreis klickbar machen -->
+						<label class="relative cursor-pointer">
+							<div
+								class="h-5 w-5 rounded-full border border-gray-300"
+								style="background-color: {tag.color}"
+								title={tag.color}
+							></div>
+							<input
+								type="color"
+								class="absolute inset-0 cursor-pointer opacity-0"
+								bind:value={tag.color}
+								onblur={() => updateTag(tag)}
+							/>
+						</label>
+
 						<input
-							type="color"
-							class="h-6 w-6 border-none p-0"
-							bind:value={tag.color}
-							onchange={() => updateTag(tag)}
+							type="text"
+							class="input-bordered input flex-1"
+							bind:value={tag.name}
+							onblur={() => updateTag(tag)}
 						/>
-						<button class="btn" ondblclick={() => deleteTag(tag.id)}>✕</button>
+						<button
+							class="btn btn-sm btn-error"
+							title="Tag löschen (Doppelklick)"
+							ondblclick={() => deleteTag(tag.id)}
+						>
+							✕
+						</button>
 					</div>
 				{/each}
 			</fieldset>
 		</div>
 
-		<div class="modal-action">
-			<label for="modal_tag" class="btn">Schließen</label>
+		<div class="modal-action mt-4">
+			<label for="modal_tag" class="btn btn-outline">Schließen</label>
 		</div>
 	</div>
 </div>

@@ -4,11 +4,23 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 const host = process.env.TAURI_DEV_HOST;
 
+import { sentrySvelteKit } from '@sentry/sveltekit';
 import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
-	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
+	plugins: [
+		sentrySvelteKit({
+			sourceMapsUploadOptions: {
+				org: 'authhub',
+				project: 'datasearch-pro',
+				url: 'https://glitchtip.webretter.com/'
+			}
+		}),
+		tailwindcss(),
+		sveltekit(),
+		devtoolsJson()
+	],
 
 	// Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
 	//

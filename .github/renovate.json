@@ -1,0 +1,36 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:recommended"],
+	"vulnerabilityAlerts": {
+		"labels": ["security"]
+	},
+	"rebaseWhen": "auto",
+	"prCreation": "not-pending",
+	"dependencyDashboard": false,
+	"rangeStrategy": "bump",
+	"schedule": ["before 5am"],
+	"minimumReleaseAge": "7 days",
+	"rollbackPrs": true,
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["patch", "minor"],
+			"matchFileNames": ["package.json", "pnpm"],
+			"labels": ["dependencies"],
+			"automerge": true
+		},
+		{
+			"matchUpdateTypes": ["patch", "minor"],
+			"matchFileNames": ["Cargo.toml", "src-tauri/Cargo.toml"],
+			"labels": ["dependencies"],
+			"automerge": true
+		},
+		{
+			"matchUpdateTypes": ["patch", "minor"],
+			"matchFileNames": [".github/workflows/*.yml"],
+			"labels": ["dependencies"],
+			"automerge": false
+		}
+	],
+	"separateMajorMinor": true,
+	"timezone": "Europe/Berlin"
+}

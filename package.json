@@ -58,6 +58,7 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@sentry/cli",
 			"@tailwindcss/oxide",
 			"better-sqlite3",
 			"esbuild"

@@ -126,7 +126,7 @@
 					</div>
 
 					<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-						<div class="truncate font-semibold">{file.name}</div>
+						<div class="truncate font-semibold" title={file.name}>{file.name}</div>
 						<div class="truncate text-xs text-base-content/70" title={file.path}>{file.path}</div>
 					</div>
 

@@ -78,7 +78,9 @@ function createIndexingStore() {
 				const data = await readFile(p);
 				const hash = await computeHash(data);
 				const name = p.split(sep()).pop() || '';
-				const mimeType = !s.isDirectory && name.includes('.') ? name.split('.').pop() || '' : '';
+				const mimeType = (
+					!s.isDirectory && name.includes('.') ? name.split('.').pop() || '' : ''
+				).toLowerCase();
 
 				const indexed: IndexedFile = {
 					path: p,
@@ -99,7 +101,7 @@ function createIndexingStore() {
 		for (const file of allFiles) {
 			if (
 				settings.allowedFileTypes.length > 0 &&
-				!settings.allowedFileTypes.includes(file.mimeType)
+				!settings.allowedFileTypes.includes(file.mimeType.toLowerCase())
 			)
 				continue;
 			const existing = await db.query.files.findFirst({
@@ -159,9 +161,9 @@ function createIndexingStore() {
 			}
 
 			// passenden Extractor holen
-			const extractor = extractors[file.data.mimeType];
+			const extractor = extractors[file.data.mimeType.toLowerCase()];
 			if (!extractor) {
-				console.warn(`Kein Extractor für Typ ${file.data.mimeType}`);
+				console.warn(`Kein Extractor für Typ ${file.data.mimeType.toLowerCase()}`);
 				return;
 			}
 

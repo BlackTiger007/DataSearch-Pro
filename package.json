@@ -54,6 +54,7 @@
 		"better-sqlite3": "^11.8.0",
 		"drizzle-orm": "^0.40.0",
 		"pdfjs-dist": "^5.4.54",
+		"tesseract.js": "5.1.1",
 		"zod": "^4.0.17"
 	},
 	"pnpm": {
@@ -61,7 +62,8 @@
 			"@sentry/cli",
 			"@tailwindcss/oxide",
 			"better-sqlite3",
-			"esbuild"
+			"esbuild",
+			"tesseract.js"
 		]
 	}
 }

@@ -5,6 +5,7 @@
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import { formatBytes } from '$lib/utils/formatBytes';
 
 	// Map für animierte Prioritäten
 	let animatedPriorities = new Map<string, Tween<number>>();
@@ -89,7 +90,7 @@
 						<div class="truncate" title={item.file}>{item.file}</div>
 					</div>
 
-					<span>Dateigröße: {item.data.size} bytes</span>
+					<span>Dateigröße: {formatBytes(item.data.size)} bytes</span>
 
 					<!-- Buttons: Priority erhöhen -->
 					<div class="flex space-x-1">

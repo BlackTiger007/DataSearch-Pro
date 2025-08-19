@@ -2,6 +2,7 @@ import type { QueueItem } from '$lib/types/indexing';
 import type { NewScan } from '$lib/db/schema';
 import { extractTxt } from './txt';
 import { extractPdf } from './pdf';
+import { extractImageOcr } from './img';
 
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
@@ -16,7 +17,9 @@ export const extractors: Record<string, ExtractFn> = {
 	yaml: extractTxt,
 	yml: extractTxt,
 	json: extractTxt, // JSON kann als Text eingelesen werden
-	pdf: extractPdf
+	pdf: extractPdf,
+	png: extractImageOcr,
+	jpg: extractImageOcr
 
 	// Platzhalter für spezielle Formate
 	// docx: extractDocx,

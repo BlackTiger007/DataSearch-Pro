@@ -4,6 +4,8 @@
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { and, eq } from 'drizzle-orm';
 	import type { PageProps } from './$types';
+	import { openPath } from '@tauri-apps/plugin-opener';
+	import { sep } from '@tauri-apps/api/path';
 
 	let { data }: PageProps = $props();
 
@@ -144,6 +146,23 @@
 		{#if selectedFile}
 			<h2 class="mb-2 text-2xl font-bold">{selectedFile.name}</h2>
 			<p class="mb-4 text-sm text-base-content/70">{selectedFile.path}</p>
+
+			<div class="mb-4 flex gap-2">
+				<button
+					class="btn btn-sm btn-primary"
+					disabled={!selectedFile.path}
+					onclick={() => openPath(selectedFile!.path)}
+				>
+					Datei öffnen
+				</button>
+				<button
+					class="btn btn-sm btn-secondary"
+					disabled={!selectedFile.path}
+					onclick={() => openPath(selectedFile!.path.split(sep()).slice(0, -1).join(sep()) || '')}
+				>
+					Ordner öffnen
+				</button>
+			</div>
 
 			<div class="stats mb-4 bg-base-100 shadow">
 				<div class="stat">

@@ -26,9 +26,9 @@ export async function extractDocx(file: QueueItem, id: number): Promise<NewScan[
 	let lineNumber = 0;
 
 	for (const line of text.split(/\r?\n/)) {
-		lineNumber++;
 		const clean = sanitizeText(line);
 		if (!clean) continue;
+		lineNumber++;
 		textChunks.push(...splitSmartForDb(clean, lineNumber, id));
 	}
 

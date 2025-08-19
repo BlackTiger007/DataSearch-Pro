@@ -28,9 +28,9 @@ export async function extractPdf(file: QueueItem, id: number): Promise<NewScan[]
 
 		const lines = pageText.split(/\r?\n/);
 		for (const line of lines) {
-			lineNumber++;
 			const clean = sanitizeText(line);
 			if (!clean) continue;
+			lineNumber++;
 			textChunks.push(...splitSmartForDb(clean, lineNumber, id));
 		}
 	}

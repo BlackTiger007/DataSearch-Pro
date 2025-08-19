@@ -32,9 +32,9 @@ export async function extractImageOcr(file: QueueItem, id: number): Promise<NewS
 	// Text in Zeilen zerlegen
 	const lines = text.split(/\r?\n/);
 	for (const line of lines) {
-		lineNumber++;
 		const clean = sanitizeText(line);
 		if (!clean) continue;
+		lineNumber++;
 		textChunks.push(...splitSmartForDb(clean, lineNumber, id));
 	}
 

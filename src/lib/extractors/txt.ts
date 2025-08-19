@@ -11,9 +11,9 @@ export async function extractTxt(file: QueueItem, id: number): Promise<NewScan[]
 	const textChunks: NewScan[] = [];
 	let lineNumber = 0;
 	for await (const line of lines) {
-		lineNumber++;
 		const clean = sanitizeText(line);
 		if (clean.length === 0) continue;
+		lineNumber++;
 
 		textChunks.push(...splitSmartForDb(clean, lineNumber, id));
 	}

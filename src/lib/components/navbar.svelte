@@ -3,6 +3,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { settings } from '$lib/stores/settings.svelte';
 	import { open } from '@tauri-apps/plugin-dialog';
+	import { handleUnscannedFiles } from '$lib/utils/fileService';
 
 	/** Fügt Dateien aus ausgewählten Ordnern der Queue hinzu */
 	async function addTempFolders() {
@@ -42,6 +43,9 @@
 	</div>
 
 	<div class="flex gap-1">
+		{#if import.meta.env.DEV}
+			<button class="btn" onclick={handleUnscannedFiles}>Ungescannte Dokumente</button>
+		{/if}
 		<button class="btn" onclick={addTempFolders}>Add Temp Folder</button>
 		<button class="btn" onclick={addTempWatchFolders}>Add Temp Watch Folder</button>
 		<button

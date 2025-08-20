@@ -31,6 +31,9 @@ sentry = "0.42.0"
 sentry-log = "0.42.0"
 log = "0.4"
 
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+
 [profile.dev]
 opt-level = 1          # Aktiviert ein wenig Optimierung für schnelleren Code, ohne lange Build-Zeiten.
 incremental = true     # Behalte inkrementelle Builds.
@@ -46,3 +49,4 @@ lto = true        # Enables link-time-optimizations.
 opt-level = "s"   # Prioritizes small binary size. Use `3` if you prefer speed.
 panic = "abort"   # Higher performance by disabling panic handlers.
 strip = true      # Ensures debug symbols are removed.
+

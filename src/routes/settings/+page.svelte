@@ -4,12 +4,24 @@
 	import { saveSettings } from '$lib/services/settingsService';
 	import { settings } from '$lib/stores/settings.svelte';
 	import type { SettingsType } from '$lib/validation/settingsSchema';
+	import { open } from '@tauri-apps/plugin-dialog';
 
 	let localSettings: SettingsType = $state({ ...settings });
 
 	async function save() {
 		await saveSettings($state.snapshot(localSettings));
 		goto('/');
+	}
+
+	async function pickFolder(i: number) {
+		const folder = await open({
+			directory: true,
+			multiple: false
+		});
+
+		if (folder && typeof folder === 'string') {
+			localSettings.folders[i] = folder;
+		}
 	}
 </script>
 
@@ -57,6 +69,7 @@
 							class="input-bordered input w-full"
 							bind:value={localSettings.folders[i]}
 						/>
+						<button class="btn" onclick={() => pickFolder(i)}>Folder</button>
 						<button class="btn btn-error" onclick={() => localSettings.folders.splice(i, 1)}>
 							✕
 						</button>

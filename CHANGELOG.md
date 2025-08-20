@@ -15,7 +15,7 @@
 
 ### Features
 
-* **app:** generate Tauri app icons from favicon with iOS color `[#00](https://github.com/BlackTiger007/DataSearch-Pro/issues/00)D387` ([2431230](https://github.com/BlackTiger007/DataSearch-Pro/commit/2431230bd18680565beb6083bf488292ab834226)), closes [#00D387](https://github.com/BlackTiger007/DataSearch-Pro/issues/00D387)
+* **app:** generate Tauri app icons from favicon with iOS color #00D387 ([2431230](https://github.com/BlackTiger007/DataSearch-Pro/commit/2431230bd18680565beb6083bf488292ab834226))
 * **build:** add `include_dir` dependency to Cargo.toml ([537d3df](https://github.com/BlackTiger007/DataSearch-Pro/commit/537d3df74d0bf43e716040cc8d3a54d9d43bc640))
 * **build:** update Cargo.toml with author, rust-version and custom profiles ([d828eac](https://github.com/BlackTiger007/DataSearch-Pro/commit/d828eace6bb579ba45500a6b5d073e02ee76685b))
 * **capabilities:** add permissions for opener to allow opening paths ([036f4b8](https://github.com/BlackTiger007/DataSearch-Pro/commit/036f4b803a65bebe35c3650d0ea07134e072cb34))

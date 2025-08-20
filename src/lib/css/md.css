@@ -2,7 +2,7 @@
 @plugin "daisyui";
 
 .body {
-	@apply prose-slate mx-auto prose max-w-4xl p-6;
+	@apply mx-auto prose max-w-4xl p-6;
 
 	h1 {
 		@apply my-5 text-3xl font-bold text-primary;

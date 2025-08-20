@@ -1,0 +1,76 @@
+@reference "tailwindcss";
+@plugin "daisyui";
+
+.body {
+	@apply prose-slate mx-auto prose max-w-4xl p-6;
+
+	h1 {
+		@apply my-5 text-3xl font-bold text-primary;
+	}
+
+	h2 {
+		@apply my-4 text-2xl font-semibold text-secondary;
+	}
+
+	h3 {
+		@apply mt-4 mb-2 text-xl font-semibold text-secondary;
+	}
+
+	p {
+		@apply my-2 text-base leading-relaxed;
+	}
+
+	a {
+		@apply text-blue-500 hover:underline;
+	}
+
+	code {
+		@apply rounded bg-base-300 px-1 py-0.5 font-mono text-sm;
+	}
+
+	pre {
+		@apply overflow-x-auto rounded bg-base-200 p-4 font-mono text-sm;
+	}
+
+	ul,
+	ol {
+		@apply my-2 list-inside list-disc space-y-2;
+	}
+
+	li {
+		@apply text-sm;
+	}
+
+	li > a {
+		@apply text-blue-500 hover:underline;
+	}
+
+	li > code {
+		@apply rounded bg-base-300 px-1;
+	}
+
+	strong {
+		@apply font-semibold;
+	}
+
+	blockquote {
+		@apply my-4 border-l-4 border-primary pl-4 text-base text-base-content/80 italic;
+	}
+
+	table {
+		@apply w-full table-auto overflow-hidden rounded border border-base-300;
+	}
+
+	th,
+	td {
+		@apply border border-base-300 px-3 py-1 text-left;
+	}
+
+	th {
+		@apply bg-base-200 font-semibold;
+	}
+
+	img {
+		@apply my-4 rounded shadow-md;
+	}
+}

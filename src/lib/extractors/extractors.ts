@@ -9,23 +9,18 @@ import { extractXlsx } from './xlsx';
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
 export const extractors: Record<string, ExtractFn> = {
-	// Klartext
 	txt: extractTxt,
-	csv: extractTxt, // CSV kann man wie Text behandeln
+	csv: extractTxt,
 	tsv: extractTxt,
 	log: extractTxt,
 	md: extractTxt,
 	ini: extractTxt,
 	yaml: extractTxt,
 	yml: extractTxt,
-	json: extractTxt, // JSON kann als Text eingelesen werden
+	json: extractTxt,
 	pdf: extractPdf,
 	png: extractImageOcr,
 	jpg: extractImageOcr,
 	docx: extractDocx,
 	xlsx: extractXlsx
-
-	// Platzhalter für spezielle Formate
-	// docx: extractDocx,
-	// pdf: extractPdf,
 };

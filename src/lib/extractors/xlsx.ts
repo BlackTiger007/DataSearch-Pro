@@ -26,20 +26,23 @@ export async function extractXlsx(file: QueueItem, id: number): Promise<NewScan[
 	for (const sheetName of workbook.SheetNames) {
 		const sheet = workbook.Sheets[sheetName];
 
-		// Sheet in JSON auslesen
-		const rows: Record<string, unknown>[] = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+		// Sheet als Array von Arrays auslesen (erste Zeile wird behalten)
+		const rows: unknown[][] = XLSX.utils.sheet_to_json(sheet, {
+			header: 1,
+			defval: ''
+		});
+
+		console.log('row type', rows, typeof rows);
 
 		for (const row of rows) {
-			// Alle Zellen des Rows zusammenführen
-			const line = Object.values(row).join(' ');
+			// Array von Strings direkt zusammenführen
+			const line = row.join(' ');
 			const clean = sanitizeText(line);
 			if (!clean) continue;
 			lineNumber++;
 			textChunks.push(...splitSmartForDb(clean, lineNumber, id));
 		}
 	}
-
-	console.log('XLSX:', textChunks);
 
 	return textChunks;
 }

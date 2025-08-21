@@ -61,7 +61,7 @@
 		"mammoth": "^1.10.0",
 		"marked": "^16.2.0",
 		"pdfjs-dist": "^5.4.54",
-		"tesseract.js": "5.1.1",
+		"tesseract.js": "6.0.1",
 		"zod": "^4.0.17"
 	},
 	"pnpm": {

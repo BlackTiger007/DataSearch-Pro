@@ -38,7 +38,6 @@
 		if (event.target instanceof HTMLAnchorElement) {
 			const url = event.target.getAttribute('href');
 			if (url) {
-				console.log(`Opening URL: ${url}`);
 				openUrl(url);
 			}
 		}

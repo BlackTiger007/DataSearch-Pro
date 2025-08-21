@@ -32,8 +32,6 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 			defval: ''
 		});
 
-		console.log('row type', rows, typeof rows);
-
 		for (const row of rows) {
 			// Array von Strings direkt zusammenführen
 			const line = row.join(' ');

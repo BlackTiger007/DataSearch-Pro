@@ -133,8 +133,6 @@ function createIndexingStore() {
 
 	async function processFile(file: QueueItem) {
 		try {
-			console.log('Verarbeitung', $state.snapshot(file));
-
 			await db
 				.insert(schema.files)
 				.values({ ...file.data, indexedAt: new Date() })

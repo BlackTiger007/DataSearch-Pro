@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type File, type Tag, schema } from '$lib/db/schema';
+	import { type File, type Scan, type Tag, schema } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { openPath } from '@tauri-apps/plugin-opener';
 	import { sep } from '@tauri-apps/api/path';
@@ -18,8 +18,23 @@
 		overflow: boolean;
 	} = $props();
 
-	const filePromise = (id: number) =>
-		db.select().from(schema.scans).where(eq(schema.scans.fileId, id));
+	// Cache für File-Chunks
+	const fileCache = new Map<number, Scan[]>();
+
+	// Promise-Funktion mit Cache
+	const filePromise = async (id: number) => {
+		if (fileCache.has(id)) {
+			return fileCache.get(id)!;
+		}
+		const chunks = await db.select().from(schema.scans).where(eq(schema.scans.fileId, id));
+		fileCache.set(id, chunks);
+		return chunks;
+	};
+
+	// Optional: Cache leeren, falls Datei aktualisiert wird
+	function invalidateFileCache(fileId: number) {
+		fileCache.delete(fileId);
+	}
 </script>
 
 <div class="w-2/3 overflow-y-auto bg-base-300 p-6">

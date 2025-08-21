@@ -57,7 +57,7 @@
 		"@tauri-apps/plugin-sql": "~2.3.0",
 		"@tauri-apps/plugin-updater": "~2.9.0",
 		"better-sqlite3": "^11.10.0",
-		"drizzle-orm": "^0.40.0",
+		"drizzle-orm": "^0.44.4",
 		"mammoth": "^1.10.0",
 		"marked": "^16.2.0",
 		"pdfjs-dist": "^5.4.54",

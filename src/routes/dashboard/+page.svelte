@@ -40,7 +40,7 @@
 		<h2 class="mb-2 text-2xl font-semibold">👀 Aktive Watch-Pfade</h2>
 		{#if indexing.store.activeWatches.size > 0}
 			<ul class="list divide-y divide-base-200 overflow-hidden rounded-box bg-base-100 shadow-md">
-				{#each Array.from(indexing.store.activeWatches) as [path, unwatch] (path)}
+				{#each Array.from(indexing.store.activeWatches) as [path] (path)}
 					<li class="list-row transition-colors duration-200 hover:bg-base-200">
 						<div class="list-col-grow truncate">{path}</div>
 						<button class="btn" onclick={() => indexing.removeWatch(path)}>✕</button>

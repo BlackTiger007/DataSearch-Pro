@@ -94,7 +94,7 @@
 
 					<!-- Buttons: Priority erhöhen -->
 					<div class="flex space-x-1">
-						{#each [1, 10, 100] as val}
+						{#each [1, 10, 100] as val (val)}
 							<button
 								class="btn transition-transform btn-outline btn-sm hover:scale-110"
 								onclick={() => indexing.setPriority(item.file, val)}
@@ -106,7 +106,7 @@
 
 					<!-- Buttons: Priority verringern -->
 					<div class="flex space-x-1">
-						{#each [100, 10, 1] as val}
+						{#each [100, 10, 1] as val (val)}
 							<button
 								class="btn transition-transform btn-outline btn-sm hover:scale-110"
 								onclick={() => indexing.setPriority(item.file, -val)}

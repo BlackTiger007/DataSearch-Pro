@@ -181,7 +181,7 @@
 				<div class="flex flex-wrap gap-2">
 					{#each selectedTags
 						.map((id) => tags.find((t) => t.id === id))
-						.filter((t): t is Tag => !!t) as tag}
+						.filter((t): t is Tag => !!t) as tag (tag.id)}
 						<span class="badge" style="background-color: {tag.color}">{tag.name}</span>
 					{/each}
 					<label for="modal_tag" class="btn btn-outline btn-xs">+ Tag</label>

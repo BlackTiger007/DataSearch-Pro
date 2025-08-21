@@ -185,6 +185,7 @@ function createIndexingStore() {
 			}
 		} catch (err) {
 			console.error(`Fehler bei Datei ${file.file}:`, err);
+			if (file.priority > -300) return;
 			file.priority -= 100;
 			store.queue.push(file);
 			sortPriority();

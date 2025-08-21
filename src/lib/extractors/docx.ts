@@ -9,7 +9,7 @@ import mammoth from 'mammoth';
  * Extrahiert den reinen Text aus einer .docx Datei (Browser/Tauri-kompatibel)
  * und gibt ihn in NewScan-Chunks zurück.
  */
-export async function extractDocx(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	const uint8Array = await readFile(file.file);
 
 	const arrayBuffer = uint8Array.slice().buffer;

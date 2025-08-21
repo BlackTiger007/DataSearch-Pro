@@ -160,12 +160,15 @@ function createIndexingStore() {
 				return;
 			}
 
-			// passenden Extractor holen
-			const extractor = extractors[file.data.mimeType.toLowerCase()];
-			if (!extractor) {
+			// passenden loader holen
+			const loader = extractors[file.data.mimeType.toLowerCase()];
+			if (!loader) {
 				console.warn(`Kein Extractor für Typ ${file.data.mimeType.toLowerCase()}`);
 				return;
 			}
+
+			// dynamisch importieren und Funktion abrufen
+			const extractor = await loader();
 
 			const textChunks = await extractor(file, id);
 

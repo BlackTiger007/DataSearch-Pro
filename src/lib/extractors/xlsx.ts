@@ -9,7 +9,7 @@ import * as XLSX from 'xlsx';
  * Extrahiert den Text aus einer .xlsx Datei (Browser/Tauri-kompatibel)
  * und gibt ihn in NewScan-Chunks zurück.
  */
-export async function extractXlsx(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	// Datei als Uint8Array lesen
 	const uint8Array = await readFile(file.file);
 

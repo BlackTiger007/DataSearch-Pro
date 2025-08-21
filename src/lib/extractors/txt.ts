@@ -4,7 +4,7 @@ import { sanitizeText } from '$lib/utils/sanitizeText';
 import { splitSmartForDb } from '$lib/utils/split';
 import { readTextFileLines } from '@tauri-apps/plugin-fs';
 
-export async function extractTxt(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	const lines = await readTextFileLines(file.file);
 
 	// DEFAULT

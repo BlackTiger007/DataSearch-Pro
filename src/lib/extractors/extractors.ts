@@ -1,26 +1,21 @@
 import type { QueueItem } from '$lib/types/indexing';
 import type { NewScan } from '$lib/db/schema';
-import { extractTxt } from './txt';
-import { extractPdf } from './pdf';
-import { extractImageOcr } from './img';
-import { extractDocx } from './docx';
-import { extractXlsx } from './xlsx';
 
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
-export const extractors: Record<string, ExtractFn> = {
-	txt: extractTxt,
-	csv: extractTxt,
-	tsv: extractTxt,
-	log: extractTxt,
-	md: extractTxt,
-	ini: extractTxt,
-	yaml: extractTxt,
-	yml: extractTxt,
-	json: extractTxt,
-	pdf: extractPdf,
-	png: extractImageOcr,
-	jpg: extractImageOcr,
-	docx: extractDocx,
-	xlsx: extractXlsx
+export const extractors: Record<string, () => Promise<ExtractFn>> = {
+	txt: () => import('./txt').then((m) => m.extract),
+	csv: () => import('./txt').then((m) => m.extract),
+	tsv: () => import('./txt').then((m) => m.extract),
+	log: () => import('./txt').then((m) => m.extract),
+	md: () => import('./txt').then((m) => m.extract),
+	ini: () => import('./txt').then((m) => m.extract),
+	yaml: () => import('./txt').then((m) => m.extract),
+	yml: () => import('./txt').then((m) => m.extract),
+	json: () => import('./txt').then((m) => m.extract),
+	pdf: () => import('./pdf').then((m) => m.extract),
+	png: () => import('./img').then((m) => m.extract),
+	jpg: () => import('./img').then((m) => m.extract),
+	docx: () => import('./docx').then((m) => m.extract),
+	xlsx: () => import('./xlsx').then((m) => m.extract)
 };

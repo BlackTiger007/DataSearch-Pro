@@ -6,9 +6,10 @@
 	import { cubicOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
 	import { formatBytes } from '$lib/utils/formatBytes';
+	import { SvelteMap } from 'svelte/reactivity';
 
 	// Map für animierte Prioritäten
-	let animatedPriorities = new Map<string, Tween<number>>();
+	let animatedPriorities = new SvelteMap<string, Tween<number>>();
 
 	// Funktion, um Priority-Werte smooth zu animieren
 	function getAnimatedPriority(file: string, value: number): Tween<number> {

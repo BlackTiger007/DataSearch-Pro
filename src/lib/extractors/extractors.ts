@@ -4,6 +4,7 @@ import { extractTxt } from './txt';
 import { extractPdf } from './pdf';
 import { extractImageOcr } from './img';
 import { extractDocx } from './docx';
+import { extractXlsx } from './xlsx';
 
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
@@ -21,7 +22,8 @@ export const extractors: Record<string, ExtractFn> = {
 	pdf: extractPdf,
 	png: extractImageOcr,
 	jpg: extractImageOcr,
-	docx: extractDocx
+	docx: extractDocx,
+	xlsx: extractXlsx
 
 	// Platzhalter für spezielle Formate
 	// docx: extractDocx,

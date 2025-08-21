@@ -43,6 +43,8 @@ function createIndexingStore() {
 
 		store.isRunning = false;
 		store.currentFile = null;
+
+		saveSettings($state.snapshot(settings));
 	}
 
 	function stop() {
@@ -161,7 +163,18 @@ function createIndexingStore() {
 			// passenden loader holen
 			const loader = extractors[file.data.mimeType.toLowerCase()];
 			if (!loader) {
-				console.warn(`Kein Extractor für Typ ${file.data.mimeType.toLowerCase()}`);
+				const ext = file.data.mimeType.toLowerCase();
+
+				// Prüfen, ob die Endung schon existiert
+				const existing = settings.fileUsageCount.find((e) => e.extension === ext);
+
+				if (existing) {
+					existing.count++;
+				} else {
+					settings.fileUsageCount.push({ extension: ext, count: 1 });
+				}
+
+				console.warn(`Kein Extractor für Typ ${ext}`);
 				return;
 			}
 

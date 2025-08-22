@@ -17,7 +17,7 @@
 	}
 </script>
 
-<main class="flex h-screen">
+<main class="flex grow">
 	<Sidebar files={data.files} {selectedFile} bind:search {selectFile} />
 	<Content {selectedFile} {tags} {selectedTags} bind:overflow />
 </main>

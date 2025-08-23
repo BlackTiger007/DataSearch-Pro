@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Beispiel: Du kannst pro Setting eigene Validierung definieren
 export const settingsSchema = z.object({
-	theme: z.enum(['light', 'dark']).default('light'),
+	theme: z.enum(['system', 'light', 'dark']).default('system'),
 	folders: z.array(z.string()).default([]), // Liste von Pfaden
 	allowedFileTypes: z.array(z.string()).default(['pdf', 'doc', 'docx']), // Liste von Erlaubten Datie endungen
 	autoWatch: z.boolean().default(true), // Automatisches Beobachten von Ordnern

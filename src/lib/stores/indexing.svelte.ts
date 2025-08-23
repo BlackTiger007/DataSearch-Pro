@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { settings } from './settings.svelte';
 import type { UnwatchFn } from '@tauri-apps/plugin-fs';
 import { exists, readFile, stat, watch as watchWithDelay } from '@tauri-apps/plugin-fs';
-import { saveSettings } from '$lib/services/settingsService';
+import { saveSettings, saveSettingsFileUsageCount } from '$lib/services/settingsService';
 import { ask, message } from '@tauri-apps/plugin-dialog';
 import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
@@ -44,7 +44,7 @@ function createIndexingStore() {
 		store.isRunning = false;
 		store.currentFile = null;
 
-		saveSettings($state.snapshot(settings));
+		saveSettingsFileUsageCount(settings.fileUsageCount);
 	}
 
 	function stop() {

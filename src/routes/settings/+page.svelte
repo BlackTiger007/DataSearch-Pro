@@ -34,6 +34,16 @@
 			<h2 class="card-title">Theme</h2>
 			<div class="mt-2 flex gap-4">
 				<label class="label cursor-pointer">
+					<span class="label-text mr-2">System</span>
+					<input
+						type="radio"
+						name="theme"
+						class="radio"
+						value="system"
+						bind:group={localSettings.theme}
+					/>
+				</label>
+				<label class="label cursor-pointer">
 					<span class="label-text mr-2">Light</span>
 					<input
 						type="radio"

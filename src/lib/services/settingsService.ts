@@ -34,3 +34,23 @@ export async function saveSettings(newSettings: Partial<SettingsType>) {
 
 	Object.assign(settingsStore, newSettings); // Eigenschaften von settingsTemp in settings kopieren
 }
+
+export async function saveSettingsFileUsageCount(fileUsageCount: SettingsType['fileUsageCount']) {
+	if (Object.keys(fileUsageCount).length === 0) return;
+
+	try {
+		await db
+			.insert(settings)
+			.values({
+				key: 'fileUsageCount',
+				value: JSON.stringify(fileUsageCount)
+			})
+			.onConflictDoUpdate({
+				target: settings.key,
+				set: { value: JSON.stringify(fileUsageCount) }
+			});
+	} catch (error) {
+		console.error('Fehler beim Speichern der Settings:', error);
+	}
+	settingsStore.fileUsageCount = fileUsageCount;
+}

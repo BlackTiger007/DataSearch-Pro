@@ -29,5 +29,8 @@ export const extractors: Record<string, () => Promise<ExtractFn>> = {
 	pptx: () => import('./office').then((m) => m.extract),
 	odt: () => import('./office').then((m) => m.extract),
 	ods: () => import('./office').then((m) => m.extract),
-	odp: () => import('./office').then((m) => m.extract)
+	odp: () => import('./office').then((m) => m.extract),
+
+	// XML
+	xml: () => import('./xml').then((m) => m.extract)
 };

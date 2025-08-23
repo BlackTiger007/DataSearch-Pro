@@ -43,6 +43,8 @@ function createIndexingStore() {
 
 		store.isRunning = false;
 		store.currentFile = null;
+
+		saveSettings($state.snapshot(settings));
 	}
 
 	function stop() {
@@ -133,8 +135,6 @@ function createIndexingStore() {
 
 	async function processFile(file: QueueItem) {
 		try {
-			console.log('Verarbeitung', $state.snapshot(file));
-
 			await db
 				.insert(schema.files)
 				.values({ ...file.data, indexedAt: new Date() })
@@ -160,12 +160,26 @@ function createIndexingStore() {
 				return;
 			}
 
-			// passenden Extractor holen
-			const extractor = extractors[file.data.mimeType.toLowerCase()];
-			if (!extractor) {
-				console.warn(`Kein Extractor für Typ ${file.data.mimeType.toLowerCase()}`);
+			// passenden loader holen
+			const loader = extractors[file.data.mimeType.toLowerCase()];
+			if (!loader) {
+				const ext = file.data.mimeType.toLowerCase();
+
+				// Prüfen, ob die Endung schon existiert
+				const existing = settings.fileUsageCount.find((e) => e.extension === ext);
+
+				if (existing) {
+					existing.count++;
+				} else {
+					settings.fileUsageCount.push({ extension: ext, count: 1 });
+				}
+
+				console.warn(`Kein Extractor für Typ ${ext}`);
 				return;
 			}
+
+			// dynamisch importieren und Funktion abrufen
+			const extractor = await loader();
 
 			const textChunks = await extractor(file, id);
 
@@ -184,6 +198,7 @@ function createIndexingStore() {
 			}
 		} catch (err) {
 			console.error(`Fehler bei Datei ${file.file}:`, err);
+			if (file.priority > -300) return;
 			file.priority -= 100;
 			store.queue.push(file);
 			sortPriority();

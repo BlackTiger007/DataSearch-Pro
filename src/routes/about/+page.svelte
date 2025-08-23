@@ -8,7 +8,6 @@
 	const license = 'MIT';
 	const contactEmail = 'info@webretter.com';
 	const website = 'https://github.com/BlackTiger007/DataSearch-Pro';
-	const releaseDate = '2025-08-13';
 
 	onMount(async () => {
 		version = await app.getVersion();
@@ -18,7 +17,7 @@
 <div class="container mx-auto p-6">
 	<div class="card space-y-6 rounded-lg bg-base-200 p-6 shadow-lg">
 		<h1 class="text-center text-3xl font-bold">{appName}</h1>
-		<p class="text-center text-sm text-gray-500">Version {version} • Released on {releaseDate}</p>
+		<p class="text-center text-sm text-gray-500">Version {version}</p>
 
 		<section class="space-y-2">
 			<h2 class="text-xl font-semibold">Über die App</h2>

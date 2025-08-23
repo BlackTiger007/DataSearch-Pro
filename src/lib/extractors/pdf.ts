@@ -10,7 +10,7 @@ import type { TextItem } from 'pdfjs-dist/types/src/display/api';
 // Worker explizit setzen
 GlobalWorkerOptions.workerSrc = workerSrc;
 
-export async function extractPdf(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	const binary = await readFile(file.file);
 	const pdf = await getDocument({ data: binary }).promise;
 

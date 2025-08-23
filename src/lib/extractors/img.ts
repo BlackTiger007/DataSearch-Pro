@@ -8,7 +8,7 @@ import { createWorker } from 'tesseract.js';
 /**
  * OCR nur für Bilder (PNG, JPG, etc.) mit Tesseract.js
  */
-export async function extractImageOcr(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	// Datei einlesen
 	const binary = await readFile(file.file);
 

@@ -1,29 +1,33 @@
 import type { QueueItem } from '$lib/types/indexing';
 import type { NewScan } from '$lib/db/schema';
-import { extractTxt } from './txt';
-import { extractPdf } from './pdf';
-import { extractImageOcr } from './img';
-import { extractDocx } from './docx';
 
 type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
 
-export const extractors: Record<string, ExtractFn> = {
-	// Klartext
-	txt: extractTxt,
-	csv: extractTxt, // CSV kann man wie Text behandeln
-	tsv: extractTxt,
-	log: extractTxt,
-	md: extractTxt,
-	ini: extractTxt,
-	yaml: extractTxt,
-	yml: extractTxt,
-	json: extractTxt, // JSON kann als Text eingelesen werden
-	pdf: extractPdf,
-	png: extractImageOcr,
-	jpg: extractImageOcr,
-	docx: extractDocx
+export const extractors: Record<string, () => Promise<ExtractFn>> = {
+	// Textbasierte Formate
+	txt: () => import('./txt').then((m) => m.extract),
+	csv: () => import('./txt').then((m) => m.extract),
+	tsv: () => import('./txt').then((m) => m.extract),
+	log: () => import('./txt').then((m) => m.extract),
+	md: () => import('./txt').then((m) => m.extract),
+	ini: () => import('./txt').then((m) => m.extract),
+	yaml: () => import('./txt').then((m) => m.extract),
+	yml: () => import('./txt').then((m) => m.extract),
+	json: () => import('./txt').then((m) => m.extract),
 
-	// Platzhalter für spezielle Formate
-	// docx: extractDocx,
-	// pdf: extractPdf,
+	// PDF
+	pdf: () => import('./pdf').then((m) => m.extract),
+
+	// Bilder
+	png: () => import('./img').then((m) => m.extract),
+	jpg: () => import('./img').then((m) => m.extract),
+	jpeg: () => import('./img').then((m) => m.extract),
+
+	// Office-Formate (alle landen in ./office)
+	docx: () => import('./office').then((m) => m.extract),
+	xlsx: () => import('./office').then((m) => m.extract),
+	pptx: () => import('./office').then((m) => m.extract),
+	odt: () => import('./office').then((m) => m.extract),
+	ods: () => import('./office').then((m) => m.extract),
+	odp: () => import('./office').then((m) => m.extract)
 };

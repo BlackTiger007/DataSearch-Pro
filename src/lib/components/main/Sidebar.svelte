@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { File } from '$lib/db/schema';
+	import { getIconComponent } from '$lib/utils/icons';
 	import { formatBytes } from '$lib/utils/formatBytes';
 
 	let {
@@ -38,9 +39,9 @@
 				class:bg-base-100={selectedFile?.id === file.id}
 				onclick={() => selectFile(file)}
 			>
-				<div class="shrink-0 text-xl">
-					{file.mimeType === 'txt' ? '📝' : file.mimeType === 'pdf' ? '📄' : '📁'}
-				</div>
+				{#await getIconComponent(file.mimeType) then Icon}
+					<Icon class="size-12 text-base-content/70" />
+				{/await}
 
 				<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
 					<div class="truncate font-semibold" title={file.name}>{file.name}</div>

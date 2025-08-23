@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { schema } from '$lib/db/schema';
 import { indexing } from '$lib/stores/indexing.svelte';
-import { inArray } from 'drizzle-orm';
+import { gt, inArray } from 'drizzle-orm';
 
 /**
  * Gibt eine Liste von Pfaden aller Dateien zurück, für die keine Scans existieren,
@@ -9,7 +9,7 @@ import { inArray } from 'drizzle-orm';
  */
 export async function handleUnscannedFiles() {
 	// Alle Dateien abfragen
-	const files = await db.select().from(schema.files);
+	const files = await db.select().from(schema.files).where(gt(schema.files.size, 0));
 
 	// Alle Scans abfragen (nur fileId)
 	const scans = await db.select({ fileId: schema.scans.fileId }).from(schema.scans);

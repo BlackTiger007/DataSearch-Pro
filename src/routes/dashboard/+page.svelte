@@ -10,6 +10,16 @@
 	import { open } from '@tauri-apps/plugin-dialog';
 	import { handleUnscannedFiles } from '$lib/utils/fileService';
 
+	// Icons
+	import AddFolder from 'bootstrap-icons/icons/folder-plus.svg?component';
+	import WatchIcon from 'bootstrap-icons/icons/eye.svg?component';
+	import RemoveIcon from 'bootstrap-icons/icons/x-lg.svg?component';
+	import Spinner from 'bootstrap-icons/icons/arrow-repeat.svg?component';
+	import IdleIcon from 'bootstrap-icons/icons/pause-circle.svg?component';
+	import QueueIcon from 'bootstrap-icons/icons/box-seam.svg?component';
+	import PlusIcon from 'bootstrap-icons/icons/plus.svg?component';
+	import MinusIcon from 'bootstrap-icons/icons/dash.svg?component';
+
 	// Map für animierte Prioritäten
 	let animatedPriorities = new SvelteMap<string, Tween<number>>();
 
@@ -54,30 +64,42 @@
 	<div class="flex flex-wrap gap-2">
 		{#if import.meta.env.DEV}
 			<button class="btn btn-outline btn-sm" onclick={handleUnscannedFiles}>
-				🧩 Ungescannte
+				<QueueIcon class="size-4" /> Ungescannte
 			</button>
 		{/if}
-		<button class="btn btn-sm" onclick={addTempFolders}>📂 Add Folder</button>
-		<button class="btn btn-sm" onclick={addTempWatchFolders}>👀 Watch Folder</button>
+		<button class="btn btn-sm" onclick={addTempFolders}>
+			<AddFolder class="size-4" />
+			Add Folder
+		</button>
+		<button class="btn btn-sm" onclick={addTempWatchFolders}>
+			<WatchIcon class="size-4" />
+			Watch Folder
+		</button>
 	</div>
 
-	<h1 class="text-2xl font-bold md:text-3xl">📊 Dashboard</h1>
+	<h1 class="flex items-center gap-2 text-2xl font-bold md:text-3xl">
+		<QueueIcon class="size-6" />
+		Dashboard
+	</h1>
 	<p class="text-base-content/70">Live-Indexierungsstatus & Warteschlange</p>
 
 	<!-- Watch-Pfade -->
 	<section>
-		<h2 class="mb-2 text-xl font-semibold md:text-2xl">👀 Aktive Watch-Pfade</h2>
+		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
+			<WatchIcon class="size-5" />
+			Aktive Watch-Pfade
+		</h2>
 		{#if indexing.store.activeWatches.size > 0}
 			<ul class="divide-y divide-base-200 overflow-hidden rounded-box bg-base-100 shadow-md">
 				{#each Array.from(indexing.store.activeWatches) as [path] (path)}
 					<li class="flex items-center justify-between px-3 py-2 hover:bg-base-200">
 						<span class="truncate text-sm md:text-base">{path}</span>
 						<button
-							class="btn btn-outline btn-xs btn-error"
+							class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
 							title="Entfernen"
 							onclick={() => indexing.removeWatch(path)}
 						>
-							✕
+							<RemoveIcon class="size-3" />
 						</button>
 					</li>
 				{/each}
@@ -89,12 +111,14 @@
 
 	<!-- Warteschlange -->
 	<section>
-		<h2 class="mb-2 text-xl font-semibold md:text-2xl">📦 Aktive Warteschlange</h2>
+		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
+			<QueueIcon class="size-5" /> Aktive Warteschlange
+		</h2>
 		<ul class="overflow-hidden rounded-box bg-base-100 shadow-md">
 			<li class="border-b border-base-200 px-3 py-2">
 				{#if indexing.store.currentFile}
 					<div class="flex items-center gap-2">
-						<span class="loading loading-sm loading-spinner text-primary"></span>
+						<Spinner class="size-4 animate-spin text-primary" />
 						<div class="truncate" title={indexing.store.currentFile}>
 							<strong>Wird verarbeitet:</strong>
 							<span class="text-primary">{indexing.store.currentFile}</span>
@@ -102,7 +126,7 @@
 					</div>
 				{:else}
 					<div class="flex items-center gap-2 text-base-content/70">
-						<span class="badge badge-outline">Idle</span>
+						<IdleIcon class="size-4" />
 						<span class="italic">Es wird aktuell nichts verarbeitet</span>
 					</div>
 				{/if}
@@ -124,7 +148,9 @@
 						<div class="truncate text-sm md:text-base" title={item.file}>
 							{item.file}
 						</div>
-						<div class="text-xs opacity-70">📏 {formatBytes(item.data.size)}</div>
+						<div class="flex items-center gap-1 text-xs opacity-70">
+							{formatBytes(item.data.size)}
+						</div>
 					</div>
 
 					<!-- Controls -->
@@ -133,11 +159,12 @@
 						<div class="flex gap-1">
 							{#each [1, 10, 100] as val (val)}
 								<button
-									class="btn btn-outline btn-xs btn-success"
+									class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
 									title={`Priorität +${val}`}
 									onclick={() => indexing.setPriority(item.file, val)}
 								>
-									+{val}
+									<PlusIcon class="size-3" />
+									{val}
 								</button>
 							{/each}
 						</div>
@@ -145,11 +172,12 @@
 						<div class="flex gap-1">
 							{#each [100, 10, 1] as val (val)}
 								<button
-									class="btn btn-outline btn-xs btn-error"
+									class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
 									title={`Priorität -${val}`}
 									onclick={() => indexing.setPriority(item.file, -val)}
 								>
-									-{val}
+									<MinusIcon class="size-3" />
+									{val}
 								</button>
 							{/each}
 						</div>

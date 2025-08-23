@@ -7,6 +7,8 @@
 	import { onMount } from 'svelte';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { SvelteMap } from 'svelte/reactivity';
+	import { open } from '@tauri-apps/plugin-dialog';
+	import { handleUnscannedFiles } from '$lib/utils/fileService';
 
 	// Map für animierte Prioritäten
 	let animatedPriorities = new SvelteMap<string, Tween<number>>();
@@ -23,6 +25,22 @@
 		return tween;
 	}
 
+	/** Fügt Dateien aus ausgewählten Ordnern der Queue hinzu */
+	async function addTempFolders() {
+		const paths = await open({ multiple: true, directory: true });
+		if (!paths) return;
+
+		indexing.addToQueue(paths);
+	}
+
+	/** Fügt Watch-Funktion für ausgewählte Ordner hinzu */
+	async function addTempWatchFolders() {
+		const paths = await open({ multiple: true, directory: true });
+		if (!paths) return;
+		indexing.addToQueue(paths);
+		await Promise.all(paths.map((p) => indexing.watch(p)));
+	}
+
 	onMount(() => {
 		// initiale Queue Werte setzen
 		indexing.store.queue.forEach((item) => {
@@ -32,6 +50,14 @@
 </script>
 
 <main class="flex grow flex-col space-y-6 p-6 text-base-content">
+	<div>
+		{#if import.meta.env.DEV}
+			<button class="btn" onclick={handleUnscannedFiles}>Ungescannte Dokumente</button>
+		{/if}
+		<button class="btn" onclick={addTempFolders}>Add Temp Folder</button>
+		<button class="btn" onclick={addTempWatchFolders}>Add Temp Watch Folder</button>
+	</div>
+
 	<h1 class="text-3xl font-bold">📊 Dashboard</h1>
 	<p class="text-base-content/70">Live-Indexierungsstatus & Warteschlange</p>
 

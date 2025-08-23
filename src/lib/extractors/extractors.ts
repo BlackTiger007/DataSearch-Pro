@@ -25,6 +25,7 @@ export const extractors: Record<string, () => Promise<ExtractFn>> = {
 
 	// Office-Formate (alle landen in ./office)
 	docx: () => import('./office').then((m) => m.extract),
+	docm: () => import('./office').then((m) => m.extract),
 	xlsx: () => import('./office').then((m) => m.extract),
 	pptx: () => import('./office').then((m) => m.extract),
 	odt: () => import('./office').then((m) => m.extract),
@@ -32,5 +33,11 @@ export const extractors: Record<string, () => Promise<ExtractFn>> = {
 	odp: () => import('./office').then((m) => m.extract),
 
 	// XML
-	xml: () => import('./xml').then((m) => m.extract)
+	xml: () => import('./xml').then((m) => m.extract),
+
+	// HTML / XHTML / SVG
+	htm: () => import('./html').then((m) => m.extract),
+	html: () => import('./html').then((m) => m.extract),
+	xhtml: () => import('./html').then((m) => m.extract),
+	svg: () => import('./html').then((m) => m.extract)
 };

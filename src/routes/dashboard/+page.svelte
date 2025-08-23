@@ -49,27 +49,36 @@
 	});
 </script>
 
-<main class="flex grow flex-col space-y-6 p-6 text-base-content">
-	<div>
+<main class="flex grow flex-col space-y-6 p-4 text-base-content md:p-6">
+	<!-- Actions -->
+	<div class="flex flex-wrap gap-2">
 		{#if import.meta.env.DEV}
-			<button class="btn" onclick={handleUnscannedFiles}>Ungescannte Dokumente</button>
+			<button class="btn btn-outline btn-sm" onclick={handleUnscannedFiles}>
+				🧩 Ungescannte
+			</button>
 		{/if}
-		<button class="btn" onclick={addTempFolders}>Add Temp Folder</button>
-		<button class="btn" onclick={addTempWatchFolders}>Add Temp Watch Folder</button>
+		<button class="btn btn-sm" onclick={addTempFolders}>📂 Add Folder</button>
+		<button class="btn btn-sm" onclick={addTempWatchFolders}>👀 Watch Folder</button>
 	</div>
 
-	<h1 class="text-3xl font-bold">📊 Dashboard</h1>
+	<h1 class="text-2xl font-bold md:text-3xl">📊 Dashboard</h1>
 	<p class="text-base-content/70">Live-Indexierungsstatus & Warteschlange</p>
 
 	<!-- Watch-Pfade -->
 	<section>
-		<h2 class="mb-2 text-2xl font-semibold">👀 Aktive Watch-Pfade</h2>
+		<h2 class="mb-2 text-xl font-semibold md:text-2xl">👀 Aktive Watch-Pfade</h2>
 		{#if indexing.store.activeWatches.size > 0}
-			<ul class="list divide-y divide-base-200 overflow-hidden rounded-box bg-base-100 shadow-md">
+			<ul class="divide-y divide-base-200 overflow-hidden rounded-box bg-base-100 shadow-md">
 				{#each Array.from(indexing.store.activeWatches) as [path] (path)}
-					<li class="list-row transition-colors duration-200 hover:bg-base-200">
-						<div class="list-col-grow truncate">{path}</div>
-						<button class="btn" onclick={() => indexing.removeWatch(path)}>✕</button>
+					<li class="flex items-center justify-between px-3 py-2 hover:bg-base-200">
+						<span class="truncate text-sm md:text-base">{path}</span>
+						<button
+							class="btn btn-outline btn-xs btn-error"
+							title="Entfernen"
+							onclick={() => indexing.removeWatch(path)}
+						>
+							✕
+						</button>
 					</li>
 				{/each}
 			</ul>
@@ -80,21 +89,21 @@
 
 	<!-- Warteschlange -->
 	<section>
-		<h2 class="mb-2 text-2xl font-semibold">📦 Aktive Warteschlange</h2>
-		<ul class="list overflow-hidden rounded-box bg-base-100 shadow-md">
-			<li
-				class="list-row transition-all duration-200"
-				in:fade={{ duration: 300 }}
-				out:fade={{ duration: 200 }}
-			>
+		<h2 class="mb-2 text-xl font-semibold md:text-2xl">📦 Aktive Warteschlange</h2>
+		<ul class="overflow-hidden rounded-box bg-base-100 shadow-md">
+			<li class="border-b border-base-200 px-3 py-2">
 				{#if indexing.store.currentFile}
-					<div class="list-col-grow">
-						<div class="font-semibold">🔄 Wird verarbeitet:</div>
-						<div class="truncate text-primary">{indexing.store.currentFile}</div>
+					<div class="flex items-center gap-2">
+						<span class="loading loading-sm loading-spinner text-primary"></span>
+						<div class="truncate" title={indexing.store.currentFile}>
+							<strong>Wird verarbeitet:</strong>
+							<span class="text-primary">{indexing.store.currentFile}</span>
+						</div>
 					</div>
 				{:else}
-					<div class="list-col-grow text-base-content/70">
-						✅ <span class="italic">Es wird aktuell nichts verarbeitet</span>
+					<div class="flex items-center gap-2 text-base-content/70">
+						<span class="badge badge-outline">Idle</span>
+						<span class="italic">Es wird aktuell nichts verarbeitet</span>
 					</div>
 				{/if}
 			</li>
@@ -102,45 +111,48 @@
 			{#each indexing.store.queue as item (item.file)}
 				{@const priority = getAnimatedPriority(item.file, item.priority)}
 				<li
-					class="list-row transition-colors duration-200 hover:bg-base-200"
+					class="grid grid-cols-1 items-center gap-3 px-3 py-2 hover:bg-base-200 md:grid-cols-[60px_1fr_auto]"
 					animate:flip={{ duration: 300 }}
 				>
 					<!-- Priority animiert -->
-					<div
-						class="px-3 text-4xl font-thin tabular-nums opacity-50 transition-all duration-200 ease-in-out"
-						style="transform-origin: center;"
-					>
+					<div class="text-center text-2xl font-thin opacity-70">
 						{priority.current.toFixed(0)}
 					</div>
 
-					<div class="list-col-grow truncate">
-						<div class="truncate" title={item.file}>{item.file}</div>
+					<!-- File info -->
+					<div class="truncate">
+						<div class="truncate text-sm md:text-base" title={item.file}>
+							{item.file}
+						</div>
+						<div class="text-xs opacity-70">📏 {formatBytes(item.data.size)}</div>
 					</div>
 
-					<span>Dateigröße: {formatBytes(item.data.size)} bytes</span>
-
-					<!-- Buttons: Priority erhöhen -->
-					<div class="flex space-x-1">
-						{#each [1, 10, 100] as val (val)}
-							<button
-								class="btn transition-transform btn-outline btn-sm hover:scale-110"
-								onclick={() => indexing.setPriority(item.file, val)}
-							>
-								+{val}
-							</button>
-						{/each}
-					</div>
-
-					<!-- Buttons: Priority verringern -->
-					<div class="flex space-x-1">
-						{#each [100, 10, 1] as val (val)}
-							<button
-								class="btn transition-transform btn-outline btn-sm hover:scale-110"
-								onclick={() => indexing.setPriority(item.file, -val)}
-							>
-								-{val}
-							</button>
-						{/each}
+					<!-- Controls -->
+					<div class="flex items-center gap-2">
+						<!-- Erhöhen -->
+						<div class="flex gap-1">
+							{#each [1, 10, 100] as val (val)}
+								<button
+									class="btn btn-outline btn-xs btn-success"
+									title={`Priorität +${val}`}
+									onclick={() => indexing.setPriority(item.file, val)}
+								>
+									+{val}
+								</button>
+							{/each}
+						</div>
+						<!-- Verringern -->
+						<div class="flex gap-1">
+							{#each [100, 10, 1] as val (val)}
+								<button
+									class="btn btn-outline btn-xs btn-error"
+									title={`Priorität -${val}`}
+									onclick={() => indexing.setPriority(item.file, -val)}
+								>
+									-{val}
+								</button>
+							{/each}
+						</div>
 					</div>
 				</li>
 			{/each}

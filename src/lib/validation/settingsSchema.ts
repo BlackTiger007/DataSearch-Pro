@@ -9,7 +9,8 @@ export const settingsSchema = z.object({
 	autoStart: z.boolean().default(false), // Automatisches Starten des Indexers
 	locale: z.string().default('en'),
 	fileUsageCount: z.array(z.object({ extension: z.string(), count: z.number() })).default([]), // Liste von Dateitypen und deren Nutzung
-	enableImageTextExtraction: z.boolean().default(true)
+	enableImageTextExtraction: z.boolean().default(true),
+	parallelJobs: z.number().min(1).max(8).default(2)
 });
 
 export type SettingsType = z.infer<typeof settingsSchema>;

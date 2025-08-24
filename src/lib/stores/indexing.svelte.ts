@@ -22,15 +22,21 @@ function createIndexingStore() {
 	});
 
 	async function start() {
-		if (store.isRunning) return; // Schon am Laufen
+		if (store.isRunning) return;
 		store.isRunning = true;
 		store.isPaused = false;
 
 		while (store.isRunning) {
-			if (store.isPaused || store.queue.length === 0) {
-				await new Promise((res) => setTimeout(res, 1000));
-				if (store.queue.length === 0 && !store.isPaused) break;
-				continue;
+			if (store.isPaused) {
+				// passiv warten, bis resume() aufgerufen wird
+				await new Promise<void>((resolve) => {
+					const interval = setInterval(() => {
+						if (!store.isPaused) {
+							clearInterval(interval);
+							resolve();
+						}
+					}, 500);
+				});
 			}
 
 			const item = store.queue.shift() || null;

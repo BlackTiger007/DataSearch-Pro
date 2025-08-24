@@ -143,6 +143,25 @@
 		</div>
 	</div>
 
+	<!-- Image Text Extraction -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Texterkennung (OCR)</h2>
+			<p class="text-sm opacity-70">
+				Wenn aktiviert, werden Texte aus eingebetteten Bildern (z. B. in Word, PDF oder Bilddateien)
+				automatisch extrahiert.
+			</p>
+			<label class="label mt-2 cursor-pointer">
+				<span class="label-text">Texte aus Bildern extrahieren</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.enableImageTextExtraction}
+				/>
+			</label>
+		</div>
+	</div>
+
 	<!-- Locale -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">

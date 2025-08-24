@@ -11,6 +11,6 @@ export interface IndexingState {
 	isRunning: boolean;
 	isPaused: boolean;
 	queue: QueueItem[];
-	currentFile: string | null;
+	currentFiles: string[];
 	activeWatches: Map<string, UnwatchFn>;
 }

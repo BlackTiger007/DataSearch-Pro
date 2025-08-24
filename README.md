@@ -58,7 +58,7 @@ DataSearch Pro is a lightweight, local **Document Management System (DMS)** desi
 
 - **Text**: `txt`, `csv`, `tsv`, `log`, `md`, `ini`, `yaml`, `yml`, `json`
 - **PDF**: `pdf`
-- **Images**: `png`, `jpg`, `jpeg` (optional OCR via `handleImage`)
+- **Images**: `png`, `jpg`, `jpeg` (text extraction via OCR if enabled in settings)
 - **Office**: `docx`, `xlsx`, `pptx`, `odt`, `ods`, `odp`, `docm`
 - **Web / XML-based**: `html`, `htm`, `xhtml`, `svg`, `xml`
 
@@ -66,6 +66,11 @@ DataSearch Pro is a lightweight, local **Document Management System (DMS)** desi
 
 - **Additional Office Formats**: `doc`, `rtf`
 - **Web Formats**: `epub`
-- **Audio/Video Metadata**: `mp3`, `mp4`, `mkv` (metadata only, optional OCR for subtitles)
+- **Audio/Video Metadata**: `mp3`, `mp4`, `mkv` (metadata only, subtitles if available)
+
+### Notes
+
+Image files (`png`, `jpg`, `jpeg`) are always processed with OCR.  
+If **text extraction from embedded images** is enabled in settings, images inside documents (e.g., PDF, Word, PowerPoint) will also be processed with OCR.
 
 **DataSearch Pro** makes it easy to manage and find files efficiently – all locally and securely on your machine.

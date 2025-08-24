@@ -12,6 +12,7 @@ export const icons: Record<string, () => Promise<{ default: Component }>> = {
 	htm: () => import('bootstrap-icons/icons/filetype-html.svg?component'),
 	html: () => import('bootstrap-icons/icons/filetype-html.svg?component'),
 	xhtml: () => import('bootstrap-icons/icons/filetype-xml.svg?component'),
+	exe: () => import('bootstrap-icons/icons/filetype-exe.svg?component'),
 
 	// Dokumente
 	pdf: () => import('bootstrap-icons/icons/filetype-pdf.svg?component'),
@@ -19,6 +20,7 @@ export const icons: Record<string, () => Promise<{ default: Component }>> = {
 	docx: () => import('bootstrap-icons/icons/filetype-docx.svg?component'),
 	docm: () => import('bootstrap-icons/icons/filetype-doc.svg?component'),
 	odt: () => import('bootstrap-icons/icons/filetype-doc.svg?component'),
+	rtf: () => import('bootstrap-icons/icons/file-richtext.svg?component'),
 
 	// Tabellen
 	xls: () => import('bootstrap-icons/icons/filetype-xls.svg?component'),
@@ -57,6 +59,7 @@ export const icons: Record<string, () => Promise<{ default: Component }>> = {
 	'7z': () => import('bootstrap-icons/icons/file-zip.svg?component'),
 	tar: () => import('bootstrap-icons/icons/file-zip.svg?component'),
 	gz: () => import('bootstrap-icons/icons/file-zip.svg?component'),
+	db: () => import('bootstrap-icons/icons/database.svg?component'),
 
 	// Code / Entwickler
 	js: () => import('bootstrap-icons/icons/filetype-js.svg?component'),
@@ -68,6 +71,9 @@ export const icons: Record<string, () => Promise<{ default: Component }>> = {
 	cs: () => import('bootstrap-icons/icons/filetype-cs.svg?component'),
 	php: () => import('bootstrap-icons/icons/filetype-php.svg?component'),
 	sh: () => import('bootstrap-icons/icons/filetype-sh.svg?component'),
+
+	lnk: () => import('bootstrap-icons/icons/folder-symlink.svg?component'),
+	url: () => import('bootstrap-icons/icons/link-45deg.svg?component'),
 
 	// Fallback
 	default: () => import('bootstrap-icons/icons/file-earmark.svg?component')

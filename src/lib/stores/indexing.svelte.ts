@@ -11,13 +11,14 @@ import { computeHash } from '$lib/utils/hash';
 import { sep } from '@tauri-apps/api/path';
 import type { IndexingState, QueueItem } from '$lib/types/indexing';
 import { extractors } from '$lib/extractors/extractors';
+import { SvelteSet } from 'svelte/reactivity';
 
 function createIndexingStore() {
 	const store = $state<IndexingState>({
 		isRunning: false,
 		isPaused: false,
 		queue: [],
-		currentFile: null,
+		currentFiles: [],
 		activeWatches: new Map<string, UnwatchFn>()
 	});
 
@@ -26,30 +27,48 @@ function createIndexingStore() {
 		store.isRunning = true;
 		store.isPaused = false;
 
-		while (store.isRunning) {
-			if (store.isPaused) {
-				// passiv warten, bis resume() aufgerufen wird
-				await new Promise<void>((resolve) => {
-					const interval = setInterval(() => {
-						if (!store.isPaused) {
-							clearInterval(interval);
-							resolve();
-						}
-					}, 500);
-				});
+		const runningJobs: Set<Promise<void>> = new SvelteSet();
+
+		const launchNext = () => {
+			if (store.isPaused || !store.isRunning) return;
+
+			while (store.queue.length > 0 && store.currentFiles.length < settings.parallelJobs) {
+				const item = store.queue.shift()!;
+				store.currentFiles.push(item.file);
+
+				const job = processFile(item)
+					.catch((err) => console.error(`Error processing file ${item.file}:`, err))
+					.finally(() => {
+						store.currentFiles = store.currentFiles.filter((f) => f !== item.file);
+						runningJobs.delete(job);
+						// prüfen, ob neue Jobs gestartet werden können
+						launchNext();
+					});
+
+				runningJobs.add(job);
 			}
+		};
 
-			const item = store.queue.shift() || null;
-			store.currentFile = item?.file || null;
+		const monitorQueue = async () => {
+			while (store.isRunning) {
+				if (!store.isPaused && store.queue.length > 0) {
+					launchNext();
+				}
 
-			if (!item) continue;
-			await processFile(item);
-			store.currentFile = null;
-		}
+				// Stop-Bedingung: Queue leer & keine laufenden Jobs
+				if (store.queue.length === 0 && runningJobs.size === 0) {
+					store.isRunning = false;
+					break;
+				}
 
-		store.isRunning = false;
-		store.currentFile = null;
+				await new Promise((res) => setTimeout(res, 200));
+			}
+		};
 
+		await monitorQueue();
+		await Promise.all(runningJobs);
+
+		store.currentFiles = [];
 		saveSettingsFileUsageCount(settings.fileUsageCount);
 	}
 

@@ -162,6 +162,19 @@
 		</div>
 	</div>
 
+	<!-- Parallel Jobs -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Parallel Jobs</h2>
+			<p class="text-sm opacity-70">
+				Anzahl der Dateien, die gleichzeitig verarbeitet werden. Höhere Werte können die Performance
+				verbessern, belasten aber CPU und RAM.
+			</p>
+			<p>Parallele Jobs: {localSettings.parallelJobs}</p>
+			<input type="range" min="1" max="8" bind:value={localSettings.parallelJobs} class="range" />
+		</div>
+	</div>
+
 	<!-- Locale -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">

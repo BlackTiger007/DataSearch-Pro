@@ -112,22 +112,26 @@
 	<!-- Warteschlange -->
 	<section>
 		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
-			<QueueIcon class="size-5" /> Aktive Warteschlange
+			<QueueIcon class="size-5" /> Active Queue
 		</h2>
 		<ul class="overflow-hidden rounded-box bg-base-100 shadow-md">
 			<li class="border-b border-base-200 px-3 py-2">
-				{#if indexing.store.currentFile}
-					<div class="flex items-center gap-2">
-						<Spinner class="size-4 animate-spin text-primary" />
-						<div class="truncate" title={indexing.store.currentFile}>
-							<strong>Wird verarbeitet:</strong>
-							<span class="text-primary">{indexing.store.currentFile}</span>
-						</div>
+				{#if indexing.store.currentFiles.length > 0}
+					<div class="flex flex-col gap-1">
+						{#each indexing.store.currentFiles as file (file)}
+							<div class="flex items-center gap-2">
+								<Spinner class="size-4 animate-spin text-primary" />
+								<div class="truncate" title={file}>
+									<strong>Processing:</strong>
+									<span class="text-primary">{file}</span>
+								</div>
+							</div>
+						{/each}
 					</div>
 				{:else}
 					<div class="flex items-center gap-2 text-base-content/70">
 						<IdleIcon class="size-4" />
-						<span class="italic">Es wird aktuell nichts verarbeitet</span>
+						<span class="italic">Nothing is currently being processed</span>
 					</div>
 				{/if}
 			</li>
@@ -160,7 +164,7 @@
 							{#each [1, 10, 100] as val (val)}
 								<button
 									class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
-									title={`Priorität +${val}`}
+									title={`Priority +${val}`}
 									onclick={() => indexing.setPriority(item.file, val)}
 								>
 									<PlusIcon class="size-3" />
@@ -173,7 +177,7 @@
 							{#each [100, 10, 1] as val (val)}
 								<button
 									class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
-									title={`Priorität -${val}`}
+									title={`Priority -${val}`}
 									onclick={() => indexing.setPriority(item.file, -val)}
 								>
 									<MinusIcon class="size-3" />

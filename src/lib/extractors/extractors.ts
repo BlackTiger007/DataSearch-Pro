@@ -14,6 +14,7 @@ export const extractors: Record<string, () => Promise<ExtractFn>> = {
 	yaml: () => import('./txt').then((m) => m.extract),
 	yml: () => import('./txt').then((m) => m.extract),
 	json: () => import('./txt').then((m) => m.extract),
+	url: () => import('./txt').then((m) => m.extract),
 
 	// PDF
 	pdf: () => import('./pdf').then((m) => m.extract),

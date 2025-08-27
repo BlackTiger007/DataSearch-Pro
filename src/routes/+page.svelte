@@ -10,7 +10,6 @@
 	let selectedFile: File | null = $state(null);
 	let tags = $state([...data.tags]);
 	let selectedTags: number[] = $state([]);
-	let overflow = $state(true);
 
 	function selectFile(file: File) {
 		selectedFile = file;

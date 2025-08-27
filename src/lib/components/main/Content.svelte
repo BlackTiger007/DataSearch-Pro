@@ -9,14 +9,14 @@
 	let {
 		selectedFile,
 		tags,
-		selectedTags,
-		overflow = $bindable()
+		selectedTags
 	}: {
 		selectedFile: File | null;
 		tags: Tag[];
 		selectedTags: number[];
-		overflow: boolean;
 	} = $props();
+
+	let overflow = $state(true);
 
 	let newTagName = $state('');
 	let newTagColor = $state('#34d399'); // Standardfarbe grün

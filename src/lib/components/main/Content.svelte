@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { type File, type Scan, type Tag, schema } from '$lib/db/schema';
+	import { type File, type NewTag, type Scan, type Tag, schema } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { openPath } from '@tauri-apps/plugin-opener';
 	import { sep } from '@tauri-apps/api/path';
 	import { db } from '$lib/db';
-	import { eq } from 'drizzle-orm';
+	import { and, eq } from 'drizzle-orm';
 
 	let {
 		selectedFile,
@@ -17,6 +17,9 @@
 		selectedTags: number[];
 		overflow: boolean;
 	} = $props();
+
+	let newTagName = $state('');
+	let newTagColor = $state('#34d399'); // Standardfarbe grün
 
 	// Cache für File-Chunks
 	const fileCache = new Map<number, Scan[]>();
@@ -34,6 +37,69 @@
 	// Optional: Cache leeren, falls Datei aktualisiert wird
 	function invalidateFileCache(fileId: number) {
 		fileCache.delete(fileId);
+	}
+
+	async function addNewTag() {
+		if (!newTagName.trim()) return;
+
+		const newTag: NewTag = { name: newTagName, color: newTagColor };
+		await db.insert(schema.tags).values(newTag);
+
+		const createdTag = await db.query.tags.findFirst({ where: eq(schema.tags.name, newTagName) });
+		if (!createdTag) return;
+
+		tags.push(createdTag);
+		newTagName = '';
+
+		// Direkt auch für die aktuelle Datei zuordnen, falls eine ausgewählt
+		if (selectedFile) {
+			await addTagToFile(createdTag.id!, selectedFile.id);
+			selectedTags.push(createdTag.id!);
+		}
+	}
+
+	async function addTagToFile(tagId: number, fileId: number) {
+		const exists = await db
+			.select()
+			.from(schema.fileTags)
+			.where(and(eq(schema.fileTags.fileId, fileId), eq(schema.fileTags.tagId, tagId)));
+		if (exists.length === 0) {
+			await db.insert(schema.fileTags).values({ fileId, tagId });
+		}
+	}
+
+	async function removeTagFromFile(tagId: number, fileId: number) {
+		await db
+			.delete(schema.fileTags)
+			.where(and(eq(schema.fileTags.fileId, fileId), eq(schema.fileTags.tagId, tagId)));
+	}
+
+	async function toggleTag(tagId: number) {
+		if (!selectedFile) return;
+		if (selectedTags.includes(tagId)) {
+			selectedTags = selectedTags.filter((id) => id !== tagId);
+			await removeTagFromFile(tagId, selectedFile.id);
+		} else {
+			selectedTags.push(tagId);
+			await addTagToFile(tagId, selectedFile.id);
+		}
+	}
+
+	async function deleteTag(id: number) {
+		await db.delete(schema.tags).where(eq(schema.tags.id, id));
+		tags.splice(
+			tags.findIndex((t) => t.id === id),
+			1
+		);
+	}
+
+	async function updateTag(tag: Tag) {
+		await db
+			.update(schema.tags)
+			.set({ name: tag.name, color: tag.color })
+			.where(eq(schema.tags.id, tag.id));
+		const index = tags.findIndex((t) => t.id === tag.id);
+		if (index !== -1) tags[index] = tag;
 	}
 </script>
 
@@ -79,6 +145,7 @@
 					.filter((t): t is Tag => !!t) as tag (tag.id)}
 					<span class="badge" style="background-color: {tag.color}">{tag.name}</span>
 				{/each}
+				<label for="modal_tag" class="btn btn-outline btn-xs">+ Tag</label>
 			</div>
 		</div>
 
@@ -115,4 +182,78 @@
 	{:else}
 		<p class="text-center text-base-content/70">Bitte eine Datei auswählen</p>
 	{/if}
+</div>
+
+<!-- MODAL -->
+<input type="checkbox" id="modal_tag" class="modal-toggle" />
+<div class="modal modal-bottom sm:modal-middle">
+	<div class="modal-box w-11/12 max-w-2xl">
+		<h3 class="mb-4 text-xl font-bold">Tags verwalten</h3>
+
+		<!-- Neue Tags erstellen -->
+		<div class="mb-4 flex flex-col items-center gap-2 sm:flex-row">
+			<input
+				type="text"
+				placeholder="Neuen Tag erstellen"
+				bind:value={newTagName}
+				class="input-bordered input flex-1"
+			/>
+			<input
+				type="color"
+				bind:value={newTagColor}
+				class="h-10 w-12 cursor-pointer rounded border-none"
+			/>
+			<button class="btn flex-none btn-primary" onclick={addNewTag}> Erstellen </button>
+		</div>
+
+		<!-- Bestehende Tags auswählen und bearbeiten -->
+		<div class="max-h-64 overflow-y-auto border-t border-b border-gray-200 py-2">
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">Tags zuweisen / bearbeiten</legend>
+				{#each tags as tag (tag.id)}
+					<div class="flex items-center gap-2 rounded px-1 py-1">
+						<input
+							type="checkbox"
+							checked={selectedTags.includes(tag.id)}
+							onchange={() => toggleTag(tag.id)}
+							class="checkbox checkbox-primary"
+						/>
+
+						<!-- Farbkreis klickbar machen -->
+						<label class="relative cursor-pointer">
+							<div
+								class="h-5 w-5 rounded-full border border-gray-300"
+								style="background-color: {tag.color}"
+								title={tag.color}
+							></div>
+							<input
+								type="color"
+								class="absolute inset-0 cursor-pointer opacity-0"
+								bind:value={tag.color}
+								onblur={() => updateTag(tag)}
+							/>
+						</label>
+
+						<input
+							type="text"
+							class="input-bordered input flex-1"
+							bind:value={tag.name}
+							onblur={() => updateTag(tag)}
+						/>
+						<button
+							class="btn btn-sm btn-error"
+							title="Tag löschen (Doppelklick)"
+							ondblclick={() => deleteTag(tag.id)}
+						>
+							✕
+						</button>
+					</div>
+				{/each}
+			</fieldset>
+		</div>
+
+		<div class="modal-action mt-4">
+			<label for="modal_tag" class="btn btn-outline">Schließen</label>
+		</div>
+	</div>
 </div>

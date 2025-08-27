@@ -189,19 +189,25 @@ async function extractOdf(
 async function extractImages(zip: JSZip, opts: ExtractOptions, collected: string[]) {
 	if (!opts.handleImage) return;
 
+	const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp'];
+
 	for (const path in zip.files) {
-		if (
-			path.startsWith('word/media/') ||
-			path.startsWith('ppt/media/') ||
-			path.startsWith('xl/media/') ||
-			path.startsWith('Pictures/')
-		) {
-			const file = zip.file(path);
-			if (!file) continue;
-			const buffer = new Uint8Array(await file.async('uint8array'));
-			const mimeType = guessMimeType(path);
-			const extractedText = await opts.handleImage(buffer, mimeType);
-			if (extractedText) collected.push(normalize(extractedText, opts.normalizeWhitespace ?? true));
+		// skip directories
+		if (zip.files[path].dir) continue;
+
+		// prüfe nur auf bekannte Bild-Endungen (case-insensitive)
+		const lowerPath = path.toLowerCase();
+		if (!imageExtensions.some((ext) => lowerPath.endsWith(ext))) continue;
+
+		const file = zip.file(path);
+		if (!file) continue;
+
+		const buffer = new Uint8Array(await file.async('uint8array'));
+		const mimeType = guessMimeType(path); // darf so bleiben, falls du es schon nutzt
+		const extractedText = await opts.handleImage(buffer, mimeType);
+
+		if (extractedText) {
+			collected.push(normalize(extractedText, opts.normalizeWhitespace ?? true));
 		}
 	}
 }

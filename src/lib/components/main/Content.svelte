@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { type File, type NewTag, type Scan, type Tag, schema } from '$lib/db/schema';
+	import { type NewTag, type Scan, type Tag, schema } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { openPath } from '@tauri-apps/plugin-opener';
 	import { sep } from '@tauri-apps/api/path';
 	import { db } from '$lib/db';
 	import { and, eq } from 'drizzle-orm';
 	import { isDarkColor } from '$lib/utils/brightness';
+	import type { FilesWithTags } from '$lib/types/fileWihtTags';
 
 	let {
 		selectedFile,
-		tags = $bindable([]),
-		selectedTags
+		tags = $bindable([])
 	}: {
-		selectedFile: File | null;
+		selectedFile: FilesWithTags | null;
 		tags: Tag[];
-		selectedTags: number[];
 	} = $props();
 
 	let overflow = $state(true);
@@ -55,7 +54,7 @@
 		// Direkt auch für die aktuelle Datei zuordnen, falls eine ausgewählt
 		if (selectedFile) {
 			await addTagToFile(createdTag.id!, selectedFile.id);
-			selectedTags.push(createdTag.id!);
+			selectedFile.tags.push(createdTag);
 		}
 	}
 
@@ -75,14 +74,14 @@
 			.where(and(eq(schema.fileTags.fileId, fileId), eq(schema.fileTags.tagId, tagId)));
 	}
 
-	async function toggleTag(tagId: number) {
+	async function toggleTag(tag: Tag) {
 		if (!selectedFile) return;
-		if (selectedTags.includes(tagId)) {
-			selectedTags = selectedTags.filter((id) => id !== tagId);
-			await removeTagFromFile(tagId, selectedFile.id);
+		if (selectedFile.tags.some((t) => t.id === tag.id)) {
+			selectedFile.tags = selectedFile.tags.filter((t) => t.id !== tag.id);
+			await removeTagFromFile(tag.id, selectedFile.id);
 		} else {
-			selectedTags.push(tagId);
-			await addTagToFile(tagId, selectedFile.id);
+			selectedFile.tags.push(tag);
+			await addTagToFile(tag.id, selectedFile.id);
 		}
 	}
 
@@ -141,9 +140,7 @@
 		<div class="mb-4">
 			<h3 class="mb-2 font-semibold">Tags</h3>
 			<div class="flex flex-wrap gap-2">
-				{#each selectedTags
-					.map((id) => tags.find((t) => t.id === id))
-					.filter((t): t is Tag => !!t) as tag (tag.id)}
+				{#each selectedFile.tags as tag (tag.id)}
 					<span
 						class="badge"
 						style="background-color: {tag.color}; 
@@ -210,7 +207,7 @@
 				bind:value={newTagColor}
 				class="h-10 w-12 cursor-pointer rounded border-none"
 			/>
-			<button class="btn flex-none btn-primary" onclick={addNewTag}> Erstellen </button>
+			<button class="btn flex-none btn-primary" onclick={addNewTag}>Erstellen</button>
 		</div>
 
 		<!-- Bestehende Tags auswählen und bearbeiten -->
@@ -221,8 +218,8 @@
 					<div class="flex items-center gap-2 rounded px-1 py-1">
 						<input
 							type="checkbox"
-							checked={selectedTags.includes(tag.id)}
-							onchange={() => toggleTag(tag.id)}
+							checked={selectedFile?.tags.some((t) => t.id === tag.id)}
+							onchange={() => toggleTag(tag)}
 							class="checkbox checkbox-primary"
 						/>
 

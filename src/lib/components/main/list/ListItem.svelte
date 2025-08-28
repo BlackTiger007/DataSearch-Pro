@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { File } from '$lib/db/schema';
+	import type { FilesWithTags } from '$lib/types/fileWihtTags';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { getIconComponent } from '$lib/utils/icons';
 
-	export let item: File;
+	export let item: FilesWithTags;
 	export let onClick: ((item: any) => void) | undefined;
 </script>
 

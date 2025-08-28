@@ -3,6 +3,7 @@
 	import { cleanupMissingFiles } from '$lib/maintenance/cleanupMissingFiles';
 	import { saveSettings } from '$lib/services/settingsService';
 	import { settings } from '$lib/stores/settings.svelte';
+	import { availableEncodings } from '$lib/types/encodings';
 	import type { SettingsType } from '$lib/validation/settingsSchema';
 	import { open } from '@tauri-apps/plugin-dialog';
 
@@ -183,6 +184,21 @@
 				<option value="en">English</option>
 				<option value="de">Deutsch</option>
 				<option value="fr">Français</option>
+			</select>
+		</div>
+	</div>
+
+	<!-- Text Encoding -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Text Encoding</h2>
+			<select
+				class="select-bordered select w-full max-w-xs"
+				bind:value={localSettings.textEncoding}
+			>
+				{#each availableEncodings as encoding}
+					<option value={encoding}>{encoding}</option>
+				{/each}
 			</select>
 		</div>
 	</div>

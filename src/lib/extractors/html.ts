@@ -1,4 +1,5 @@
 import type { NewScan } from '$lib/db/schema/scans';
+import { createTextDecoder } from '$lib/types/encodings';
 import type { QueueItem } from '$lib/types/indexing';
 import { sanitizeText } from '$lib/utils/sanitizeText';
 import { splitSmartForDb } from '$lib/utils/split';
@@ -12,7 +13,7 @@ import { readFile } from '@tauri-apps/plugin-fs';
  */
 export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	const binary = await readFile(file.file);
-	const decoder = new TextDecoder('utf-8');
+	const decoder = createTextDecoder();
 	const htmlText = decoder.decode(binary);
 
 	const parser = new DOMParser();

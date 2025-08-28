@@ -5,6 +5,7 @@
 	import { sep } from '@tauri-apps/api/path';
 	import { db } from '$lib/db';
 	import { and, eq } from 'drizzle-orm';
+	import { isDarkColor } from '$lib/utils/brightness';
 
 	let {
 		selectedFile,
@@ -143,7 +144,13 @@
 				{#each selectedTags
 					.map((id) => tags.find((t) => t.id === id))
 					.filter((t): t is Tag => !!t) as tag (tag.id)}
-					<span class="badge" style="background-color: {tag.color}">{tag.name}</span>
+					<span
+						class="badge"
+						style="background-color: {tag.color}; 
+						color: {isDarkColor(tag.color) ? '#fff' : '#000'};"
+					>
+						{tag.name}
+					</span>
 				{/each}
 				<label for="modal_tag" class="btn btn-outline btn-xs">+ Tag</label>
 			</div>

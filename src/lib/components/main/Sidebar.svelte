@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { File } from '$lib/db/schema';
+	import type { FilesWithTags } from '$lib/types/fileWihtTags';
 	import List from './list/List.svelte';
 
 	let {
@@ -8,9 +8,9 @@
 		selectedFile,
 		search = $bindable()
 	}: {
-		files: File[];
-		selectFile: (file: File) => void;
-		selectedFile: File | null;
+		files: FilesWithTags[];
+		selectFile: (file: FilesWithTags) => void;
+		selectedFile: FilesWithTags | null;
 		search: string;
 	} = $props();
 </script>

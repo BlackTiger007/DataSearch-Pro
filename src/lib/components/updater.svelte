@@ -89,7 +89,7 @@
 					return;
 				}
 				downloadProgress = Math.round((downloaded / contentLength) * 100);
-				console.log(
+				console.debug(
 					`Download progress: ${downloadProgress}% (${downloaded}/${contentLength} bytes)`
 				);
 				break;

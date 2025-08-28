@@ -29,5 +29,5 @@
 
 <main class="flex h-[calc(100vh-64px)]">
 	<Sidebar files={data.files} {selectedFile} bind:search {selectFile} />
-	<Content {selectedFile} {tags} {selectedTags} />
+	<Content {selectedFile} bind:tags {selectedTags} />
 </main>

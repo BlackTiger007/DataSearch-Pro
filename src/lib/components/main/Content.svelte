@@ -9,7 +9,7 @@
 
 	let {
 		selectedFile,
-		tags,
+		tags = $bindable([]),
 		selectedTags
 	}: {
 		selectedFile: File | null;

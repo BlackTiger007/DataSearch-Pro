@@ -1,6 +1,6 @@
 {
 	"$schema": "https://schema.tauri.app/config/2",
-	"productName": "datasearch-pro",
+	"productName": "DataSearch-Pro",
 	"version": "../package.json",
 	"identifier": "webretter.datasearch-pro",
 	"build": {

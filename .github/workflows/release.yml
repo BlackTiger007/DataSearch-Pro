@@ -80,7 +80,9 @@ jobs:
             PRERELEASE=$(echo "$RELEASE_INFO" | jq -r '.isPrerelease')
 
             echo "release_tag=$TAG" >> $GITHUB_OUTPUT
-            echo "release_body=$BODY" >> $GITHUB_OUTPUT
+            echo "release_body<<EOF" >> $GITHUB_OUTPUT
+            echo "$BODY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
             echo "release_draft=$DRAFT" >> $GITHUB_OUTPUT
             echo "release_prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
             echo "release_released=true" >> $GITHUB_OUTPUT

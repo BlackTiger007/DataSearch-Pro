@@ -27,7 +27,10 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl space-y-6 p-6">
-	<h1 class="mb-6 text-3xl font-bold">Settings</h1>
+	<div class="flex justify-between">
+		<h1 class="text-3xl font-bold">Settings</h1>
+		<button class="btn btn-success" onclick={save}>Save Settings</button>
+	</div>
 
 	<!-- Theme -->
 	<div class="card bg-base-200 shadow-xl">
@@ -280,10 +283,5 @@
 				Fehlende Dateien bereinigen
 			</button>
 		</div>
-	</div>
-
-	<!-- Save Button -->
-	<div class="flex justify-end">
-		<button class="btn btn-success" onclick={save}>Save Settings</button>
 	</div>
 </div>

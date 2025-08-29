@@ -68,16 +68,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Prüfen, ob semantic-release ein Tag erstellt hat
-          LATEST_RELEASE=$(gh release list --limit 1 --json tagName,name,body,draft,prerelease -q '.[0]')
+          # Neuestes Release holen (nur Tag)
+          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
 
-          if [ "$LATEST_RELEASE" != "null" ]; then
-            TAG=$(echo "$LATEST_RELEASE" | jq -r '.tagName')
-            NAME=$(echo "$LATEST_RELEASE" | jq -r '.name')
-            BODY=$(echo "$LATEST_RELEASE" | jq -r '.body')
-            DRAFT=$(echo "$LATEST_RELEASE" | jq -r '.draft')
-            PRERELEASE=$(echo "$LATEST_RELEASE" | jq -r '.prerelease')
+          if [ -n "$LATEST_TAG" ]; then
+            # Release-Details vom Tag abrufen
+            RELEASE_INFO=$(gh release view "$LATEST_TAG" --json tagName,name,body,draft,prerelease)
             
+            TAG=$(echo "$RELEASE_INFO" | jq -r '.tagName')
+            NAME=$(echo "$RELEASE_INFO" | jq -r '.name')
+            BODY=$(echo "$RELEASE_INFO" | jq -r '.body')
+            DRAFT=$(echo "$RELEASE_INFO" | jq -r '.draft')
+            PRERELEASE=$(echo "$RELEASE_INFO" | jq -r '.prerelease')
+
             echo "release_tag=$TAG" >> $GITHUB_OUTPUT
             echo "release_body=$BODY" >> $GITHUB_OUTPUT
             echo "release_draft=$DRAFT" >> $GITHUB_OUTPUT

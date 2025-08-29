@@ -94,22 +94,25 @@ jobs:
             echo "release_released=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Log release outputs
-        run: |
-          echo "=== Release Outputs ==="
-          echo "release_tag: ${{ steps.set_outputs.outputs.release_tag }}"
-          echo "release_body: ${{ steps.set_outputs.outputs.release_body }}"
-          echo "release_draft: ${{ steps.set_outputs.outputs.release_draft }}"
-          echo "release_prerelease: ${{ steps.set_outputs.outputs.release_prerelease }}"
-          echo "release_released: ${{ steps.set_outputs.outputs.release_released }}"
-
   format:
     name: Code Formatting
+    runs-on: ubuntu-latest
     needs: semantic-release
     if: needs.semantic-release.outputs.release_released == 'true'
     permissions:
       contents: write
-    uses: ./.github/workflows/format.yml
+    steps:
+      - name: Log release outputs
+        run: |
+          echo "=== Release Outputs from semantic-release ==="
+          echo "release_tag: ${{ needs.semantic-release.outputs.release_tag }}"
+          echo "release_body: ${{ needs.semantic-release.outputs.release_body }}"
+          echo "release_draft: ${{ needs.semantic-release.outputs.release_draft }}"
+          echo "release_prerelease: ${{ needs.semantic-release.outputs.release_prerelease }}"
+          echo "release_released: ${{ needs.semantic-release.outputs.release_released }}"
+
+      - name: Run format workflow
+        uses: ./.github/workflows/format.yml
 
   tauri-release:
     name: Tauri Release

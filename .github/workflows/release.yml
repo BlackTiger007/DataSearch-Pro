@@ -94,17 +94,10 @@ jobs:
             echo "release_released=false" >> $GITHUB_OUTPUT
           fi
 
-  format:
-    name: Code Formatting
-    needs: semantic-release
-    if: needs.semantic-release.outputs.release_released == 'true'
-    permissions:
-      contents: write
-    uses: ./.github/workflows/format.yml
-
   tauri-release:
     name: Tauri Release
-    needs: format
+    needs: semantic-release
+    if: needs.semantic-release.outputs.release_released == 'true'
     permissions:
       contents: write
     strategy:
@@ -173,3 +166,10 @@ jobs:
           releaseDraft: ${{ needs.semantic-release.outputs.release_draft == 'true' }}
           prerelease: ${{ needs.semantic-release.outputs.release_prerelease == 'true' }}
           args: ${{ matrix.args }}
+
+  format:
+    name: Code Formatting
+    needs: tauri-release
+    permissions:
+      contents: write
+    uses: ./.github/workflows/format.yml

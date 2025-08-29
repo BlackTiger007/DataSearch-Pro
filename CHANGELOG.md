@@ -1,3 +1,45 @@
+# [1.2.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v1.1.0...v1.2.0) (2025-08-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sentry/sveltekit to ^10.8.0 ([8e2bebb](https://github.com/BlackTiger007/DataSearch-Pro/commit/8e2bebb41bf0d08a6c0e40e5334edfac8595486c))
+* **deps:** update dependency zod to ^4.1.5 ([7afe6b2](https://github.com/BlackTiger007/DataSearch-Pro/commit/7afe6b28ed26dd4bc0bbec5836b83867c1713aca))
+* **sentry:** disable log sending in development mode ([a5aa36f](https://github.com/BlackTiger007/DataSearch-Pro/commit/a5aa36fdcca0c1e6760b123b5e246225cb0228d9))
+* **tauri-release:** add Ubuntu dependencies for Tauri build ([a46bf13](https://github.com/BlackTiger007/DataSearch-Pro/commit/a46bf136c185d50c51b8ba3bb5f4898602eb1d87))
+* **updater:** change download progress logs from console.log to console.debug ([f1d1c1e](https://github.com/BlackTiger007/DataSearch-Pro/commit/f1d1c1eb45b21125af827a319e692c6456d2a046))
+
+
+### Features
+
+* **content:** improve tag visibility by auto-adjusting text color based on tag background ([3a32785](https://github.com/BlackTiger007/DataSearch-Pro/commit/3a32785a0637c561315d9486d633e9aaf0c37078))
+* **content:** make tags bindable to parent page ([71e82cb](https://github.com/BlackTiger007/DataSearch-Pro/commit/71e82cb043c1f12015c81693fc0e63eea1bddb1f))
+* **error:** add Sentry feedback dialog to error page ([b3f4181](https://github.com/BlackTiger007/DataSearch-Pro/commit/b3f41814c032dded0dfa979e9aeb7de1fc0a9e94))
+* **file-tags:** load selected file's tags on selection ([a61687c](https://github.com/BlackTiger007/DataSearch-Pro/commit/a61687c294aafe5dfff9833af9bacec648ecf432))
+* **list-item:** add reusable ListItem component ([a80d715](https://github.com/BlackTiger007/DataSearch-Pro/commit/a80d7155ba24c75a8cf7be8f3734b100828a8375))
+* **list:** add List component using VirtualList and ListItem ([bcbdcac](https://github.com/BlackTiger007/DataSearch-Pro/commit/bcbdcac62db90481bdd6210744fdaa34d30ccd48))
+* **office:** integrate settings-based controls for Office text extraction ([106cf6b](https://github.com/BlackTiger007/DataSearch-Pro/commit/106cf6b510e814725d3e02b5fc0dc5fffb94ad96))
+* **parser:** improve image extraction by filtering known image extensions ([46a4fd1](https://github.com/BlackTiger007/DataSearch-Pro/commit/46a4fd1d9a8546b0792b0a0b9697ee32496f6d64))
+* **release:** add branch input to release workflow ([13726fa](https://github.com/BlackTiger007/DataSearch-Pro/commit/13726fa733f8849a1b448a94bf3934badb8aa3fa))
+* **release:** add GitHub CLI fallback for release outputs ([5ede68e](https://github.com/BlackTiger007/DataSearch-Pro/commit/5ede68ee51a1e683e3fbb207333adf451cdab329))
+* **release:** fetch latest GitHub release dynamically for semantic-release outputs ([a59c2f8](https://github.com/BlackTiger007/DataSearch-Pro/commit/a59c2f868a1eecde28c99f71e5381e9b537610ee))
+* **release:** fetch latest release tag separately and retrieve full release details ([62fba5a](https://github.com/BlackTiger007/DataSearch-Pro/commit/62fba5aac5a7ef1c29665ebe2a37d065c6f6e1e8))
+* **release:** support multiline release body in semantic-release outputs ([f8de04c](https://github.com/BlackTiger007/DataSearch-Pro/commit/f8de04cef10281d497144f70e34a9d577bdf2865))
+* **release:** switch semantic-release output to use GH_TOKEN and latest release query ([4c0c642](https://github.com/BlackTiger007/DataSearch-Pro/commit/4c0c642c528d3aae462c78c9800cfc889a204b12))
+* **release:** update semantic-release outputs to use latest GitHub release ([2cd80ed](https://github.com/BlackTiger007/DataSearch-Pro/commit/2cd80ed32b3cb225d369f327b19e11144d9667de))
+* **sentry:** integrate dynamic Sentry/GlitchTip logging and session replay based on settings ([b17b1e5](https://github.com/BlackTiger007/DataSearch-Pro/commit/b17b1e5d1eded31c2bf8a6f33f40b6d7361c536a))
+* **settings-ui:** add Sentry/GlitchTip toggles to settings page ([c2c84a1](https://github.com/BlackTiger007/DataSearch-Pro/commit/c2c84a1b221dfa3f170754fdccd676483a1d0881))
+* **settings:** add Sentry/GlitchTip log and session replay toggles ([a4d19bc](https://github.com/BlackTiger007/DataSearch-Pro/commit/a4d19bcc38dc7558a0a5ee89c18dea42f46c0366))
+* **settings:** add TextEncoding enum and createTextDecoder helper ([aa0a342](https://github.com/BlackTiger007/DataSearch-Pro/commit/aa0a342b56513eb4b32b0039556c731332fee5a6))
+* **settings:** add textEncoding selection to settings page ([6171b89](https://github.com/BlackTiger007/DataSearch-Pro/commit/6171b89cf89a6f95a72b086c1ee6972c5704d291))
+* **settings:** add textEncoding to settingsSchema ([74e3148](https://github.com/BlackTiger007/DataSearch-Pro/commit/74e3148c181c1426c4a90ce96fab783dbee343b2))
+* **settings:** add UI controls for advanced text extraction options ([d2edf12](https://github.com/BlackTiger007/DataSearch-Pro/commit/d2edf12776a5b9d624f9f62e41516ff1da376f4d))
+* **settings:** extend schema with advanced text extraction options ([3d8b97f](https://github.com/BlackTiger007/DataSearch-Pro/commit/3d8b97f33ea392eecf33922ca50ef5633d4ed446))
+* **types:** add FilesWithTags type ([817690c](https://github.com/BlackTiger007/DataSearch-Pro/commit/817690c91fc1c9c04fb283d60b69af0ca9ddddf5))
+* **ui:** add full tag management modal in Content view ([5ec7b6d](https://github.com/BlackTiger007/DataSearch-Pro/commit/5ec7b6da61e803a35cab8a33d6246b02861dfee8))
+* **utils:** add isDarkColor function to determine brightness of a hex color ([aa797e6](https://github.com/BlackTiger007/DataSearch-Pro/commit/aa797e62867b6820829a650041280f5918b3c1d6))
+* **virtual-list:** add VirtualList component with dynamic virtualization ([7e8c2e9](https://github.com/BlackTiger007/DataSearch-Pro/commit/7e8c2e93d20d882a9a2ef6da6426dbb39ea8f812))
+
 # [1.1.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v1.0.0...v1.1.0) (2025-08-25)
 
 

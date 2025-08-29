@@ -15,7 +15,9 @@ export const settingsSchema = z.object({
 	normalizeWhitespace: z.boolean().default(true), // Mehrfaches Whitespace normalisieren
 	includeHeadersFooters: z.boolean().default(false), // Kopf- und Fußzeilen extrahieren
 	includeComments: z.boolean().default(false), // Kommentare extrahieren
-	includeImageText: z.boolean().default(false) // Texte aus eingebetteten Bildern in ODF-Formaten
+	includeImageText: z.boolean().default(false), // Texte aus eingebetteten Bildern in ODF-Formaten
+	sentryEnableLogs: z.boolean().default(true), // Aktiviert das Senden von Logs an GlitchTip/Sentry
+	sentryEnableSessionReplay: z.boolean().default(true) // Aktiviert Session Replay
 });
 
 export type SettingsType = z.infer<typeof settingsSchema>;

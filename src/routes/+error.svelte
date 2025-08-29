@@ -1,5 +1,12 @@
 <script lang="ts">
+	import * as Sentry from '@sentry/sveltekit';
 	import { page } from '$app/state';
+
+	function openFeedback() {
+		Sentry.showReportDialog({
+			eventId: Sentry.lastEventId()
+		});
+	}
 </script>
 
 <main class="flex grow content-center items-center p-4">
@@ -11,11 +18,11 @@
 		<p class="mt-6 mb-8 text-lg text-base-content lg:text-xl">
 			{page.error?.message ?? 'An unexpected error occurred.'}
 		</p>
-		<a
-			href="/"
-			class="btn transition-transform duration-200 btn-md btn-primary hover:scale-105 md:btn-lg"
-		>
-			Go Home
-		</a>
+
+		<a href="/" class="btn btn-primary">Go Home</a>
+
+		<div class="mt-8">
+			<button onclick={openFeedback} class="btn btn-secondary">Feedback senden</button>
+		</div>
 	</div>
 </main>

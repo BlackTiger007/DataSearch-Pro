@@ -94,9 +94,19 @@ jobs:
             echo "release_released=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Log release outputs
+        run: |
+          echo "=== Release Outputs ==="
+          echo "release_tag: ${{ steps.set_outputs.outputs.release_tag }}"
+          echo "release_body: ${{ steps.set_outputs.outputs.release_body }}"
+          echo "release_draft: ${{ steps.set_outputs.outputs.release_draft }}"
+          echo "release_prerelease: ${{ steps.set_outputs.outputs.release_prerelease }}"
+          echo "release_released: ${{ steps.set_outputs.outputs.release_released }}"
+
   format:
     name: Code Formatting
     needs: semantic-release
+    if: needs.semantic-release.outputs.release_released == 'true'
     permissions:
       contents: write
     uses: ./.github/workflows/format.yml
@@ -104,7 +114,6 @@ jobs:
   tauri-release:
     name: Tauri Release
     needs: format
-    if: needs.semantic-release.outputs.release_released == 'true'
     permissions:
       contents: write
     strategy:

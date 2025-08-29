@@ -246,6 +246,31 @@
 		</div>
 	</div>
 
+	<!-- Sentry / GlitchTip -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Sentry</h2>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Fehler-Logs senden</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.sentryEnableLogs}
+				/>
+			</label>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Session Replay aktivieren</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.sentryEnableSessionReplay}
+				/>
+			</label>
+		</div>
+	</div>
+
 	<!-- Cleanup -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">

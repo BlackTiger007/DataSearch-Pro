@@ -9,7 +9,7 @@ Sentry.init({
 	tracesSampleRate: 1.0,
 
 	// Enable logs to be sent to Sentry
-	enableLogs: true
+	enableLogs: !import.meta.env.DEV
 });
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`

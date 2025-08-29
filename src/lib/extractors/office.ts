@@ -13,9 +13,10 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 	const handleImage = settings.enableImageTextExtraction ? myhandleImage : undefined;
 
 	const text = await extractOfficeContent(uint8Array, {
-		normalizeWhitespace: true,
-		includeHeadersFooters: false,
-		includeComments: false,
+		normalizeWhitespace: settings.normalizeWhitespace,
+		includeHeadersFooters: settings.includeHeadersFooters,
+		includeComments: settings.includeComments,
+		includeImageText: settings.includeImageText,
 		handleImage
 	});
 

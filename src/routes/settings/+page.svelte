@@ -203,6 +203,49 @@
 		</div>
 	</div>
 
+	<!-- Extract Options -->
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Textextraktion</h2>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Whitespace normalisieren</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.normalizeWhitespace}
+				/>
+			</label>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Kopf- und Fußzeilen extrahieren</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.includeHeadersFooters}
+				/>
+			</label>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Kommentare extrahieren</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.includeComments}
+				/>
+			</label>
+
+			<label class="label cursor-pointer">
+				<span class="label-text">Texte aus eingebetteten Bildern (ODF)</span>
+				<input
+					type="checkbox"
+					class="toggle toggle-primary"
+					bind:checked={localSettings.includeImageText}
+				/>
+			</label>
+		</div>
+	</div>
+
 	<!-- Cleanup -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">

@@ -65,6 +65,8 @@ jobs:
 
       - name: Set release outputs
         id: set_outputs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Prüfen, ob semantic-release ein Tag erstellt hat
           LATEST_RELEASE=$(gh release list --limit 1 --json tagName,name,body,draft,prerelease -q '.[0]')

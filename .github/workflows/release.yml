@@ -63,15 +63,32 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm exec semantic-release --no-ci || true
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh -y
+
       - name: Set release outputs
         id: set_outputs
         run: |
-          TAG=$(pnpm exec semantic-release --dry-run | grep "Next release" | awk '{print $3}' || echo "")
+          # Prüfen, ob semantic-release ein Tag erstellt hat
+          TAG=$(git tag --points-at HEAD)
           if [ -n "$TAG" ]; then
+            # GitHub CLI verwendet Token aus Environment
+            gh auth login --with-token <<< "${GITHUB_TOKEN}"
+
+            RELEASE_INFO=$(gh release view "$TAG" --json tagName,name,body,draft,prerelease)
+            RELEASE_NAME=$(echo "$RELEASE_INFO" | jq -r '.name')
+            RELEASE_BODY=$(echo "$RELEASE_INFO" | jq -r '.body')
+            RELEASE_DRAFT=$(echo "$RELEASE_INFO" | jq -r '.draft')
+            RELEASE_PRERELEASE=$(echo "$RELEASE_INFO" | jq -r '.prerelease')
+
             echo "release_tag=$TAG" >> $GITHUB_OUTPUT
-            echo "release_body=Release $TAG" >> $GITHUB_OUTPUT
-            echo "release_draft=false" >> $GITHUB_OUTPUT
-            echo "release_prerelease=false" >> $GITHUB_OUTPUT
+            echo "release_body=$RELEASE_BODY" >> $GITHUB_OUTPUT
+            echo "release_draft=$RELEASE_DRAFT" >> $GITHUB_OUTPUT
+            echo "release_prerelease=$RELEASE_PRERELEASE" >> $GITHUB_OUTPUT
             echo "release_released=true" >> $GITHUB_OUTPUT
           else
             echo "release_tag=" >> $GITHUB_OUTPUT
@@ -142,7 +159,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           tagName: ${{ needs.semantic-release.outputs.release_tag }}
-          releaseName: 'App ${{ needs.semantic-release.outputs.release_tag }}'
+          releaseName: ${{ needs.semantic-release.outputs.release_body }}
           releaseBody: ${{ needs.semantic-release.outputs.release_body }}
           releaseDraft: ${{ needs.semantic-release.outputs.release_draft }}
           prerelease: ${{ needs.semantic-release.outputs.release_prerelease }}

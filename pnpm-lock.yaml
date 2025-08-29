@@ -94,8 +94,8 @@ importers:
         specifier: ^22.17.2
         version: 22.17.2
       daisyui:
-        specifier: ^5.0.50
-        version: 5.0.50
+        specifier: ^5.0.54
+        version: 5.0.54
       drizzle-kit:
         specifier: ^0.31.4
         version: 0.31.4
@@ -1898,8 +1898,8 @@ packages:
     resolution: {integrity: sha512-0LrrStPOdJj+SPCCrGhzryycLjwcgUSHBtxNA8aIDxf0GLsRh1cKYhB00Gd1lDOS4yGH69+SNn13+TWbVHETFQ==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
 
-  daisyui@5.0.50:
-    resolution: {integrity: sha512-c1PweK5RI1C76q58FKvbS4jzgyNJSP6CGTQ+KkZYzADdJoERnOxFoeLfDHmQgxLpjEzlYhFMXCeodQNLCC9bow==}
+  daisyui@5.0.54:
+    resolution: {integrity: sha512-03iuq06+lLq/VczY/+YpADgLXVC1HYO63PNiH6A9hn/+f6IkVoONVc+Jh08xizkLQQCVVMMUBp+KeIdcWSBLcg==}
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
@@ -5674,7 +5674,7 @@ snapshots:
     dependencies:
       css-tree: 2.2.1
 
-  daisyui@5.0.50: {}
+  daisyui@5.0.54: {}
 
   debug@4.4.1:
     dependencies:

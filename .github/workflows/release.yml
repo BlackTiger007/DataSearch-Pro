@@ -155,8 +155,8 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           tagName: ${{ needs.semantic-release.outputs.release_tag }}
-          releaseName: ${{ needs.semantic-release.outputs.release_body }}
+          releaseName: ${{ needs.semantic-release.outputs.release_tag }}
           releaseBody: ${{ needs.semantic-release.outputs.release_body }}
-          releaseDraft: ${{ needs.semantic-release.outputs.release_draft }}
-          prerelease: ${{ needs.semantic-release.outputs.release_prerelease }}
+          releaseDraft: ${{ needs.semantic-release.outputs.release_draft == 'true' }}
+          prerelease: ${{ needs.semantic-release.outputs.release_prerelease == 'true' }}
           args: ${{ matrix.args }}

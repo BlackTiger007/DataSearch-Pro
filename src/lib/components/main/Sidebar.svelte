@@ -2,7 +2,7 @@
 	import type { FilesWithTags } from '$lib/types/fileWihtTags';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { getIconComponent } from '$lib/utils/icons';
-	import List from './list/VirtualList.svelte';
+	import List from '../VirtualList.svelte';
 
 	let {
 		files,

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { FilesWithTags } from '$lib/types/fileWihtTags';
-	import List from './list/List.svelte';
+	import { formatBytes } from '$lib/utils/formatBytes';
+	import { getIconComponent } from '$lib/utils/icons';
+	import List from './list/VirtualList.svelte';
 
 	let {
 		files,
@@ -58,6 +60,27 @@
 
 	<!-- Scrollable List -->
 	<div class="flex-1 overflow-y-auto">
-		<List items={filteredFiles} {selectFile} />
+		<List items={filteredFiles}>
+			{#snippet row(item)}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="flex cursor-pointer rounded-lg p-2 hover:bg-base-100"
+					class:bg-base-100={selectedFile?.id === item.id}
+					onclick={() => selectFile(item)}
+				>
+					{#await getIconComponent(item.mimeType) then Icon}
+						<Icon class="size-12 text-base-content/70" />
+					{/await}
+
+					<div class="mx-2 flex min-w-0 flex-1 flex-col overflow-hidden">
+						<div class="truncate font-semibold" title={item.name}>{item.name}</div>
+						<div class="truncate text-xs text-base-content/70" title={item.path}>{item.path}</div>
+					</div>
+
+					<div class="ml-2 shrink-0 text-sm">{formatBytes(item.size)}</div>
+				</div>
+			{/snippet}
+		</List>
 	</div>
 </div>

@@ -149,7 +149,7 @@
 	}
 </script>
 
-<div class="w-2/3 overflow-y-auto bg-base-300 p-6">
+<div class="w-full overflow-y-auto bg-base-300 p-6">
 	{#if selectedFile}
 		<h2 class="mb-2 max-w-full text-2xl font-bold break-words">{selectedFile.name}</h2>
 		<p class="mb-4 max-w-full text-sm break-all text-base-content/70">{selectedFile.path}</p>

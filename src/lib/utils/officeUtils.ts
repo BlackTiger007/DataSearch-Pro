@@ -57,8 +57,10 @@ async function extractDocx(
 	opts: ExtractOptions,
 	collected: string[]
 ) {
-	const files = ['word/document.xml'];
-	if (opts.includeHeadersFooters) files.push('word/header1.xml', 'word/footer1.xml');
+	const files = [];
+	if (opts.includeHeadersFooters) files.push('word/header1.xml');
+	files.push('word/document.xml');
+	if (opts.includeHeadersFooters) files.push('word/footer1.xml');
 	if (opts.includeComments) files.push('word/comments.xml');
 
 	for (const path of files) {

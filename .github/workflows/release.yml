@@ -144,6 +144,16 @@ jobs:
           node-version: lts/*
           cache: 'pnpm'
 
+      - name: Cache Rust crates
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo
+          restore-keys: |
+            ${{ runner.os }}-cargo
+
       - name: Install Rust + Targets
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -166,3 +176,11 @@ jobs:
           releaseDraft: ${{ needs.semantic-release.outputs.release_draft == 'true' }}
           prerelease: ${{ needs.semantic-release.outputs.release_prerelease == 'true' }}
           args: ${{ matrix.args }}
+
+      - name: Cache Tauri target folder
+        uses: actions/cache@v4
+        with:
+          path: src-tauri/target
+          key: ${{ runner.os }}-tauri-target
+          restore-keys: |
+            ${{ runner.os }}-tauri-target

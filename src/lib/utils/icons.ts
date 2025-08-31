@@ -63,7 +63,7 @@ export const icons: Record<string, () => Promise<{ default: Component }>> = {
 
 	// Code / Entwickler
 	js: () => import('bootstrap-icons/icons/filetype-js.svg?component'),
-	ts: () => import('bootstrap-icons/icons/filetype-tsx.svg?component'),
+	ts: () => import('bootstrap-icons/icons/typescript.svg?component'),
 	tsx: () => import('bootstrap-icons/icons/filetype-tsx.svg?component'),
 	jsx: () => import('bootstrap-icons/icons/filetype-jsx.svg?component'),
 	java: () => import('bootstrap-icons/icons/filetype-java.svg?component'),

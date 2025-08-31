@@ -127,13 +127,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.inputs.branch || 'main' }}
 
-      - name: Debug release inputs
-        run: |
-          echo "TAG: ${{ needs.semantic-release.outputs.release_tag }}"
-          echo "DRAFT: ${{ needs.semantic-release.outputs.release_draft }}"
-          echo "PRERELEASE: ${{ needs.semantic-release.outputs.release_prerelease }}"
-          echo "BODY: ${{ needs.semantic-release.outputs.release_body }}"
-
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |

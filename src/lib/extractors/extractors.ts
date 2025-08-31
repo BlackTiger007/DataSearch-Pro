@@ -1,7 +1,7 @@
 import type { QueueItem } from '$lib/types/indexing';
 import type { NewScan } from '$lib/db/schema';
 
-type ExtractFn = (file: QueueItem, fileId: number) => Promise<NewScan[]>;
+type ExtractFn = (file: QueueItem, fileId: number, fileVersion: number) => Promise<NewScan[]>;
 
 export const extractors: Record<string, () => Promise<ExtractFn>> = {
 	// Textbasierte Formate

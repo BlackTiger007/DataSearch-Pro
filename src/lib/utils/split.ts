@@ -13,6 +13,7 @@ export function splitSmartForDb(
 	line: string,
 	lineNumber: number,
 	fileId: number,
+	fileVersionId: number,
 	maxLen = 10000
 ): NewScan[] {
 	if (line.length <= maxLen) {
@@ -20,6 +21,7 @@ export function splitSmartForDb(
 			{
 				content: line,
 				fileId,
+				fileVersionId,
 				lineNumber,
 				chunkNumber: 1,
 				createdAt: new Date()
@@ -37,6 +39,7 @@ export function splitSmartForDb(
 		chunks.push({
 			content: line.slice(start, end),
 			fileId,
+			fileVersionId,
 			lineNumber,
 			chunkNumber: i + 1,
 			createdAt: new Date()

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type NewTag, type Scan, type Tag, schema } from '$lib/db/schema';
+	import { type FileVersion, type NewTag, type Scan, type Tag, schema } from '$lib/db/schema';
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { openPath } from '@tauri-apps/plugin-opener';
 	import { sep } from '@tauri-apps/api/path';
@@ -21,16 +21,52 @@
 	let newTagName = $state('');
 	let newTagColor = $state('#34d399'); // Standardfarbe grün
 
+	// States
+	let versions: number[] = $state([]);
+	let selectedVersion: number | null = $state(null);
+
+	// Effekt: wenn sich die Datei ändert, lade die Versionen
+	$effect(() => {
+		if (!selectedFile) return;
+
+		filePromise(selectedFile.id).then((chunks) => {
+			const uniqueVersions = Array.from(new Set(chunks.map((c) => c.versionNumber))).sort(
+				(a, b) => b - a
+			);
+
+			versions = uniqueVersions;
+			if (selectedVersion === null && uniqueVersions.length > 0) {
+				selectedVersion = uniqueVersions[0]; // Standard: höchste Version
+			}
+		});
+	});
+
 	// Cache für File-Chunks
-	const fileCache = new Map<number, Scan[]>();
+	const fileCache = new Map<number, Promise<(Scan & FileVersion)[]>>();
 
 	// Promise-Funktion mit Cache
-	const filePromise = async (id: number) => {
+	const filePromise = async (id: number): Promise<(Scan & FileVersion)[]> => {
 		if (fileCache.has(id)) {
 			return fileCache.get(id)!;
 		}
-		const chunks = await db.select().from(schema.scans).where(eq(schema.scans.fileId, id));
-		fileCache.set(id, chunks);
+
+		// Join zwischen scans und file_versions
+		const scans = await db.select().from(schema.scans).where(eq(schema.scans.fileId, id));
+
+		const chunks: (Scan & FileVersion)[] = [];
+		for (const scan of scans) {
+			const [version] = await db
+				.select()
+				.from(schema.fileVersions)
+				.where(eq(schema.fileVersions.id, scan.fileVersionId));
+
+			// falls `version` nicht gefunden wurde → skip
+			if (!version) continue;
+
+			chunks.push({ ...scan, ...version });
+		}
+
+		fileCache.set(id, Promise.resolve(chunks));
 		return chunks;
 	};
 
@@ -101,6 +137,16 @@
 		const index = tags.findIndex((t) => t.id === tag.id);
 		if (index !== -1) tags[index] = tag;
 	}
+
+	// Hilfsfunktion: gruppiert die Chunks nach versionNumber
+	function groupByVersion(chunks: (Scan & FileVersion)[]) {
+		const grouped: Record<number, (Scan & FileVersion)[]> = {};
+		for (const c of chunks) {
+			if (!grouped[c.versionNumber]) grouped[c.versionNumber] = [];
+			grouped[c.versionNumber].push(c);
+		}
+		return grouped;
+	}
 </script>
 
 <div class="w-2/3 overflow-y-auto bg-base-300 p-6">
@@ -136,6 +182,17 @@
 			</div>
 		</div>
 
+		{#if selectedFile && versions.length > 0}
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">Version</legend>
+				<select class="select" bind:value={selectedVersion}>
+					{#each versions as v}
+						<option value={v}>Version {v}</option>
+					{/each}
+				</select>
+			</fieldset>
+		{/if}
+
 		<!-- Tags -->
 		<div class="mb-4">
 			<h3 class="mb-2 font-semibold">Tags</h3>
@@ -169,13 +226,17 @@
 					<p>Wird geladen...</p>
 				{:then fileChunks}
 					{#if fileChunks.length > 0}
-						{#each fileChunks as chunk (chunk.id)}
-							<div class="flex gap-2">
-								<span class="shrink-0 font-semibold">{chunk.lineNumber}</span>
-								<pre
-									class:whitespace-pre={overflow}
-									class:whitespace-pre-wrap={!overflow}>{chunk.content}</pre>
-							</div>
+						{#each Object.entries(groupByVersion(fileChunks)) as [version, chunks]}
+							{#if +version === selectedVersion}
+								{#each chunks as chunk (`${chunk.id}-${chunk.versionNumber}-${chunk.lineNumber}`)}
+									<div class="flex gap-2">
+										<span class="shrink-0 font-semibold">{chunk.lineNumber}</span>
+										<pre
+											class:whitespace-pre={overflow}
+											class:whitespace-pre-wrap={!overflow}>{chunk.content}</pre>
+									</div>
+								{/each}
+							{/if}
 						{/each}
 					{:else}
 						<p>Keine Inhalte gefunden oder kein Parser für dieses Format verfügbar.</p>

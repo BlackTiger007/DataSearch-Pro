@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { schema } from '$lib/db/schema';
 import { readDirectory, type IndexedFile } from '$lib/utils/fileUtils';
-import { eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { settings } from './settings.svelte';
 import type { UnwatchFn } from '@tauri-apps/plugin-fs';
 import { exists, readFile, stat, watch as watchWithDelay } from '@tauri-apps/plugin-fs';
@@ -185,6 +185,34 @@ function createIndexingStore() {
 				return;
 			}
 
+			const lastVersion = await db
+				.select()
+				.from(schema.fileVersions)
+				.where(eq(schema.fileVersions.fileId, id))
+				.orderBy(desc(schema.fileVersions.versionNumber))
+				.limit(1);
+
+			const newVersionNumber = lastVersion.length > 0 ? lastVersion[0].versionNumber + 1 : 1;
+
+			await db.insert(schema.fileVersions).values({
+				fileId: id,
+				versionNumber: newVersionNumber,
+				createdAt: new Date()
+			});
+
+			const [fileVersion] = await db
+				.select()
+				.from(schema.fileVersions)
+				.where(
+					and(
+						eq(schema.fileVersions.fileId, id),
+						eq(schema.fileVersions.versionNumber, newVersionNumber)
+					)
+				)
+				.limit(1);
+
+			console.log('fileVersion', fileVersion);
+
 			// passenden loader holen
 			const loader = extractors[file.data.mimeType.toLowerCase()];
 			if (!loader) {
@@ -206,20 +234,10 @@ function createIndexingStore() {
 			// dynamisch importieren und Funktion abrufen
 			const extractor = await loader();
 
-			const textChunks = await extractor(file, id);
+			const textChunks = await extractor(file, id, fileVersion.id);
 
-			for (const chunk of textChunks) {
-				await db
-					.insert(schema.scans)
-					.values(chunk)
-					.onConflictDoUpdate({
-						target: [schema.scans.fileId, schema.scans.lineNumber, schema.scans.chunkNumber],
-						set: {
-							content: chunk.content,
-							lineNumber: chunk.lineNumber,
-							chunkNumber: chunk.chunkNumber
-						}
-					});
+			if (textChunks.length > 0) {
+				await db.insert(schema.scans).values(textChunks);
 			}
 		} catch (err) {
 			console.error(`Fehler bei Datei ${file.file}:`, err);

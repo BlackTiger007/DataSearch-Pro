@@ -7,7 +7,11 @@ import { extractOfficeContent } from '../utils/officeUtils';
 import { createWorker } from 'tesseract.js';
 import { settings } from '$lib/stores/settings.svelte';
 
-export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(
+	file: QueueItem,
+	id: number,
+	fileVersionId: number
+): Promise<NewScan[]> {
 	const uint8Array = await readFile(file.file);
 
 	const handleImage = settings.enableImageTextExtraction ? myhandleImage : undefined;
@@ -27,7 +31,7 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 		const clean = sanitizeText(line);
 		if (!clean) continue;
 		lineNumber++;
-		textChunks.push(...splitSmartForDb(clean, lineNumber, id));
+		textChunks.push(...splitSmartForDb(clean, lineNumber, id, fileVersionId));
 	}
 
 	return textChunks;

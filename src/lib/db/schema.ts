@@ -3,16 +3,18 @@ import { fileTags, type FileTag, type NewFileTag } from './schema/fileTags';
 import { scans, type Scan, type NewScan } from './schema/scans';
 import { settings, type Setting, type NewSetting } from './schema/settings';
 import { tags, type Tag, type NewTag } from './schema/tags';
+import { fileVersions, type FileVersion, type NewFileVersion } from './schema/fileVersions';
 
 export const schema = {
 	files,
 	fileTags,
 	scans,
 	settings,
-	tags
+	tags,
+	fileVersions
 };
 
-export { files, tags, scans, settings, fileTags };
+export { files, tags, scans, settings, fileTags, fileVersions };
 
 export interface Schema {
 	File: File;
@@ -25,6 +27,21 @@ export interface Schema {
 	NewSetting: NewSetting;
 	Tag: Tag;
 	NewTag: NewTag;
+	FileVersion: FileVersion;
+	NewFileVersion: NewFileVersion;
 }
 
-export type { File, NewFile, FileTag, NewFileTag, Scan, NewScan, Setting, NewSetting, Tag, NewTag };
+export type {
+	File,
+	NewFile,
+	FileTag,
+	NewFileTag,
+	Scan,
+	NewScan,
+	Setting,
+	NewSetting,
+	Tag,
+	NewTag,
+	FileVersion,
+	NewFileVersion
+};

@@ -21,9 +21,16 @@ jobs:
     with:
       branch: ${{ inputs.branch }}
 
+  format:
+    name: Code Formatting
+    needs: test-build
+    permissions:
+      contents: write
+    uses: ./.github/workflows/format.yml
+
   semantic-release:
     name: Semantic Release
-    needs: test-build
+    needs: format
     runs-on: ubuntu-latest
     outputs:
       release_tag: ${{ steps.set_outputs.outputs.release_tag }}
@@ -166,10 +173,3 @@ jobs:
           releaseDraft: ${{ needs.semantic-release.outputs.release_draft == 'true' }}
           prerelease: ${{ needs.semantic-release.outputs.release_prerelease == 'true' }}
           args: ${{ matrix.args }}
-
-  format:
-    name: Code Formatting
-    needs: tauri-release
-    permissions:
-      contents: write
-    uses: ./.github/workflows/format.yml

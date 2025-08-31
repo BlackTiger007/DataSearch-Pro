@@ -1,44 +1,43 @@
-<script lang="ts">
-	import { onMount, tick } from 'svelte';
+<script lang="ts" generics="T">
+	import { onMount, tick, type Snippet } from 'svelte';
 
-	// Props
-	export let items: any[] = [];
-	export let itemHeight: number | undefined = undefined;
-	export let start: number = 0; // bind:start
-	export let end: number = 0;
+	let {
+		items = [],
+		itemHeight = undefined,
+		start = 0,
+		end = 0,
+		row
+	}: {
+		items: T[];
+		itemHeight?: number;
+		start?: number;
+		end?: number;
+		row: Snippet<[T]>;
+	} = $props();
 
-	// Local state
-	let height_map: number[] = [];
+	let height_map: number[] = $state([]);
 	let rows: HTMLCollectionOf<HTMLElement>;
 	let viewport: HTMLElement;
 	let contents: HTMLElement;
-	let viewport_height = 0;
-	let mounted = false;
-	let top = 0;
-	let bottom = 0;
-	let average_height = 0;
+	let viewport_height = $state(0);
+	let mounted = $state(false);
+	let top = $state(0);
+	let bottom = $state(0);
+	let average_height = $state(0);
 
-	// Derived state
-	$: visible = items.slice(start, end).map((data, i) => ({ index: i + start, data }));
+	let visible = $derived(items.slice(start, end).map((data, i) => ({ index: i + start, data })));
 
-	// Whenever `items` changes, invalidate the current height map
-	$: if (mounted && viewport_height > 0 && items.length > 0) {
-		refresh(items, viewport_height, itemHeight);
-	}
+	$effect(() => {
+		if (mounted && viewport_height > 0 && items.length > 0) {
+			refresh(items, viewport_height, itemHeight);
+		}
+	});
 
-	async function refresh(items: any[], viewportHeight: number, itemHeight?: number) {
+	async function refresh(items: T[], viewportHeight: number, itemHeight?: number) {
 		if (!viewport || !contents) return;
 
-		const isStartOverflow = items.length < start;
-		if (isStartOverflow) {
-			await scrollToIndex(items.length - 1, { behavior: 'auto' });
-		}
-
-		const { scrollTop } = viewport;
-		await tick();
-
-		let content_height = top - scrollTop;
 		let i = start;
+		let content_height = top - viewport.scrollTop;
 
 		while (content_height < viewportHeight && i < items.length) {
 			let row = rows[i - start] as HTMLElement | undefined;
@@ -64,12 +63,7 @@
 	async function handle_scroll() {
 		if (!viewport || !rows) return;
 
-		const { scrollTop } = viewport;
-
-		for (let v = 0; v < rows.length; v++) {
-			height_map[start + v] = itemHeight || rows[v].offsetHeight;
-		}
-
+		let scrollTop = viewport.scrollTop;
 		let i = 0;
 		let y = 0;
 
@@ -100,38 +94,23 @@
 
 	export async function scrollToIndex(index: number, opts?: ScrollToOptions) {
 		if (!viewport) return;
-		const itemsDelta = index - start;
 		const _itemHeight = itemHeight || average_height || 50;
-		const distance = itemsDelta * _itemHeight;
-
-		opts = {
+		viewport.scrollTo({
 			left: 0,
-			top: viewport.scrollTop + distance,
+			top: viewport.scrollTop + (index - start) * _itemHeight,
 			behavior: 'smooth',
 			...opts
-		};
-
-		viewport.scrollTo(opts);
+		});
 	}
 
 	onMount(async () => {
 		await tick();
-
-		// Höhe prüfen
 		viewport_height = viewport.offsetHeight;
-
-		if (viewport_height === 0) {
-			console.warn('viewport height is 0 – vielleicht braucht dein Container eine feste Höhe!');
-		}
-
-		// Rows referenzieren
 		rows = contents.getElementsByTagName(
 			'svelte-virtual-list-row'
 		) as HTMLCollectionOf<HTMLElement>;
-
 		mounted = true;
 
-		// Falls noch keine Höhe/Rows → nächsten Tick probieren
 		if (viewport_height > 0 && items.length > 0) {
 			await refresh(items, viewport_height, itemHeight);
 		} else {
@@ -140,9 +119,7 @@
 				rows = contents.getElementsByTagName(
 					'svelte-virtual-list-row'
 				) as HTMLCollectionOf<HTMLElement>;
-				if (viewport_height > 0) {
-					await refresh(items, viewport_height, itemHeight);
-				}
+				if (viewport_height > 0) await refresh(items, viewport_height, itemHeight);
 			}, 50);
 		}
 	});
@@ -151,7 +128,7 @@
 <svelte-virtual-list-viewport
 	bind:this={viewport}
 	bind:offsetHeight={viewport_height}
-	on:scroll={handle_scroll}
+	onscroll={handle_scroll}
 	class="relative block h-full overflow-y-auto"
 >
 	<svelte-virtual-list-contents
@@ -159,9 +136,9 @@
 		class="block"
 		style="padding-top: {top}px; padding-bottom: {bottom}px;"
 	>
-		{#each visible as row (row.index)}
+		{#each visible as content (content.index)}
 			<svelte-virtual-list-row class="block overflow-hidden">
-				<slot item={row.data}>Missing template</slot>
+				{@render row(content.data)}
 			</svelte-virtual-list-row>
 		{/each}
 	</svelte-virtual-list-contents>

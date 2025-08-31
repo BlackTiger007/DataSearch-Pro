@@ -1,31 +1,41 @@
 import { sqliteTable, text, integer, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { files } from './files';
+import { fileVersions } from './fileVersions';
 
-// Scans-Tabelle (zerlegte Text-Chunks)
+// Scans-Tabelle (zerlegte Text-Chunks pro Version)
 export const scans = sqliteTable(
 	'scans',
 	{
 		id: integer('id').primaryKey({ autoIncrement: true }),
 
-		// Text-Chunk (Teilinhalt, max. X Zeichen)
+		// Text-Chunk
 		content: text('content').notNull(),
 
-		// Referenz zur Datei
+		// Referenz zur Datei (direkter Zugriff möglich)
 		fileId: integer('file_id')
 			.notNull()
 			.references(() => files.id, { onDelete: 'cascade' }),
 
-		// Nummer der Zeile in der Originaldatei
+		// Referenz zur Datei-Version
+		fileVersionId: integer('file_version_id')
+			.notNull()
+			.references(() => fileVersions.id, { onDelete: 'cascade' }),
+
+		// Zeilennummer in der Originaldatei
 		lineNumber: integer('line_number').notNull(),
 
-		// Nummer des Chunks innerhalb der Zeile (falls sie geteilt wurde)
+		// Chunknummer innerhalb der Zeile
 		chunkNumber: integer('chunk_number').notNull(),
 
 		// Zeitstempel
 		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
 	},
 	(table) => [
-		uniqueIndex('scans_file_chunk_unique').on(table.fileId, table.lineNumber, table.chunkNumber)
+		uniqueIndex('scans_version_chunk_unique').on(
+			table.fileVersionId,
+			table.lineNumber,
+			table.chunkNumber
+		)
 	]
 );
 

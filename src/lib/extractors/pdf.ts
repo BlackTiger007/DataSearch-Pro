@@ -10,7 +10,11 @@ import type { TextItem } from 'pdfjs-dist/types/src/display/api';
 // Worker explizit setzen
 GlobalWorkerOptions.workerSrc = workerSrc;
 
-export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(
+	file: QueueItem,
+	id: number,
+	fileVersionId: number
+): Promise<NewScan[]> {
 	const binary = await readFile(file.file);
 	const pdf = await getDocument({ data: binary }).promise;
 
@@ -31,7 +35,7 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 			const clean = sanitizeText(line);
 			if (!clean) continue;
 			lineNumber++;
-			textChunks.push(...splitSmartForDb(clean, lineNumber, id));
+			textChunks.push(...splitSmartForDb(clean, lineNumber, id, fileVersionId));
 		}
 	}
 

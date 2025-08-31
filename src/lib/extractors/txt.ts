@@ -12,7 +12,11 @@ import { createTextDecoder } from '$lib/types/encodings';
  * @param encoding Optional: Text-Encoding (default aus Settings)
  * @returns Array von NewScan-Objekten
  */
-export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(
+	file: QueueItem,
+	id: number,
+	fileVersionId: number
+): Promise<NewScan[]> {
 	const binary = await readFile(file.file);
 	const decoder = createTextDecoder();
 	const text = decoder.decode(binary);
@@ -27,7 +31,7 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 		if (!clean) continue;
 		lineNumber++;
 
-		textChunks.push(...splitSmartForDb(clean, lineNumber, id));
+		textChunks.push(...splitSmartForDb(clean, lineNumber, id, fileVersionId));
 	}
 
 	return textChunks;

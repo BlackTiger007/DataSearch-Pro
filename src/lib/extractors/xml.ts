@@ -11,7 +11,11 @@ import { readFile } from '@tauri-apps/plugin-fs';
  * @param id Die ID des übergeordneten Scans
  * @returns Array von NewScan-Objekten
  */
-export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
+export async function extract(
+	file: QueueItem,
+	id: number,
+	fileVersionId: number
+): Promise<NewScan[]> {
 	const binary = await readFile(file.file);
 	const decoder = createTextDecoder();
 	const xmlText = decoder.decode(binary);
@@ -28,7 +32,7 @@ export async function extract(file: QueueItem, id: number): Promise<NewScan[]> {
 			const clean = sanitizeText(node.textContent ?? '');
 			if (clean) {
 				lineNumber++;
-				textChunks.push(...splitSmartForDb(clean, lineNumber, id));
+				textChunks.push(...splitSmartForDb(clean, lineNumber, id, fileVersionId));
 			}
 		} else {
 			node.childNodes.forEach(extractNodeText);

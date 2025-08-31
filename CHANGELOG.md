@@ -1,3 +1,28 @@
+# [2.0.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v1.2.0...v2.0.0) (2025-08-31)
+
+
+### Bug Fixes
+
+* **icons:** correct TypeScript icon import ([b3638cd](https://github.com/BlackTiger007/DataSearch-Pro/commit/b3638cd07cf6db1c04ad48ca881e64806f48b471))
+* **tauri:** update productName capitalization to "DataSearch-Pro" ([304c4a2](https://github.com/BlackTiger007/DataSearch-Pro/commit/304c4a2e041aa6233ddc9450b3dfca1aab1310ef))
+
+
+### Features
+
+* **db:** add fileVersion parameter to extractors ([8a7a626](https://github.com/BlackTiger007/DataSearch-Pro/commit/8a7a626f224c6b4f8f92983f298698e3bc9493c0))
+* **db:** add fileVersionId to scans table ([b4ff122](https://github.com/BlackTiger007/DataSearch-Pro/commit/b4ff122f3ba95993507dff31ce98ae8c0a73bf6e))
+* **db:** add fileVersionId to splitSmartForDb ([5b89563](https://github.com/BlackTiger007/DataSearch-Pro/commit/5b89563809532e670332c504102fbea7c3983719))
+* **db:** add fileVersions table for tracking file version history ([e58ef19](https://github.com/BlackTiger007/DataSearch-Pro/commit/e58ef1913003c80276d2557cc05f216fec340e93))
+* **db:** add fileVersions to schema ([ef7d0ca](https://github.com/BlackTiger007/DataSearch-Pro/commit/ef7d0caad3c2109624c3f6c0ec9740c2512e5e1d))
+* **db:** generate initial migration with Drizzle ([2ae9949](https://github.com/BlackTiger007/DataSearch-Pro/commit/2ae99492f430d648b44d3e96aa1a6904782ab102))
+* **files:** add versioning support for indexed file chunks ([b2af3b9](https://github.com/BlackTiger007/DataSearch-Pro/commit/b2af3b9cb56c2868ba081a0051c18eeb8559888a))
+* **indexing:** add file versioning support ([0ad2bff](https://github.com/BlackTiger007/DataSearch-Pro/commit/0ad2bff7020d0a63ff892fceab8be658a411ed77))
+
+
+### BREAKING CHANGES
+
+* **db:** database schema changed, old versions may be incompatible
+
 # [1.2.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v1.1.0...v1.2.0) (2025-08-29)
 
 ### Bug Fixes

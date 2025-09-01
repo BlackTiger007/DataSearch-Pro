@@ -21,7 +21,6 @@
 		<a href="/" class="btn">DataSearch-Pro</a>
 		<a href="/dashboard" class="btn">Dashboard</a>
 		<a href="/settings" class="btn">Einstellungen</a>
-		<a href="/about" class="btn">About</a>
 	</div>
 
 	<div class="flex gap-1">

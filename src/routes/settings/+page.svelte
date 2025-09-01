@@ -7,6 +7,10 @@
 	import type { SettingsType } from '$lib/validation/settingsSchema';
 	import { app } from '@tauri-apps/api';
 	import { open } from '@tauri-apps/plugin-dialog';
+	import Folder from 'bootstrap-icons/icons/folder.svg?component';
+	import FolderAdd from 'bootstrap-icons/icons/folder-plus.svg?component';
+	import FolderRemove from 'bootstrap-icons/icons/folder-minus.svg?component';
+	import Recycle from 'bootstrap-icons/icons/recycle.svg?component';
 
 	let localSettings: SettingsType = $state({ ...settings });
 	let showSnackbar = $state(false);
@@ -83,19 +87,19 @@
 							bind:value={localSettings.folders[i]}
 						/>
 						<button class="btn btn-outline" onclick={() => pickFolder(i)} title="Pick folder">
-							Folder
+							<Folder></Folder>
 						</button>
 						<button
 							class="btn btn-error"
 							onclick={() => localSettings.folders.splice(i, 1)}
 							title="Remove folder"
 						>
-							✕
+							<FolderRemove></FolderRemove>
 						</button>
 					</div>
 				{/each}
 				<button class="btn btn-primary" onclick={() => localSettings.folders.push('')}>
-					Add Folder
+					<FolderAdd></FolderAdd> Add Folder
 				</button>
 			</div>
 		</div>
@@ -121,12 +125,12 @@
 							onclick={() => localSettings.allowedFileTypes.splice(i, 1)}
 							title="Remove file type"
 						>
-							✕
+							<FolderRemove></FolderRemove>
 						</button>
 					</div>
 				{/each}
 				<button class="btn btn-primary" onclick={() => localSettings.allowedFileTypes.push('')}>
-					Add Type
+					<FolderAdd></FolderAdd> Add Type
 				</button>
 			</div>
 		</div>
@@ -321,7 +325,7 @@
 			<h2 class="card-title">Datenbank-Bereinigung</h2>
 			<p>Entfernt Einträge, deren Dateien nicht mehr vorhanden sind.</p>
 			<button class="btn btn-error" onclick={cleanupMissingFiles}>
-				Fehlende Dateien bereinigen
+				<Recycle></Recycle> Fehlende Dateien bereinigen
 			</button>
 		</div>
 	</div>

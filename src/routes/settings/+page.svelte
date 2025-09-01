@@ -76,7 +76,7 @@
 		<div class="card-body">
 			<h2 class="card-title">Folders</h2>
 			<div class="space-y-2">
-				{#each localSettings.folders as folder, i}
+				{#each localSettings.folders, i}
 					<div class="flex items-center gap-2">
 						<input
 							id={`folder-${i}`}

@@ -5,6 +5,7 @@
 	import { settings } from '$lib/stores/settings.svelte';
 	import { availableEncodings } from '$lib/types/encodings';
 	import type { SettingsType } from '$lib/validation/settingsSchema';
+	import { app } from '@tauri-apps/api';
 	import { open } from '@tauri-apps/plugin-dialog';
 
 	let localSettings: SettingsType = $state({ ...settings });
@@ -284,4 +285,21 @@
 			</button>
 		</div>
 	</div>
+
+	{#await app.getVersion() then version}
+		<footer class="footer-center footer bg-base-300 p-4 text-base-content sm:footer-horizontal">
+			<aside>
+				<p>
+					<a
+						class="link link-primary"
+						href="https://github.com/BlackTiger007/DataSearch-Pro"
+						target="_blank"
+					>
+						GitHub
+					</a>
+				</p>
+				<p>Version {version}</p>
+			</aside>
+		</footer>
+	{/await}
 </div>

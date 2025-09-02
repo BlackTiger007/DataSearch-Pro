@@ -43,16 +43,6 @@
 		}
 	}
 
-	async function download() {
-		if (!online.current) {
-			console.error('Cannot download update: offline');
-			return;
-		}
-		if (update && !downloadStarted) {
-			await update.download(downloadLog);
-		}
-	}
-
 	async function downloadAndInstall() {
 		if (!online.current) {
 			console.error('Cannot download & install update: offline');
@@ -137,14 +127,9 @@
 
 			<div class="flex flex-col justify-end space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
 				{#if update && !downloadStarted}
-					<button class="btn btn-primary" disabled={!online.current} onclick={download}>
-						Download
-					</button>
 					<button class="btn btn-primary" disabled={!online.current} onclick={downloadAndInstall}>
 						Download & Install
 					</button>
-				{:else if update && downloadFinished}
-					<button class="btn btn-secondary" onclick={update.install}> Install </button>
 				{/if}
 			</div>
 		{/if}

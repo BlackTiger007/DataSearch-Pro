@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { indexing } from '$lib/stores/indexing.svelte';
-	import { flip } from 'svelte/animate';
-	import { fade } from 'svelte/transition';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
@@ -9,6 +7,7 @@
 	import { SvelteMap } from 'svelte/reactivity';
 	import { open } from '@tauri-apps/plugin-dialog';
 	import { handleUnscannedFiles } from '$lib/utils/fileService';
+	import List from '$lib/components/VirtualList.svelte';
 
 	// Icons
 	import AddFolder from 'bootstrap-icons/icons/folder-plus.svg?component';
@@ -38,6 +37,10 @@
 	/** Fügt Dateien aus ausgewählten Ordnern der Queue hinzu */
 	async function addTempFolders() {
 		const paths = await open({ multiple: true, directory: true });
+
+		// console.log(paths);
+		// return;
+
 		if (!paths) return;
 
 		indexing.addToQueue(paths);
@@ -135,59 +138,61 @@
 					</div>
 				{/if}
 			</li>
-
-			{#each indexing.store.queue as item (item.file)}
-				{@const priority = getAnimatedPriority(item.file, item.priority)}
-				<li
-					class="grid grid-cols-1 items-center gap-3 px-3 py-2 hover:bg-base-200 md:grid-cols-[60px_1fr_auto]"
-					animate:flip={{ duration: 300 }}
-				>
-					<!-- Priority animiert -->
-					<div class="text-center text-2xl font-thin opacity-70">
-						{priority.current.toFixed(0)}
-					</div>
-
-					<!-- File info -->
-					<div class="truncate">
-						<div class="truncate text-sm md:text-base" title={item.file}>
-							{item.file}
-						</div>
-						<div class="flex items-center gap-1 text-xs opacity-70">
-							{formatBytes(item.data.size)}
-						</div>
-					</div>
-
-					<!-- Controls -->
-					<div class="flex items-center gap-2">
-						<!-- Erhöhen -->
-						<div class="flex gap-1">
-							{#each [1, 10, 100] as val (val)}
-								<button
-									class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
-									title={`Priority +${val}`}
-									onclick={() => indexing.setPriority(item.file, val)}
-								>
-									<PlusIcon class="size-3" />
-									{val}
-								</button>
-							{/each}
-						</div>
-						<!-- Verringern -->
-						<div class="flex gap-1">
-							{#each [100, 10, 1] as val (val)}
-								<button
-									class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
-									title={`Priority -${val}`}
-									onclick={() => indexing.setPriority(item.file, -val)}
-								>
-									<MinusIcon class="size-3" />
-									{val}
-								</button>
-							{/each}
-						</div>
-					</div>
-				</li>
-			{/each}
 		</ul>
+
+		<div class="h-[calc(100vh-470px)]">
+			<List items={indexing.store.queue}>
+				{#snippet row(item)}
+					<div
+						class="grid grid-cols-1 items-center gap-3 px-3 py-2 hover:bg-base-200 md:grid-cols-[60px_1fr_auto]"
+					>
+						<!-- Priority animiert -->
+						<div class="text-center text-2xl font-thin opacity-70">
+							{item.priority.toFixed(0)}
+						</div>
+
+						<!-- File info -->
+						<div class="truncate">
+							<div class="truncate text-sm md:text-base" title={item.file}>
+								{item.file}
+							</div>
+							<div class="flex items-center gap-1 text-xs opacity-70">
+								{formatBytes(item.data.size)}
+							</div>
+						</div>
+
+						<!-- Controls -->
+						<div class="flex items-center gap-2">
+							<!-- Erhöhen -->
+							<div class="flex gap-1">
+								{#each [1, 10, 100] as val (val)}
+									<button
+										class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
+										title={`Priority +${val}`}
+										onclick={() => indexing.setPriority(item.file, val)}
+									>
+										<PlusIcon class="size-3" />
+										{val}
+									</button>
+								{/each}
+							</div>
+							<!-- Verringern -->
+							<div class="flex gap-1">
+								{#each [100, 10, 1] as val (val)}
+									<button
+										class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
+										title={`Priority -${val}`}
+										onclick={() => indexing.setPriority(item.file, -val)}
+									>
+										<MinusIcon class="size-3" />
+										{val}
+									</button>
+								{/each}
+							</div>
+						</div>
+					</div>
+				{/snippet}
+			</List>
+		</div>
 	</section>
 </main>

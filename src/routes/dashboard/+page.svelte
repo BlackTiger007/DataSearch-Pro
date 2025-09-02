@@ -117,82 +117,85 @@
 		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
 			<QueueIcon class="size-5" /> Active Queue
 		</h2>
-		<ul class="overflow-hidden rounded-box bg-base-100 shadow-md">
-			<li class="border-b border-base-200 px-3 py-2">
-				{#if indexing.store.currentFiles.length > 0}
-					<div class="flex flex-col gap-1">
-						{#each indexing.store.currentFiles as file (file)}
-							<div class="flex items-center gap-2">
-								<Spinner class="size-4 animate-spin text-primary" />
-								<div class="truncate" title={file}>
-									<strong>Processing:</strong>
-									<span class="text-primary">{file}</span>
+
+		<div class="rounded-box border-b border-base-200 bg-base-100 shadow-md">
+			<ul class="overflow-hidden">
+				<li class="px-3 py-2">
+					{#if indexing.store.currentFiles.length > 0}
+						<div class="flex flex-col gap-1">
+							{#each indexing.store.currentFiles as file (file)}
+								<div class="flex items-center gap-2">
+									<Spinner class="size-4 animate-spin text-primary" />
+									<div class="truncate" title={file}>
+										<strong>Processing:</strong>
+										<span class="text-primary">{file}</span>
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div class="flex items-center gap-2 text-base-content/70">
+							<IdleIcon class="size-4" />
+							<span class="italic">Nothing is currently being processed</span>
+						</div>
+					{/if}
+				</li>
+			</ul>
+
+			<div class="h-[calc(100vh-470px)]">
+				<List items={indexing.store.queue}>
+					{#snippet row(item)}
+						<div
+							class="grid grid-cols-1 items-center gap-3 px-3 py-2 hover:bg-base-200 md:grid-cols-[60px_1fr_auto]"
+						>
+							<!-- Priority animiert -->
+							<div class="text-center text-2xl font-thin opacity-70">
+								{item.priority.toFixed(0)}
+							</div>
+
+							<!-- File info -->
+							<div class="truncate">
+								<div class="truncate text-sm md:text-base" title={item.file}>
+									{item.file}
+								</div>
+								<div class="flex items-center gap-1 text-xs opacity-70">
+									{formatBytes(item.data.size)}
 								</div>
 							</div>
-						{/each}
-					</div>
-				{:else}
-					<div class="flex items-center gap-2 text-base-content/70">
-						<IdleIcon class="size-4" />
-						<span class="italic">Nothing is currently being processed</span>
-					</div>
-				{/if}
-			</li>
-		</ul>
 
-		<div class="h-[calc(100vh-470px)]">
-			<List items={indexing.store.queue}>
-				{#snippet row(item)}
-					<div
-						class="grid grid-cols-1 items-center gap-3 px-3 py-2 hover:bg-base-200 md:grid-cols-[60px_1fr_auto]"
-					>
-						<!-- Priority animiert -->
-						<div class="text-center text-2xl font-thin opacity-70">
-							{item.priority.toFixed(0)}
-						</div>
-
-						<!-- File info -->
-						<div class="truncate">
-							<div class="truncate text-sm md:text-base" title={item.file}>
-								{item.file}
-							</div>
-							<div class="flex items-center gap-1 text-xs opacity-70">
-								{formatBytes(item.data.size)}
-							</div>
-						</div>
-
-						<!-- Controls -->
-						<div class="flex items-center gap-2">
-							<!-- Erhöhen -->
-							<div class="flex gap-1">
-								{#each [1, 10, 100] as val (val)}
-									<button
-										class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
-										title={`Priority +${val}`}
-										onclick={() => indexing.setPriority(item.file, val)}
-									>
-										<PlusIcon class="size-3" />
-										{val}
-									</button>
-								{/each}
-							</div>
-							<!-- Verringern -->
-							<div class="flex gap-1">
-								{#each [100, 10, 1] as val (val)}
-									<button
-										class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
-										title={`Priority -${val}`}
-										onclick={() => indexing.setPriority(item.file, -val)}
-									>
-										<MinusIcon class="size-3" />
-										{val}
-									</button>
-								{/each}
+							<!-- Controls -->
+							<div class="flex items-center gap-2">
+								<!-- Erhöhen -->
+								<div class="flex gap-1">
+									{#each [1, 10, 100] as val (val)}
+										<button
+											class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
+											title={`Priority +${val}`}
+											onclick={() => indexing.setPriority(item.file, val)}
+										>
+											<PlusIcon class="size-3" />
+											{val}
+										</button>
+									{/each}
+								</div>
+								<!-- Verringern -->
+								<div class="flex gap-1">
+									{#each [100, 10, 1] as val (val)}
+										<button
+											class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
+											title={`Priority -${val}`}
+											onclick={() => indexing.setPriority(item.file, -val)}
+										>
+											<MinusIcon class="size-3" />
+											{val}
+										</button>
+									{/each}
+								</div>
 							</div>
 						</div>
-					</div>
-				{/snippet}
-			</List>
+					{/snippet}
+				</List>
+			</div>
 		</div>
 	</section>
 </main>

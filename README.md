@@ -63,7 +63,6 @@ DataSearch Pro is a lightweight, local **Document Management System (DMS)** desi
 
 ### Planned / Optional
 
-- **Additional Office Formats**: `doc`
 - **Web Formats**: `epub`
 - **Audio/Video Metadata**: `mp3`, `mp4`, `mkv` (metadata only, subtitles if available)
 

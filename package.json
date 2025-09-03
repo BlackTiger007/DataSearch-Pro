@@ -59,7 +59,7 @@
 		"@tauri-apps/plugin-updater": "^2.9.0",
 		"better-sqlite3": "^12.2.0",
 		"bootstrap-icons": "^1.13.1",
-		"drizzle-orm": "^0.44.4",
+		"drizzle-orm": "^0.44.5",
 		"jszip": "^3.10.1",
 		"marked": "^16.2.0",
 		"pdfjs-dist": "^5.4.54",

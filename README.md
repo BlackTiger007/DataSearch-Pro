@@ -38,14 +38,13 @@ DataSearch Pro is a lightweight, local **Document Management System (DMS)** desi
 - **Auto-Start Indexing and Folder Watching**
 - **Database Cleanup:** Remove entries for files that no longer exist.
 - **File Filtering:** Only selected file types are indexed.
+- Parallel processing of multiple files for faster indexing
+- Capture videos/screenshots on errors
 
 ## Planned Enhancements
 
-- Parallel processing of multiple files for faster indexing
 - Automatic sorting by file size (small → large)
-- Support for additional file formats
 - Advanced search: by date, tag, filename, or path
-- Capture videos/screenshots on errors
 - Hotkeys for quick actions (e.g., “Restart Index”, “Add Folder”)
 - Drag & drop files and folders directly into the app
 - Worker pools / threads for improved performance on large datasets

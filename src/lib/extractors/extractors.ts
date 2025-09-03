@@ -32,6 +32,7 @@ export const extractors: Record<string, () => Promise<ExtractFn>> = {
 	odt: () => import('./office').then((m) => m.extract),
 	ods: () => import('./office').then((m) => m.extract),
 	odp: () => import('./office').then((m) => m.extract),
+	rtf: () => import('./rtf').then((m) => m.extract),
 
 	// XML
 	xml: () => import('./xml').then((m) => m.extract),

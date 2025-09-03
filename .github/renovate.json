@@ -11,18 +11,20 @@
 	"schedule": ["before 5am"],
 	"minimumReleaseAge": "7 days",
 	"rollbackPrs": true,
+	"separateMajorMinor": true,
+	"timezone": "Europe/Berlin",
 	"packageRules": [
 		{
-			"matchUpdateTypes": ["patch", "minor"],
-			"matchFileNames": ["package.json", "pnpm"],
-			"labels": ["dependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "Non-breaking updates",
+			"matchFileNames": ["package.json", "pnpm", "Cargo.toml", "src-tauri/Cargo.toml"],
 			"automerge": true
 		},
 		{
-			"matchUpdateTypes": ["patch", "minor"],
-			"matchFileNames": ["Cargo.toml", "src-tauri/Cargo.toml"],
+			"matchUpdateTypes": ["major"],
+			"matchFileNames": ["package.json", "pnpm", "Cargo.toml", "src-tauri/Cargo.toml"],
 			"labels": ["dependencies"],
-			"automerge": true
+			"automerge": false
 		},
 		{
 			"matchUpdateTypes": ["patch", "minor"],
@@ -30,7 +32,5 @@
 			"labels": ["dependencies"],
 			"automerge": false
 		}
-	],
-	"separateMajorMinor": true,
-	"timezone": "Europe/Berlin"
+	]
 }

@@ -138,13 +138,22 @@
 		if (index !== -1) tags[index] = tag;
 	}
 
-	// Hilfsfunktion: gruppiert die Chunks nach versionNumber
-	function groupByVersion(chunks: (Scan & FileVersion)[]) {
+	// Hilfsfunktion: gruppiert die Chunks nach versionNumber und lineNumber
+	function groupByVersionAndLine(chunks: (Scan & FileVersion)[]) {
 		const grouped: Record<number, (Scan & FileVersion)[]> = {};
+
 		for (const c of chunks) {
 			if (!grouped[c.versionNumber]) grouped[c.versionNumber] = [];
-			grouped[c.versionNumber].push(c);
+
+			const existing = grouped[c.versionNumber].find((item) => item.lineNumber === c.lineNumber);
+
+			if (existing) {
+				existing.content += ' ' + c.content;
+			} else {
+				grouped[c.versionNumber].push({ ...c });
+			}
 		}
+
 		return grouped;
 	}
 </script>
@@ -226,7 +235,7 @@
 					<p>Wird geladen...</p>
 				{:then fileChunks}
 					{#if fileChunks.length > 0}
-						{#each Object.entries(groupByVersion(fileChunks)) as [version, chunks]}
+						{#each Object.entries(groupByVersionAndLine(fileChunks)) as [version, chunks]}
 							{#if +version === selectedVersion}
 								{#each chunks as chunk (`${chunk.id}-${chunk.versionNumber}-${chunk.lineNumber}`)}
 									<div class="flex gap-2">

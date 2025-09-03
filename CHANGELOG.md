@@ -1,3 +1,31 @@
+# [2.1.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v2.0.0...v2.1.0) (2025-09-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sentry/sveltekit to ^10.9.0 ([61d158c](https://github.com/BlackTiger007/DataSearch-Pro/commit/61d158c1a2794bf6c08b4f6e4e79da20784f7bc9))
+* **deps:** update dependency @tauri-apps/plugin-dialog to ^2.4.0 ([e0ad8e4](https://github.com/BlackTiger007/DataSearch-Pro/commit/e0ad8e46325f5d945ed224857337bc2664fe30d6))
+* **deps:** update dependency drizzle-orm to ^0.44.5 ([a0a4849](https://github.com/BlackTiger007/DataSearch-Pro/commit/a0a4849b660694fedf4c5bfb00b0f2375868c634))
+* **deps:** update dependency marked to ^16.2.1 ([8d55cd0](https://github.com/BlackTiger007/DataSearch-Pro/commit/8d55cd06035a92f458f2830841af17dfbd842c15))
+* **deps:** update dependency pdfjs-dist to ^5.4.149 ([c5f8267](https://github.com/BlackTiger007/DataSearch-Pro/commit/c5f8267137a7b477fc73add20104aedf71dfa0b6))
+* **deps:** update rust crate tauri-plugin-dialog to 2.4.0 ([976ea9e](https://github.com/BlackTiger007/DataSearch-Pro/commit/976ea9e3a34d01918e8c689af3960ddd1795e5ca))
+* **deps:** update rust crate tauri-plugin-fs to 2.4.2 ([11d9203](https://github.com/BlackTiger007/DataSearch-Pro/commit/11d9203046767e56cfb9cec489d3d6a9a3cf7e40))
+* **deps:** update tauri monorepo ([945e28f](https://github.com/BlackTiger007/DataSearch-Pro/commit/945e28f0e6f565b4649ff1a651960ba7c6dc2917))
+* **settings:** correct each syntax for folders list ([4beed8e](https://github.com/BlackTiger007/DataSearch-Pro/commit/4beed8ebe5757c6d352c6980efccf20cbcdac319))
+* **updater:** prevent premature `install` call before `download` ([f9cf029](https://github.com/BlackTiger007/DataSearch-Pro/commit/f9cf02995cc1b628270872347d51f4895160f268))
+
+
+### Features
+
+* **extractor:** add `.doc` placeholder extractor with multilingual messages ([21a6351](https://github.com/BlackTiger007/DataSearch-Pro/commit/21a6351cf03d5ae51f9c58ef582d0eb156efb7be))
+* **extractors:** add RTF support ([582bc7c](https://github.com/BlackTiger007/DataSearch-Pro/commit/582bc7c4e66b32f21aeb81f5be879adc6d1cbeef))
+* **extractors:** register `.doc` extractor ([eb8fc88](https://github.com/BlackTiger007/DataSearch-Pro/commit/eb8fc88ab9554b839c5e6a2308476096653831e8))
+* **rtf:** improve RTF text extraction and sanitization ([ebb6520](https://github.com/BlackTiger007/DataSearch-Pro/commit/ebb652078be27e7681ed7cb4698725806674db49))
+* **settings:** enhance folder/file management UI with icons ([85a610a](https://github.com/BlackTiger007/DataSearch-Pro/commit/85a610a95b12a0e99661bacff71e161bf50fbf87))
+* **settings:** improve settings page UX ([724b33e](https://github.com/BlackTiger007/DataSearch-Pro/commit/724b33e9e4fc321ba434f7930f3e08fd36c4c4ed))
+* **settings:** show app version in footer using Tauri API ([332bc2d](https://github.com/BlackTiger007/DataSearch-Pro/commit/332bc2d2ab1a645a8a1d2e2d5bc9c60598b9c631))
+* **tauri:** add minimum window size constraints ([52547be](https://github.com/BlackTiger007/DataSearch-Pro/commit/52547beeb63c19c8b2c5b3890d1a65bd80e2e275))
+
 # [2.0.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v1.2.0...v2.0.0) (2025-08-31)
 
 ### Bug Fixes

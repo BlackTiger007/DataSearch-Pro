@@ -61,7 +61,7 @@
 		"bootstrap-icons": "^1.13.1",
 		"drizzle-orm": "^0.44.5",
 		"jszip": "^3.10.1",
-		"marked": "^16.2.0",
+		"marked": "^16.2.1",
 		"pdfjs-dist": "^5.4.54",
 		"tesseract.js": "6.0.1",
 		"zod": "^4.1.5"

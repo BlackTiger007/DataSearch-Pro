@@ -49,6 +49,7 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
+		"@inlang/paraglide-js": "^2.0.0",
 		"@sentry/sveltekit": "^10.9.0",
 		"@tauri-apps/api": "^2.8.0",
 		"@tauri-apps/plugin-dialog": "^2.4.0",

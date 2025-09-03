@@ -44,7 +44,7 @@
 
 	<!-- Snackbar -->
 	{#if showSnackbar}
-		<div class="toast">
+		<div class="toast z-10">
 			<div class="alert alert-success">Settings saved successfully</div>
 		</div>
 	{/if}

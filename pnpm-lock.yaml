@@ -48,8 +48,8 @@ importers:
         specifier: ^16.2.1
         version: 16.2.1
       pdfjs-dist:
-        specifier: ^5.4.54
-        version: 5.4.54
+        specifier: ^5.4.149
+        version: 5.4.149
       tesseract.js:
         specifier: 6.0.1
         version: 6.0.1
@@ -3140,8 +3140,8 @@ packages:
     resolution: {integrity: sha512-Vj7sf++t5pBD637NSfkxpHSMfWaeig5+DKWLhcqIYx6mWQz5hdJTGDVMQiJcw1ZYkhs7AazKDGpRVji1LJCZUQ==}
     engines: {node: '>=18'}
 
-  pdfjs-dist@5.4.54:
-    resolution: {integrity: sha512-TBAiTfQw89gU/Z4LW98Vahzd2/LoCFprVGvGbTgFt+QCB1F+woyOPmNNVgLa6djX9Z9GGTnj7qE1UzpOVJiINw==}
+  pdfjs-dist@5.4.149:
+    resolution: {integrity: sha512-Xe8/1FMJEQPUVSti25AlDpwpUm2QAVmNOpFP0SIahaPIOKBKICaefbzogLdwey3XGGoaP4Lb9wqiw2e9Jqp0LA==}
     engines: {node: '>=20.16.0 || >=22.3.0'}
 
   pg-int8@1.0.1:
@@ -6712,7 +6712,7 @@ snapshots:
 
   path-type@6.0.0: {}
 
-  pdfjs-dist@5.4.54:
+  pdfjs-dist@5.4.149:
     optionalDependencies:
       '@napi-rs/canvas': 0.1.77
 

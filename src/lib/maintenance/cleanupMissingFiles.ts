@@ -3,6 +3,7 @@ import { schema } from '$lib/db/schema';
 import { message } from '@tauri-apps/plugin-dialog';
 import { exists } from '@tauri-apps/plugin-fs';
 import { eq } from 'drizzle-orm';
+import { m } from '$lib/paraglide/messages';
 
 /**
  * Überprüft alle DB-Dateien und entfernt Einträge,
@@ -21,11 +22,11 @@ export async function cleanupMissingFiles() {
 		}
 	}
 
-	const messageText =
-		`Prüfung abgeschlossen:\n` +
-		`- Gesamteinträge: ${allFiles.length}\n` +
-		`- Gelöschte Einträge: ${deletedCount}\n` +
-		`- Verbleibende Einträge: ${allFiles.length - deletedCount}`;
+	const messageText = m.cleanup_missing_files_summary({
+		total: allFiles.length,
+		deleted: deletedCount,
+		remaining: allFiles.length - deletedCount
+	});
 
 	message(messageText, { kind: 'info' });
 }

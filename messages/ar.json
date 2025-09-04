@@ -1,0 +1,92 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"error_title": "خطأ",
+	"error_status": "رمز الحالة",
+	"error_unexpected": "حدث خطأ غير متوقع.",
+	"error_goHome": "العودة إلى المنزل",
+	"error_sendFeedback": "إرسال التعليقات",
+	"settings_title": "إعدادات",
+	"settings_cancel": "يلغي",
+	"settings_save": "حفظ الإعدادات",
+	"settings_saved_success": "تم حفظ الإعدادات بنجاح",
+	"settings_theme": "سمة",
+	"settings_folders": "المجلدات",
+	"settings_folder_placeholder": "أدخل مسار المجلد...",
+	"settings_folder_add": "إضافة مجلد",
+	"settings_filetypes": "أنواع الملفات المسموح بها",
+	"settings_filetypes_placeholder": ".pdf، .docx، .txt...",
+	"settings_filetypes_add": "إضافة نوع",
+	"settings_automation": "الأتمتة",
+	"settings_auto_watch": "مشاهدة المجلدات",
+	"settings_auto_start": "بدء الفهرسة تلقائيًا",
+	"settings_ocr_title": "التعرف الضوئي على الحروف (OCR)",
+	"settings_ocr_description": "عند تمكين هذا الخيار، يتم استخراج النصوص المضمنة في الصور تلقائيًا.",
+	"settings_ocr_label": "استخراج النصوص من الصور",
+	"settings_parallel_jobs": "الوظائف الموازية",
+	"settings_parallel_jobs_description": "عدد الملفات المطلوب معالجتها في آنٍ واحد. قد تُحسّن القيم الأعلى الأداء، لكنها تزيد من استخدام وحدة المعالجة المركزية وذاكرة الوصول العشوائي (RAM).",
+	"settings_parallel_jobs_label": "الوظائف المتوازية: {count}",
+	"settings_language": "لغة",
+	"settings_encoding": "ترميز النص",
+	"settings_extraction": "استخراج النص",
+	"settings_extraction_whitespace": "تطبيع المسافات البيضاء",
+	"settings_extraction_headers": "استخراج الرؤوس والتذييلات",
+	"settings_extraction_comments": "استخراج التعليقات",
+	"settings_extraction_images": "النصوص من الصور المضمنة (ODF)",
+	"settings_sentry": "خفير",
+	"settings_sentry_logs": "إرسال سجلات الأخطاء",
+	"settings_sentry_replay": "تمكين إعادة تشغيل الجلسة",
+	"settings_cleanup": "تنظيف قاعدة البيانات",
+	"settings_cleanup_description": "يقوم بإزالة الإدخالات التي لم تعد ملفاتها موجودة.",
+	"settings_cleanup_button": "تنظيف الملفات المفقودة",
+	"settings_footer_github": "جيثب",
+	"settings_footer_version": "الإصدار {version}",
+	"dashboard_add_folder": "إضافة مجلد",
+	"dashboard_watch_folder": "مجلد المشاهدة",
+	"dashboard_unscanned": "غير ممسوحة ضوئيًا",
+	"dashboard_title": "لوحة القيادة",
+	"dashboard_subtitle": "حالة الفهرسة المباشرة وقائمة الانتظار",
+	"dashboard_active_watches_title": "مسارات المراقبة النشطة",
+	"dashboard_active_watches_none": "لا توجد مسارات نشطة",
+	"dashboard_remove": "يزيل",
+	"dashboard_queue_title": "قائمة الانتظار النشطة",
+	"dashboard_processing_label": "يعالج:",
+	"dashboard_idle": "لا يتم معالجة أي شيء حاليًا",
+	"dashboard_priority_increase_title": "الأولوية + {val}",
+	"dashboard_priority_decrease_title": "الأولوية - {val}",
+	"cleanup_missing_files_summary": "تم التحقق من اكتمال:\n- إجمالي الإدخالات: {total}\n- الإدخالات المحذوفة: {deleted}\n- الإدخالات المتبقية: {remaining}",
+	"updater_title": "التحديث متاح!",
+	"updater_version_label": "الإصدار: {version}",
+	"updater_changelog": "سجل التغييرات:",
+	"updater_loading_changelog": "جاري تحميل سجل التغييرات...",
+	"updater_download_progress": "تقدم التنزيل: {progress} %",
+	"updater_download_finished": "تم التحميل!",
+	"updater_download_button": "تنزيل وتثبيت",
+	"updater_close_button": "يغلق",
+	"navbar_home": "داتا سيرش برو",
+	"navbar_dashboard": "لوحة القيادة",
+	"navbar_settings": "إعدادات",
+	"navbar_status_running": "الحالة: قيد التشغيل",
+	"navbar_status_paused": "الحالة: متوقفة مؤقتًا",
+	"navbar_status_idle": "الحالة: خامل",
+	"files_search_placeholder": "🔍 البحث عن الملفات...",
+	"file_open": "فتح الملف",
+	"folder_open": "فتح المجلد",
+	"size": "مقاس",
+	"type": "يكتب",
+	"version": "إصدار",
+	"version_number": "الإصدار {number}",
+	"tags_title": "العلامات",
+	"tags_add": "إضافة علامة",
+	"indexed_text": "نص مفهرس",
+	"scroll_enable": "التمرير",
+	"scroll_disable": "لا يوجد تمرير",
+	"loading": "تحميل...",
+	"no_content": "لم يتم العثور على أي محتوى أو محلل متاح لهذا التنسيق.",
+	"select_file": "الرجاء تحديد الملف",
+	"tags_manage_title": "إدارة العلامات",
+	"new_tag_placeholder": "إنشاء علامة جديدة",
+	"create_button": "يخلق",
+	"tags_assign_legend": "تعيين / تحرير العلامات",
+	"close_modal": "يغلق",
+	"delete_tag_title": "حذف العلامة (انقر نقرًا مزدوجًا)"
+}

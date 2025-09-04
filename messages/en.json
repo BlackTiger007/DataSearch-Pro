@@ -88,6 +88,5 @@
 	"create_button": "Create",
 	"tags_assign_legend": "Assign / Edit Tags",
 	"close_modal": "Close",
-	"delete_tag_title": "Delete Tag (Double-click)",
-	"hello_world": "Hello, {name}!"
+	"delete_tag_title": "Delete Tag (Double-click)"
 }

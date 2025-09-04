@@ -1,3 +1,4 @@
+import { locales } from '$lib/paraglide/runtime';
 import { availableEncodings } from '$lib/types/encodings';
 import { z } from 'zod';
 
@@ -7,7 +8,7 @@ export const settingsSchema = z.object({
 	allowedFileTypes: z.array(z.string()).default([]), // Liste von erlaubten Dateiendungen
 	autoWatch: z.boolean().default(true), // Automatisches Beobachten von Ordnern
 	autoStart: z.boolean().default(false), // Automatisches Starten des Indexers
-	locale: z.string().default('en'),
+	locale: z.enum(locales).default('en'),
 	fileUsageCount: z.array(z.object({ extension: z.string(), count: z.number() })).default([]), // Liste von Dateitypen und deren Nutzung
 	enableImageTextExtraction: z.boolean().default(true),
 	parallelJobs: z.number().min(1).max(8).default(2),

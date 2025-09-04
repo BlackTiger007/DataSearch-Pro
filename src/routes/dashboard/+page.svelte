@@ -8,6 +8,7 @@
 	import { open } from '@tauri-apps/plugin-dialog';
 	import { handleUnscannedFiles } from '$lib/utils/fileService';
 	import List from '$lib/components/VirtualList.svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	// Icons
 	import AddFolder from 'bootstrap-icons/icons/folder-plus.svg?component';
@@ -37,12 +38,7 @@
 	/** Fügt Dateien aus ausgewählten Ordnern der Queue hinzu */
 	async function addTempFolders() {
 		const paths = await open({ multiple: true, directory: true });
-
-		// console.log(paths);
-		// return;
-
 		if (!paths) return;
-
 		indexing.addToQueue(paths);
 	}
 
@@ -67,30 +63,31 @@
 	<div class="flex flex-wrap gap-2">
 		{#if import.meta.env.DEV}
 			<button class="btn btn-outline btn-sm" onclick={handleUnscannedFiles}>
-				<QueueIcon class="size-4" /> Ungescannte
+				<QueueIcon class="size-4" />
+				{m.dashboard_unscanned()}
 			</button>
 		{/if}
 		<button class="btn btn-sm" onclick={addTempFolders}>
 			<AddFolder class="size-4" />
-			Add Folder
+			{m.dashboard_add_folder()}
 		</button>
 		<button class="btn btn-sm" onclick={addTempWatchFolders}>
 			<WatchIcon class="size-4" />
-			Watch Folder
+			{m.dashboard_watch_folder()}
 		</button>
 	</div>
 
 	<h1 class="flex items-center gap-2 text-2xl font-bold md:text-3xl">
 		<QueueIcon class="size-6" />
-		Dashboard
+		{m.dashboard_title()}
 	</h1>
-	<p class="text-base-content/70">Live-Indexierungsstatus & Warteschlange</p>
+	<p class="text-base-content/70">{m.dashboard_subtitle()}</p>
 
 	<!-- Watch-Pfade -->
 	<section>
 		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
 			<WatchIcon class="size-5" />
-			Aktive Watch-Pfade
+			{m.dashboard_active_watches_title()}
 		</h2>
 		{#if indexing.store.activeWatches.size > 0}
 			<ul class="divide-y divide-base-200 overflow-hidden rounded-box bg-base-100 shadow-md">
@@ -99,7 +96,7 @@
 						<span class="truncate text-sm md:text-base">{path}</span>
 						<button
 							class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
-							title="Entfernen"
+							title={m.dashboard_remove()}
 							onclick={() => indexing.removeWatch(path)}
 						>
 							<RemoveIcon class="size-3" />
@@ -108,14 +105,15 @@
 				{/each}
 			</ul>
 		{:else}
-			<p class="text-base-content/70 italic">Keine aktiven Pfade</p>
+			<p class="text-base-content/70 italic">{m.dashboard_active_watches_none()}</p>
 		{/if}
 	</section>
 
 	<!-- Warteschlange -->
 	<section>
 		<h2 class="mb-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
-			<QueueIcon class="size-5" /> Active Queue
+			<QueueIcon class="size-5" />
+			{m.dashboard_queue_title()}
 		</h2>
 
 		<div class="rounded-box border-b border-base-200 bg-base-100 shadow-md">
@@ -127,7 +125,7 @@
 								<div class="flex items-center gap-2">
 									<Spinner class="size-4 animate-spin text-primary" />
 									<div class="truncate" title={file}>
-										<strong>Processing:</strong>
+										<strong>{m.dashboard_processing_label()}</strong>
 										<span class="text-primary">{file}</span>
 									</div>
 								</div>
@@ -136,7 +134,7 @@
 					{:else}
 						<div class="flex items-center gap-2 text-base-content/70">
 							<IdleIcon class="size-4" />
-							<span class="italic">Nothing is currently being processed</span>
+							<span class="italic">{m.dashboard_idle()}</span>
 						</div>
 					{/if}
 				</li>
@@ -170,7 +168,7 @@
 									{#each [1, 10, 100] as val (val)}
 										<button
 											class="btn flex items-center gap-1 btn-outline btn-xs btn-success"
-											title={`Priority +${val}`}
+											title={m.dashboard_priority_increase_title({ val })}
 											onclick={() => indexing.setPriority(item.file, val)}
 										>
 											<PlusIcon class="size-3" />
@@ -183,7 +181,7 @@
 									{#each [100, 10, 1] as val (val)}
 										<button
 											class="btn flex items-center gap-1 btn-outline btn-xs btn-error"
-											title={`Priority -${val}`}
+											title={m.dashboard_priority_decrease_title({ val })}
 											onclick={() => indexing.setPriority(item.file, -val)}
 										>
 											<MinusIcon class="size-3" />

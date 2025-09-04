@@ -7,6 +7,7 @@
 	import { and, eq } from 'drizzle-orm';
 	import { isDarkColor } from '$lib/utils/brightness';
 	import type { FilesWithTags } from '$lib/types/fileWihtTags';
+	import { m } from '$lib/paraglide/messages';
 
 	let {
 		selectedFile,
@@ -169,34 +170,34 @@
 				disabled={!selectedFile.path}
 				onclick={() => openPath(selectedFile.path)}
 			>
-				Datei öffnen
+				{m.file_open()}
 			</button>
 			<button
 				class="btn btn-sm btn-secondary"
 				disabled={!selectedFile.path}
 				onclick={() => openPath(selectedFile.path.split(sep()).slice(0, -1).join(sep()) || '')}
 			>
-				Ordner öffnen
+				{m.folder_open()}
 			</button>
 		</div>
 
 		<div class="stats mb-4 bg-base-100 shadow">
 			<div class="stat">
-				<div class="stat-title">Größe</div>
+				<div class="stat-title">{m.size()}</div>
 				<div class="stat-value text-lg">{formatBytes(selectedFile.size)}</div>
 			</div>
 			<div class="stat">
-				<div class="stat-title">Typ</div>
+				<div class="stat-title">{m.type()}</div>
 				<div class="stat-value text-lg">{selectedFile.mimeType}</div>
 			</div>
 		</div>
 
 		{#if selectedFile && versions.length > 0}
 			<fieldset class="fieldset">
-				<legend class="fieldset-legend">Version</legend>
+				<legend class="fieldset-legend">{m.version()}</legend>
 				<select class="select" bind:value={selectedVersion}>
 					{#each versions as v}
-						<option value={v}>Version {v}</option>
+						<option value={v}>{m.version_number({ number: v })}</option>
 					{/each}
 				</select>
 			</fieldset>
@@ -204,27 +205,28 @@
 
 		<!-- Tags -->
 		<div class="mb-4">
-			<h3 class="mb-2 font-semibold">Tags</h3>
+			<h3 class="mb-2 font-semibold">{m.tags_title()}</h3>
 			<div class="flex flex-wrap gap-2">
 				{#each selectedFile.tags as tag (tag.id)}
 					<span
 						class="badge"
-						style="background-color: {tag.color}; 
-						color: {isDarkColor(tag.color) ? '#fff' : '#000'};"
+						style="background-color: {tag.color}; color: {isDarkColor(tag.color)
+							? '#fff'
+							: '#000'};"
 					>
 						{tag.name}
 					</span>
 				{/each}
-				<label for="modal_tag" class="btn btn-outline btn-xs">+ Tag</label>
+				<label for="modal_tag" class="btn btn-outline btn-xs">+ {m.tags_add()}</label>
 			</div>
 		</div>
 
 		<!-- Indexierter Inhalt -->
 		<div>
 			<div class="mb-2 flex items-center justify-between">
-				<h3 class="font-semibold">Indexierter Text</h3>
+				<h3 class="font-semibold">{m.indexed_text()}</h3>
 				<button class="btn btn-sm" onclick={() => (overflow = !overflow)}>
-					{overflow ? 'Kein Scroll' : 'Scroll'}
+					{overflow ? m.scroll_disable : m.scroll_enable}
 				</button>
 			</div>
 			<div
@@ -232,7 +234,7 @@
 				class:overflow-x-auto={overflow}
 			>
 				{#await filePromise(selectedFile.id)}
-					<p>Wird geladen...</p>
+					<p>{m.loading()}</p>
 				{:then fileChunks}
 					{#if fileChunks.length > 0}
 						{#each Object.entries(groupByVersionAndLine(fileChunks)) as [version, chunks]}
@@ -248,13 +250,13 @@
 							{/if}
 						{/each}
 					{:else}
-						<p>Keine Inhalte gefunden oder kein Parser für dieses Format verfügbar.</p>
+						<p>{m.no_content()}</p>
 					{/if}
 				{/await}
 			</div>
 		</div>
 	{:else}
-		<p class="text-center text-base-content/70">Bitte eine Datei auswählen</p>
+		<p class="text-center text-base-content/70">{m.select_file()}</p>
 	{/if}
 </div>
 
@@ -262,13 +264,13 @@
 <input type="checkbox" id="modal_tag" class="modal-toggle" />
 <div class="modal modal-bottom sm:modal-middle">
 	<div class="modal-box w-11/12 max-w-2xl">
-		<h3 class="mb-4 text-xl font-bold">Tags verwalten</h3>
+		<h3 class="mb-4 text-xl font-bold">{m.tags_manage_title()}</h3>
 
 		<!-- Neue Tags erstellen -->
 		<div class="mb-4 flex flex-col items-center gap-2 sm:flex-row">
 			<input
 				type="text"
-				placeholder="Neuen Tag erstellen"
+				placeholder={m.new_tag_placeholder()}
 				bind:value={newTagName}
 				class="input-bordered input flex-1"
 			/>
@@ -277,13 +279,13 @@
 				bind:value={newTagColor}
 				class="h-10 w-12 cursor-pointer rounded border-none"
 			/>
-			<button class="btn flex-none btn-primary" onclick={addNewTag}>Erstellen</button>
+			<button class="btn flex-none btn-primary" onclick={addNewTag}>{m.create_button()}</button>
 		</div>
 
 		<!-- Bestehende Tags auswählen und bearbeiten -->
 		<div class="max-h-64 overflow-y-auto border-t border-b border-gray-200 py-2">
 			<fieldset class="fieldset">
-				<legend class="fieldset-legend">Tags zuweisen / bearbeiten</legend>
+				<legend class="fieldset-legend">{m.tags_assign_legend()}</legend>
 				{#each tags as tag (tag.id)}
 					<div class="flex items-center gap-2 rounded px-1 py-1">
 						<input
@@ -293,7 +295,6 @@
 							class="checkbox checkbox-primary"
 						/>
 
-						<!-- Farbkreis klickbar machen -->
 						<label class="relative cursor-pointer">
 							<div
 								class="h-5 w-5 rounded-full border border-gray-300"
@@ -316,18 +317,16 @@
 						/>
 						<button
 							class="btn btn-sm btn-error"
-							title="Tag löschen (Doppelklick)"
-							ondblclick={() => deleteTag(tag.id)}
+							title={m.delete_tag_title()}
+							ondblclick={() => deleteTag(tag.id)}>✕</button
 						>
-							✕
-						</button>
 					</div>
 				{/each}
 			</fieldset>
 		</div>
 
 		<div class="modal-action mt-4">
-			<label for="modal_tag" class="btn btn-outline">Schließen</label>
+			<label for="modal_tag" class="btn btn-outline">{m.close_modal()}</label>
 		</div>
 	</div>
 </div>

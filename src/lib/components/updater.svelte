@@ -6,6 +6,7 @@
 	import '$lib/css/md.css';
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { online } from 'svelte/reactivity/window';
+	import { m } from '$lib/paraglide/messages';
 
 	let update: Update | null = $state(null);
 	let downloadProgress = $state(0);
@@ -100,35 +101,38 @@
 				modalOpen = false;
 				update?.close();
 			}}
+			title={m.updater_close_button()}
 		>
 			✕
 		</button>
 
-		{#if update && update.body}
-			<h2 class="text-xl font-semibold md:text-2xl">Update Available!</h2>
-			<h3 class="text-lg font-semibold md:text-xl">Version: {update.version}</h3>
-			<h4 class="text-lg">Changelog:</h4>
+		{#if update}
+			<h2 class="text-xl font-semibold md:text-2xl">{m.updater_title()}</h2>
+			<h3 class="text-lg font-semibold md:text-xl">
+				{m.updater_version_label({ version: update.version })}
+			</h3>
+			<h4 class="text-lg">{m.updater_changelog()}</h4>
 
 			<div class="body my-3 max-h-[70vh] flex-1 overflow-y-auto rounded-md bg-base-200 px-3">
-				{#await marked.parse(update.body)}
-					<p>Loading changelog...</p>
+				{#await marked.parse(update.body ?? '')}
+					<p>{m.updater_loading_changelog()}</p>
 				{:then bodyHtml}
 					{@html bodyHtml} <!-- eslint-disable-line -->
 				{/await}
 			</div>
 
 			{#if downloadStarted && !downloadFinished}
-				<p class="mb-2">Download Progress: {downloadProgress}%</p>
+				<p class="mb-2">{m.updater_download_progress({ progress: downloadProgress })}</p>
 				<progress class="progress w-full progress-primary" value={downloadProgress} max="100"
 				></progress>
 			{:else if downloadFinished}
-				<p class="mt-4 text-lg font-semibold text-success">Download Finished!</p>
+				<p class="mt-4 text-lg font-semibold text-success">{m.updater_download_finished()}</p>
 			{/if}
 
 			<div class="flex flex-col justify-end space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
 				{#if update && !downloadStarted}
 					<button class="btn btn-primary" disabled={!online.current} onclick={downloadAndInstall}>
-						Download & Install
+						{m.updater_download_button()}
 					</button>
 				{/if}
 			</div>

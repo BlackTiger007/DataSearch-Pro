@@ -11,12 +11,15 @@
 	import FolderAdd from 'bootstrap-icons/icons/folder-plus.svg?component';
 	import FolderRemove from 'bootstrap-icons/icons/folder-minus.svg?component';
 	import Recycle from 'bootstrap-icons/icons/recycle.svg?component';
+	import { m } from '$lib/paraglide/messages';
+	import { locales, setLocale } from '$lib/paraglide/runtime';
 
 	let localSettings: SettingsType = $state({ ...settings });
 	let showSnackbar = $state(false);
 
 	async function save() {
 		await saveSettings($state.snapshot(localSettings));
+		setLocale(localSettings.locale);
 		showSnackbar = true;
 		setTimeout(() => (showSnackbar = false), 3000);
 	}
@@ -35,24 +38,24 @@
 
 <div class="mx-auto w-full max-w-4xl space-y-6 p-6">
 	<div class="flex justify-between">
-		<h1 class="text-3xl font-bold">Settings</h1>
+		<h1 class="text-3xl font-bold">{m.settings_title()}</h1>
 		<div class="flex gap-2">
-			<button class="btn" onclick={() => goto('/')}>Cancel</button>
-			<button class="btn btn-success" onclick={save}>Save Settings</button>
+			<button class="btn" onclick={() => goto('/')}>{m.settings_cancel()}</button>
+			<button class="btn btn-success" onclick={save}>{m.settings_save()}</button>
 		</div>
 	</div>
 
 	<!-- Snackbar -->
 	{#if showSnackbar}
 		<div class="toast z-10">
-			<div class="alert alert-success">Settings saved successfully</div>
+			<div class="alert alert-success">{m.settings_saved_success()}</div>
 		</div>
 	{/if}
 
 	<!-- Theme -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Theme</h2>
+			<h2 class="card-title">{m.settings_theme()}</h2>
 			<div class="mt-2 flex gap-4">
 				{#each ['system', 'light', 'dark'] as theme}
 					<label class="label cursor-pointer" for={`theme-${theme}`}>
@@ -74,7 +77,7 @@
 	<!-- Folders -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Folders</h2>
+			<h2 class="card-title">{m.settings_folders()}</h2>
 			<div class="space-y-2">
 				{#each localSettings.folders, i}
 					<div class="flex items-center gap-2">
@@ -83,23 +86,28 @@
 							name={`folder-${i}`}
 							type="text"
 							class="input-bordered input w-full"
-							placeholder="Enter folder path..."
+							placeholder={m.settings_folder_placeholder()}
 							bind:value={localSettings.folders[i]}
 						/>
-						<button class="btn btn-outline" onclick={() => pickFolder(i)} title="Pick folder">
+						<button
+							class="btn btn-outline"
+							onclick={() => pickFolder(i)}
+							title={m.settings_folders()}
+						>
 							<Folder></Folder>
 						</button>
 						<button
 							class="btn btn-error"
 							onclick={() => localSettings.folders.splice(i, 1)}
-							title="Remove folder"
+							title={m.settings_cancel()}
 						>
 							<FolderRemove></FolderRemove>
 						</button>
 					</div>
 				{/each}
 				<button class="btn btn-primary" onclick={() => localSettings.folders.push('')}>
-					<FolderAdd></FolderAdd> Add Folder
+					<FolderAdd></FolderAdd>
+					{m.settings_folder_add()}
 				</button>
 			</div>
 		</div>
@@ -108,7 +116,7 @@
 	<!-- Allowed File Types -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Allowed File Types</h2>
+			<h2 class="card-title">{m.settings_filetypes()}</h2>
 			<div class="space-y-2">
 				{#each localSettings.allowedFileTypes as type, i}
 					<div class="flex items-center gap-2">
@@ -117,20 +125,21 @@
 							name={`filetype-${i}`}
 							type="text"
 							class="input-bordered input w-full"
-							placeholder=".pdf, .docx, .txt..."
+							placeholder={m.settings_filetypes_placeholder()}
 							bind:value={localSettings.allowedFileTypes[i]}
 						/>
 						<button
 							class="btn btn-error"
 							onclick={() => localSettings.allowedFileTypes.splice(i, 1)}
-							title="Remove file type"
+							title={m.settings_cancel()}
 						>
 							<FolderRemove></FolderRemove>
 						</button>
 					</div>
 				{/each}
 				<button class="btn btn-primary" onclick={() => localSettings.allowedFileTypes.push('')}>
-					<FolderAdd></FolderAdd> Add Type
+					<FolderAdd></FolderAdd>
+					{m.settings_filetypes_add()}
 				</button>
 			</div>
 		</div>
@@ -139,25 +148,25 @@
 	<!-- Automation -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Automation</h2>
+			<h2 class="card-title">{m.settings_automation()}</h2>
 			<label class="label cursor-pointer" for="autoWatch">
-				<span class="label-text">Watching Folders</span>
+				<span class="label-text">{m.settings_auto_watch()}</span>
 				<input
 					id="autoWatch"
 					type="checkbox"
 					class="toggle toggle-primary"
-					aria-label="Enable watching folders"
+					aria-label={m.settings_auto_watch()}
 					bind:checked={localSettings.autoWatch}
 				/>
 			</label>
 
 			<label class="label cursor-pointer" for="autoStart">
-				<span class="label-text">Auto Start Indexing</span>
+				<span class="label-text">{m.settings_auto_start()}</span>
 				<input
 					id="autoStart"
 					type="checkbox"
 					class="toggle toggle-primary"
-					aria-label="Enable auto start indexing"
+					aria-label={m.settings_auto_start()}
 					bind:checked={localSettings.autoStart}
 				/>
 			</label>
@@ -167,17 +176,15 @@
 	<!-- OCR -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Texterkennung (OCR)</h2>
-			<p class="text-sm opacity-70">
-				Wenn aktiviert, werden Texte aus eingebetteten Bildern automatisch extrahiert.
-			</p>
+			<h2 class="card-title">{m.settings_ocr_title()}</h2>
+			<p class="text-sm opacity-70">{m.settings_ocr_description()}</p>
 			<label class="label mt-2 cursor-pointer" for="ocr">
-				<span class="label-text">Texte aus Bildern extrahieren</span>
+				<span class="label-text">{m.settings_ocr_label()}</span>
 				<input
 					id="ocr"
 					type="checkbox"
 					class="toggle toggle-primary"
-					aria-label="Enable OCR"
+					aria-label={m.settings_ocr_label()}
 					bind:checked={localSettings.enableImageTextExtraction}
 				/>
 			</label>
@@ -187,12 +194,9 @@
 	<!-- Parallel Jobs -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Parallel Jobs</h2>
-			<p class="text-sm opacity-70">
-				Number of files to process simultaneously. Higher values may improve performance but
-				increase CPU and RAM usage.
-			</p>
-			<p>Parallele Jobs: {localSettings.parallelJobs}</p>
+			<h2 class="card-title">{m.settings_parallel_jobs()}</h2>
+			<p class="text-sm opacity-70">{m.settings_parallel_jobs_description()}</p>
+			<p>{m.settings_parallel_jobs_label({ count: localSettings.parallelJobs })}</p>
 			<input
 				id="parallelJobs"
 				name="parallelJobs"
@@ -201,7 +205,7 @@
 				max="8"
 				bind:value={localSettings.parallelJobs}
 				class="range"
-				aria-label="Set number of parallel jobs"
+				aria-label={m.settings_parallel_jobs()}
 			/>
 		</div>
 	</div>
@@ -209,16 +213,20 @@
 	<!-- Language -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Language</h2>
+			<h2 class="card-title">{m.settings_language()}</h2>
 			<select
 				id="locale"
 				name="locale"
 				class="select-bordered select w-full max-w-xs"
 				bind:value={localSettings.locale}
 			>
-				<option value="en">English</option>
-				<option value="de">Deutsch</option>
-				<option value="fr">Français</option>
+				{#each locales as locale}
+					<option value={locale}
+						>{new Intl.DisplayNames([window.navigator.language], {
+							type: 'language'
+						}).of(locale)}</option
+					>
+				{/each}
 			</select>
 		</div>
 	</div>
@@ -226,7 +234,7 @@
 	<!-- Encoding -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Text Encoding</h2>
+			<h2 class="card-title">{m.settings_encoding()}</h2>
 			<select
 				id="encoding"
 				name="encoding"
@@ -243,49 +251,49 @@
 	<!-- Extraction Options -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Textextraktion</h2>
+			<h2 class="card-title">{m.settings_extraction()}</h2>
 
 			<label class="label cursor-pointer">
-				<span class="label-text">Whitespace normalisieren</span>
+				<span class="label-text">{m.settings_extraction_whitespace()}</span>
 				<input
 					id="normalizeWhitespace"
 					type="checkbox"
 					class="toggle toggle-primary"
 					bind:checked={localSettings.normalizeWhitespace}
-					aria-label="Whitespace normalisieren"
+					aria-label={m.settings_extraction_whitespace()}
 				/>
 			</label>
 
 			<label class="label cursor-pointer">
-				<span class="label-text">Kopf- und Fußzeilen extrahieren</span>
+				<span class="label-text">{m.settings_extraction_headers()}</span>
 				<input
 					id="includeHeadersFooters"
 					type="checkbox"
 					class="toggle toggle-primary"
 					bind:checked={localSettings.includeHeadersFooters}
-					aria-label="Kopf- und Fußzeilen extrahieren"
+					aria-label={m.settings_extraction_headers()}
 				/>
 			</label>
 
 			<label class="label cursor-pointer">
-				<span class="label-text">Kommentare extrahieren</span>
+				<span class="label-text">{m.settings_extraction_comments()}</span>
 				<input
 					id="includeComments"
 					type="checkbox"
 					class="toggle toggle-primary"
 					bind:checked={localSettings.includeComments}
-					aria-label="Kommentare extrahieren"
+					aria-label={m.settings_extraction_comments()}
 				/>
 			</label>
 
 			<label class="label cursor-pointer">
-				<span class="label-text">Texte aus eingebetteten Bildern (ODF)</span>
+				<span class="label-text">{m.settings_extraction_images()}</span>
 				<input
 					id="includeImageText"
 					type="checkbox"
 					class="toggle toggle-primary"
 					bind:checked={localSettings.includeImageText}
-					aria-label="Texte aus eingebetteten Bildern (ODF)"
+					aria-label={m.settings_extraction_images()}
 				/>
 			</label>
 		</div>
@@ -294,25 +302,25 @@
 	<!-- Sentry -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Sentry</h2>
+			<h2 class="card-title">{m.settings_sentry()}</h2>
 			<label class="label cursor-pointer" for="sentryLogs">
-				<span class="label-text">Fehler-Logs senden</span>
+				<span class="label-text">{m.settings_sentry_logs()}</span>
 				<input
 					id="sentryLogs"
 					type="checkbox"
 					class="toggle toggle-primary"
-					aria-label="Enable error log sending"
+					aria-label={m.settings_sentry_logs()}
 					bind:checked={localSettings.sentryEnableLogs}
 				/>
 			</label>
 
 			<label class="label cursor-pointer" for="sentryReplay">
-				<span class="label-text">Session Replay aktivieren</span>
+				<span class="label-text">{m.settings_sentry_replay()}</span>
 				<input
 					id="sentryReplay"
 					type="checkbox"
 					class="toggle toggle-primary"
-					aria-label="Enable session replay"
+					aria-label={m.settings_sentry_replay()}
 					bind:checked={localSettings.sentryEnableSessionReplay}
 				/>
 			</label>
@@ -322,10 +330,11 @@
 	<!-- Cleanup -->
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
-			<h2 class="card-title">Datenbank-Bereinigung</h2>
-			<p>Entfernt Einträge, deren Dateien nicht mehr vorhanden sind.</p>
+			<h2 class="card-title">{m.settings_cleanup()}</h2>
+			<p>{m.settings_cleanup_description()}</p>
 			<button class="btn btn-error" onclick={cleanupMissingFiles}>
-				<Recycle></Recycle> Fehlende Dateien bereinigen
+				<Recycle></Recycle>
+				{m.settings_cleanup_button()}
 			</button>
 		</div>
 	</div>
@@ -339,10 +348,10 @@
 						href="https://github.com/BlackTiger007/DataSearch-Pro"
 						target="_blank"
 					>
-						GitHub
+						{m.settings_footer_github()}
 					</a>
 				</p>
-				<p>Version {version}</p>
+				<p>{m.settings_footer_version({ version })}</p>
 			</aside>
 		</footer>
 	{/await}

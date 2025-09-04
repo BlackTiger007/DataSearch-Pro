@@ -221,7 +221,11 @@
 				bind:value={localSettings.locale}
 			>
 				{#each locales as locale}
-					<option value={locale}>{locale}</option>
+					<option value={locale}
+						>{new Intl.DisplayNames([window.navigator.language], {
+							type: 'language'
+						}).of(locale)}</option
+					>
 				{/each}
 			</select>
 		</div>

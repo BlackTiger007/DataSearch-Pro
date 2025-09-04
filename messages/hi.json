@@ -88,6 +88,5 @@
 	"create_button": "बनाएं",
 	"tags_assign_legend": "टैग असाइन करें / संपादित करें",
 	"close_modal": "बंद करना",
-	"delete_tag_title": "टैग हटाएं (डबल-क्लिक)",
-	"hello_world": "नमस्ते, {name} !"
+	"delete_tag_title": "टैग हटाएं (डबल-क्लिक)"
 }

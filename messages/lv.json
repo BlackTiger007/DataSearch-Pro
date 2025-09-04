@@ -88,6 +88,5 @@
 	"create_button": "Izveidot",
 	"tags_assign_legend": "Piešķirt/rediģēt tagus",
 	"close_modal": "Aizvērt",
-	"delete_tag_title": "Dzēst tagu (veiciet dubultklikšķi)",
-	"hello_world": "Sveiki, {name} !"
+	"delete_tag_title": "Dzēst tagu (veiciet dubultklikšķi)"
 }

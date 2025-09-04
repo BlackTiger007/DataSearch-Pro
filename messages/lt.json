@@ -88,6 +88,5 @@
 	"create_button": "Sukurti",
 	"tags_assign_legend": "Priskirti / redaguoti žymas",
 	"close_modal": "Uždaryti",
-	"delete_tag_title": "Ištrinti žymę (dukart spustelėkite)",
-	"hello_world": "Sveiki, {name} !"
+	"delete_tag_title": "Ištrinti žymę (dukart spustelėkite)"
 }

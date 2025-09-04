@@ -88,6 +88,5 @@
 	"create_button": "Vytvoriť",
 	"tags_assign_legend": "Priradiť / Upraviť značky",
 	"close_modal": "Zatvoriť",
-	"delete_tag_title": "Odstrániť značku (dvojité kliknutie)",
-	"hello_world": "Dobrý deň, {name} !"
+	"delete_tag_title": "Odstrániť značku (dvojité kliknutie)"
 }

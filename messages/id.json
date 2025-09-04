@@ -88,6 +88,5 @@
 	"create_button": "Membuat",
 	"tags_assign_legend": "Tetapkan / Edit Tag",
 	"close_modal": "Menutup",
-	"delete_tag_title": "Hapus Tag (Klik dua kali)",
-	"hello_world": "Halo, {name} !"
+	"delete_tag_title": "Hapus Tag (Klik dua kali)"
 }

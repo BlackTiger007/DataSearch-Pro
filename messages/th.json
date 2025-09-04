@@ -88,6 +88,5 @@
 	"create_button": "สร้าง",
 	"tags_assign_legend": "กำหนด / แก้ไขแท็ก",
 	"close_modal": "ปิด",
-	"delete_tag_title": "ลบแท็ก (ดับเบิลคลิก)",
-	"hello_world": "สวัสดี {name} !"
+	"delete_tag_title": "ลบแท็ก (ดับเบิลคลิก)"
 }

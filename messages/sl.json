@@ -88,6 +88,5 @@
 	"create_button": "Ustvari",
 	"tags_assign_legend": "Dodeli/Uredi oznake",
 	"close_modal": "Zapri",
-	"delete_tag_title": "Izbriši oznako (dvojni klik)",
-	"hello_world": "Pozdravljeni, {name} !"
+	"delete_tag_title": "Izbriši oznako (dvojni klik)"
 }

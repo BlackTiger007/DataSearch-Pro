@@ -12,12 +12,14 @@
 	import FolderRemove from 'bootstrap-icons/icons/folder-minus.svg?component';
 	import Recycle from 'bootstrap-icons/icons/recycle.svg?component';
 	import { m } from '$lib/paraglide/messages';
+	import { locales, setLocale } from '$lib/paraglide/runtime';
 
 	let localSettings: SettingsType = $state({ ...settings });
 	let showSnackbar = $state(false);
 
 	async function save() {
 		await saveSettings($state.snapshot(localSettings));
+		setLocale(localSettings.locale);
 		showSnackbar = true;
 		setTimeout(() => (showSnackbar = false), 3000);
 	}
@@ -218,9 +220,9 @@
 				class="select-bordered select w-full max-w-xs"
 				bind:value={localSettings.locale}
 			>
-				<option value="en">English</option>
-				<option value="de">Deutsch</option>
-				<option value="fr">Français</option>
+				{#each locales as locale}
+					<option value={locale}>{locale}</option>
+				{/each}
 			</select>
 		</div>
 	</div>

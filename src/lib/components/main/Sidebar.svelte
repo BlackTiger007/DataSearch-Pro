@@ -3,6 +3,7 @@
 	import { formatBytes } from '$lib/utils/formatBytes';
 	import { getIconComponent } from '$lib/utils/icons';
 	import List from '../VirtualList.svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	let {
 		files,
@@ -52,7 +53,7 @@
 	<div class="sticky top-0 z-10 bg-base-200 p-4">
 		<input
 			type="text"
-			placeholder="🔍 Dateien suchen..."
+			placeholder={m.files_search_placeholder()}
 			bind:value={search}
 			class="input-bordered input w-full"
 		/>

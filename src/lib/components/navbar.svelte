@@ -2,6 +2,7 @@
 	import { indexing } from '$lib/stores/indexing.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { settings } from '$lib/stores/settings.svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	onMount(() => {
 		indexing.addToQueue(settings.folders);
@@ -18,9 +19,9 @@
 
 <div class="navbar flex justify-between bg-base-100 shadow-sm">
 	<div class="flex gap-1">
-		<a href="/" class="btn">DataSearch-Pro</a>
-		<a href="/dashboard" class="btn">Dashboard</a>
-		<a href="/settings" class="btn">Einstellungen</a>
+		<a href="/" class="btn">{m.navbar_home()}</a>
+		<a href="/dashboard" class="btn">{m.navbar_dashboard()}</a>
+		<a href="/settings" class="btn">{m.navbar_settings()}</a>
 	</div>
 
 	<div class="flex gap-1">
@@ -39,13 +40,13 @@
 		>
 			{#if indexing.store.isRunning && !indexing.store.isPaused}
 				<div aria-label="running" class="status status-success"></div>
-				Status: Läuft
+				{m.navbar_status_running()}
 			{:else if indexing.store.isRunning && indexing.store.isPaused}
 				<div aria-label="paused" class="status status-warning"></div>
-				Status: Pausiert
+				{m.navbar_status_paused()}
 			{:else}
 				<div aria-label="idle" class="status status-neutral"></div>
-				Status: Inaktiv
+				{m.navbar_status_idle()}
 			{/if}
 		</button>
 	</div>

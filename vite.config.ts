@@ -26,7 +26,7 @@ export default defineConfig(async () => ({
 		paraglideVitePlugin({
 			project: './project.inlang',
 			outdir: './src/lib/paraglide',
-			strategy: ['preferredLanguage', 'globalVariable', 'localStorage']
+			strategy: ['globalVariable', 'localStorage']
 		})
 	],
 

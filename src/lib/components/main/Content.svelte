@@ -233,7 +233,7 @@
 					<p>{m.loading()}</p>
 				{:then fileChunks}
 					{#if fileChunks.length > 0}
-						{#each Object.entries(groupByVersionAndLine(fileChunks)) as [version, chunks]}
+						{#each Object.entries(groupByVersionAndLine(fileChunks)) as [version, chunks] (version)}
 							{#if +version === selectedVersion}
 								{#each chunks as chunk (`${chunk.id}-${chunk.versionNumber}-${chunk.lineNumber}`)}
 									<div class="flex gap-2">

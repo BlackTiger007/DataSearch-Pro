@@ -16,20 +16,20 @@ name = "datasearch_pro_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.5.1", features = [] }
+tauri-build = { version = "2.5.3", features = [] }
 
 [dependencies]
-tauri = { version = "2.9.2", features = [] }
+tauri = { version = "2.9.5", features = [] }
 tauri-plugin-opener = "2.5.2"
 serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.145"
+serde_json = "1.0.149"
 tauri-plugin-sql = { version = "2.3.1", features = ["sqlite"] }
 include_dir = "0.7.4"
 tauri-plugin-dialog = "2.4.2"
 tauri-plugin-fs = { version = "2.4.4", features = ["watch"] }
-sentry = "0.45.0"
-sentry-log = "0.45.0"
-log = "0.4.28"
+sentry = "0.46.0"
+sentry-log = "0.46.0"
+log = "0.4.29"
 tauri-plugin-process = "2.3.1"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]

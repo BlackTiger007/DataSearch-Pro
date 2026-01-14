@@ -57,7 +57,7 @@
 		<div class="card-body">
 			<h2 class="card-title">{m.settings_theme()}</h2>
 			<div class="mt-2 flex gap-4">
-				{#each ['system', 'light', 'dark'] as theme}
+				{#each ['system', 'light', 'dark'] as theme (theme)}
 					<label class="label cursor-pointer" for={`theme-${theme}`}>
 						<span class="label-text mr-2 capitalize">{theme}</span>
 						<input
@@ -118,7 +118,7 @@
 		<div class="card-body">
 			<h2 class="card-title">{m.settings_filetypes()}</h2>
 			<div class="space-y-2">
-				{#each localSettings.allowedFileTypes as type, i}
+				{#each localSettings.allowedFileTypes, i}
 					<div class="flex items-center gap-2">
 						<input
 							id={`filetype-${i}`}
@@ -220,7 +220,7 @@
 				class="select-bordered select w-full max-w-xs"
 				bind:value={localSettings.locale}
 			>
-				{#each locales as locale}
+				{#each locales as locale (locale)}
 					<option value={locale}
 						>{new Intl.DisplayNames([window.navigator.language], {
 							type: 'language'
@@ -241,7 +241,7 @@
 				class="select-bordered select w-full max-w-xs"
 				bind:value={localSettings.textEncoding}
 			>
-				{#each availableEncodings as encoding}
+				{#each availableEncodings as encoding (encoding)}
 					<option value={encoding}>{encoding.toUpperCase()}</option>
 				{/each}
 			</select>

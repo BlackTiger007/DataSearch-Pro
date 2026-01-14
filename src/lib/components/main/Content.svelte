@@ -8,6 +8,7 @@
 	import { isDarkColor } from '$lib/utils/brightness';
 	import type { FilesWithTags } from '$lib/types/fileWihtTags';
 	import { m } from '$lib/paraglide/messages';
+	import { SvelteMap } from 'svelte/reactivity';
 
 	let {
 		selectedFile,
@@ -43,7 +44,7 @@
 	});
 
 	// Cache für File-Chunks
-	const fileCache = new Map<number, Promise<(Scan & FileVersion)[]>>();
+	const fileCache = new SvelteMap<number, Promise<(Scan & FileVersion)[]>>();
 
 	// Promise-Funktion mit Cache
 	const filePromise = async (id: number): Promise<(Scan & FileVersion)[]> => {
@@ -70,11 +71,6 @@
 		fileCache.set(id, Promise.resolve(chunks));
 		return chunks;
 	};
-
-	// Optional: Cache leeren, falls Datei aktualisiert wird
-	function invalidateFileCache(fileId: number) {
-		fileCache.delete(fileId);
-	}
 
 	async function addNewTag() {
 		if (!newTagName.trim()) return;
@@ -161,7 +157,7 @@
 
 <div class="w-full overflow-y-auto bg-base-300 p-6">
 	{#if selectedFile}
-		<h2 class="mb-2 max-w-full text-2xl font-bold break-words">{selectedFile.name}</h2>
+		<h2 class="mb-2 max-w-full text-2xl font-bold wrap-break-word">{selectedFile.name}</h2>
 		<p class="mb-4 max-w-full text-sm break-all text-base-content/70">{selectedFile.path}</p>
 
 		<div class="mb-4 flex gap-2">
@@ -196,7 +192,7 @@
 			<fieldset class="fieldset">
 				<legend class="fieldset-legend">{m.version()}</legend>
 				<select class="select" bind:value={selectedVersion}>
-					{#each versions as v}
+					{#each versions as v (v)}
 						<option value={v}>{m.version_number({ number: v })}</option>
 					{/each}
 				</select>

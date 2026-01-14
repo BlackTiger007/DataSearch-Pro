@@ -1,9 +1,8 @@
 ## [2.2.1](https://github.com/BlackTiger007/DataSearch-Pro/compare/v2.2.0...v2.2.1) (2025-09-05)
 
-
 ### Bug Fixes
 
-* **i18n:** remove preferredLanguage strategy from paraglide config to prevent infinite loop ([388c128](https://github.com/BlackTiger007/DataSearch-Pro/commit/388c128b91e25f9be66cb647032d6540fb94e9a1))
+- **i18n:** remove preferredLanguage strategy from paraglide config to prevent infinite loop ([388c128](https://github.com/BlackTiger007/DataSearch-Pro/commit/388c128b91e25f9be66cb647032d6540fb94e9a1))
 
 # [2.2.0](https://github.com/BlackTiger007/DataSearch-Pro/compare/v2.1.0...v2.2.0) (2025-09-04)
 

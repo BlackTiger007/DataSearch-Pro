@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@plugin "daisyui";
+@plugin 'daisyui';
 
 .body {
 	@apply mx-auto prose max-w-4xl p-6;

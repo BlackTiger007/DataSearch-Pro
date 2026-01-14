@@ -226,7 +226,7 @@
 			<div class="mb-2 flex items-center justify-between">
 				<h3 class="font-semibold">{m.indexed_text()}</h3>
 				<button class="btn btn-sm" onclick={() => (overflow = !overflow)}>
-					{overflow ? m.scroll_disable : m.scroll_enable}
+					{overflow ? m.scroll_disable() : m.scroll_enable()}
 				</button>
 			</div>
 			<div

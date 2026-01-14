@@ -8,7 +8,7 @@
 
 	let search = $state('');
 	let selectedFile: FilesWithTags | null = $state(null);
-	let tags = $state([...data.tags]);
+	let tags = $derived(data.tags);
 
 	function selectFile(file: FilesWithTags) {
 		selectedFile = file;

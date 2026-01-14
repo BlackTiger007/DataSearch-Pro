@@ -48,8 +48,8 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1
       marked:
-        specifier: ^16.4.1
-        version: 16.4.1
+        specifier: ^17.0.1
+        version: 17.0.1
       pdfjs-dist:
         specifier: ^5.4.296
         version: 5.4.394
@@ -2839,8 +2839,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  marked@16.4.1:
-    resolution: {integrity: sha512-ntROs7RaN3EvWfy3EZi14H4YxmT6A5YvywfhO+0pm+cH/dnSQRmdAmoFIc3B9aiwTehyk7pESH4ofyBY+V5hZg==}
+  marked@17.0.1:
+    resolution: {integrity: sha512-boeBdiS0ghpWcSwoNm/jJBwdpFaMnZWRzjA6SkUMYb40SVaN1x7mmfGKp0jvexGcx+7y2La5zRZsYFZI6Qpypg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -6621,7 +6621,7 @@ snapshots:
 
   marked@15.0.12: {}
 
-  marked@16.4.1: {}
+  marked@17.0.1: {}
 
   mdn-data@2.0.28: {}
 

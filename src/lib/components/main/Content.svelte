@@ -86,7 +86,7 @@
 
 		// Direkt auch für die aktuelle Datei zuordnen, falls eine ausgewählt
 		if (selectedFile) {
-			await addTagToFile(createdTag.id!, selectedFile.id);
+			await addTagToFile(createdTag.id, selectedFile.id);
 			selectedFile.tags.push(createdTag);
 		}
 	}

@@ -1,20 +1,19 @@
 ## [2.2.2](https://github.com/BlackTiger007/DataSearch-Pro/compare/v2.2.1...v2.2.2) (2026-01-14)
 
-
 ### Bug Fixes
 
-* add key to each block in fileChunks iteration for improved rendering performance ([901585a](https://github.com/BlackTiger007/DataSearch-Pro/commit/901585af384b3f9f246d89dbcde5149162f6ee94))
-* Change tags from $state to $derived for better reactivity ([c3000da](https://github.com/BlackTiger007/DataSearch-Pro/commit/c3000da9cbfd674700e6f4b7a9ae2d0132998d1c))
-* **deps:** update dependency marked to v17 ([d2ca367](https://github.com/BlackTiger007/DataSearch-Pro/commit/d2ca367b6f0bbed8bd1285faf7c3aa5f537e83d1))
-* **deps:** update dependency tesseract.js to v7 ([e8b7da2](https://github.com/BlackTiger007/DataSearch-Pro/commit/e8b7da27b2c1d60c6e44419f7abc0a414b9907e1))
-* **deps:** update non-breaking updates ([e995cda](https://github.com/BlackTiger007/DataSearch-Pro/commit/e995cdaa574d5e11b7354b5ba073a1171cd0e3e9))
-* **deps:** update non-breaking updates ([bc17a37](https://github.com/BlackTiger007/DataSearch-Pro/commit/bc17a37ed889f73634ea3c99a30d7cd54bc87fbf))
-* **deps:** update non-breaking updates ([2c2608e](https://github.com/BlackTiger007/DataSearch-Pro/commit/2c2608ecfac779f51635da24feb4c17790846226))
-* remove tracked .gitignore from inlang project ([12284a3](https://github.com/BlackTiger007/DataSearch-Pro/commit/12284a327e8e3d0ae6b72586079d1b77f3a8b402))
-* remove unnecessary non-null assertion when adding tag to selected file ([22eb19c](https://github.com/BlackTiger007/DataSearch-Pro/commit/22eb19ce0b1199457b029cb1b414b1a487086cf4))
-* replace Map with SvelteMap for file cache and improve reactivity in settings ([f494d1d](https://github.com/BlackTiger007/DataSearch-Pro/commit/f494d1dd8f41a2d5e3b3908c7e5fd2ee8c5d4983))
-* update dependencies for log, reqwest, sentry, and tauri packages ([18fc820](https://github.com/BlackTiger007/DataSearch-Pro/commit/18fc82069c363295cd71e97ddfca52465cb8a6a4))
-* Update scroll button text function calls for proper rendering ([eed8bb8](https://github.com/BlackTiger007/DataSearch-Pro/commit/eed8bb8a8091795207c1c7cc5c681ccbc1ea7f6c))
+- add key to each block in fileChunks iteration for improved rendering performance ([901585a](https://github.com/BlackTiger007/DataSearch-Pro/commit/901585af384b3f9f246d89dbcde5149162f6ee94))
+- Change tags from $state to $derived for better reactivity ([c3000da](https://github.com/BlackTiger007/DataSearch-Pro/commit/c3000da9cbfd674700e6f4b7a9ae2d0132998d1c))
+- **deps:** update dependency marked to v17 ([d2ca367](https://github.com/BlackTiger007/DataSearch-Pro/commit/d2ca367b6f0bbed8bd1285faf7c3aa5f537e83d1))
+- **deps:** update dependency tesseract.js to v7 ([e8b7da2](https://github.com/BlackTiger007/DataSearch-Pro/commit/e8b7da27b2c1d60c6e44419f7abc0a414b9907e1))
+- **deps:** update non-breaking updates ([e995cda](https://github.com/BlackTiger007/DataSearch-Pro/commit/e995cdaa574d5e11b7354b5ba073a1171cd0e3e9))
+- **deps:** update non-breaking updates ([bc17a37](https://github.com/BlackTiger007/DataSearch-Pro/commit/bc17a37ed889f73634ea3c99a30d7cd54bc87fbf))
+- **deps:** update non-breaking updates ([2c2608e](https://github.com/BlackTiger007/DataSearch-Pro/commit/2c2608ecfac779f51635da24feb4c17790846226))
+- remove tracked .gitignore from inlang project ([12284a3](https://github.com/BlackTiger007/DataSearch-Pro/commit/12284a327e8e3d0ae6b72586079d1b77f3a8b402))
+- remove unnecessary non-null assertion when adding tag to selected file ([22eb19c](https://github.com/BlackTiger007/DataSearch-Pro/commit/22eb19ce0b1199457b029cb1b414b1a487086cf4))
+- replace Map with SvelteMap for file cache and improve reactivity in settings ([f494d1d](https://github.com/BlackTiger007/DataSearch-Pro/commit/f494d1dd8f41a2d5e3b3908c7e5fd2ee8c5d4983))
+- update dependencies for log, reqwest, sentry, and tauri packages ([18fc820](https://github.com/BlackTiger007/DataSearch-Pro/commit/18fc82069c363295cd71e97ddfca52465cb8a6a4))
+- Update scroll button text function calls for proper rendering ([eed8bb8](https://github.com/BlackTiger007/DataSearch-Pro/commit/eed8bb8a8091795207c1c7cc5c681ccbc1ea7f6c))
 
 ## [2.2.1](https://github.com/BlackTiger007/DataSearch-Pro/compare/v2.2.0...v2.2.1) (2025-09-05)
 
